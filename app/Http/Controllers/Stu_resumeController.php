@@ -10,6 +10,8 @@ use App\Stu_licence as stulicenceEloquent;
 use App\Stu_relatives as stuRelativesEloquent;
 use App\Stu_works as stuWorksEloquent;
 
+use App\Services\newResumeService as newResumeService;
+
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
@@ -26,40 +28,67 @@ class Stu_resumeController extends Controller
 	}
 	//新增履歷開始
 	public function createEduDataById(Request $request,$id){
-		$headers = array('Content-Type' => 'application/json; <a href="http://superlevin.ifengyuan.tw/tag/charset/">charset</a>=utf-8');
+
 		$re=$request->all();
-		$school=$re['school'];
-		$department=$re['department'];
-		$degree=$re['degree'];
-		$enterDate=$re['enterDate'];
-		$exitDate=$re['exitDate'];
-		$graduate=$re['graduate'];
+
 
 		$objValidator = Validator::make($request->all(), array(
 			'school'=>'required',
 			'department'=>'required',
 			'enterDate' => 'required|date',
 			'exitDate'=>'nullable|date',
-			'graduate'=>'required'
+			'graduate'=>'required|integer'
 			),array(
 			'required'=>'此欄位不可為空白',
-			'date'=>'日期格式錯誤'
+			'date'=>'日期格式錯誤',
+            'integer'=>'int格式錯誤'
 			));
 		if($objValidator->fails()){
 			return response()->json($objValidator->errors(),400);//422
 		}else{
-			$stuEdu= new stuEduEloquent();
-			$stuEdu->sid=$id;
-			$stuEdu->school=$school;
-			$stuEdu->department=$department;
-			$stuEdu->degree=$degree;
-			$stuEdu->enterDate=$enterDate;
-			$stuEdu->exitDate=$exitDate;
-			$stuEdu->graduate=$graduate;
-			$stuEdu->save();
-			return response()->json("新增學歷資料成功",200,$headers, JSON_UNESCAPED_UNICODE);
+            $responses=newResumeService::newEduDataById($re,$id);
+            if($responses=='新增學歷資料成功'){
+                return response()->json($responses,200,[], JSON_UNESCAPED_UNICODE);
+            }else{
+                return response()->json($responses,400,[], JSON_UNESCAPED_UNICODE);
+            }
 		}
-		return response()->json("新增學歷資料失敗",400,$headers, JSON_UNESCAPED_UNICODE);
+
+
+//        $headers = array('Content-Type' => 'application/json; <a href="http://superlevin.ifengyuan.tw/tag/charset/">charset</a>=utf-8');
+//        $re=$request->all();
+//        $school=$re['school'];
+//        $department=$re['department'];
+//        $degree=$re['degree'];
+//        $enterDate=$re['enterDate'];
+//        $exitDate=$re['exitDate'];
+//        $graduate=$re['graduate'];
+//
+//        $objValidator = Validator::make($request->all(), array(
+//            'school'=>'required',
+//            'department'=>'required',
+//            'enterDate' => 'required|date',
+//            'exitDate'=>'nullable|date',
+//            'graduate'=>'required'
+//        ),array(
+//            'required'=>'此欄位不可為空白',
+//            'date'=>'日期格式錯誤'
+//        ));
+//        if($objValidator->fails()){
+//            return response()->json($objValidator->errors(),400);//422
+//        }else{
+//            $stuEdu= new stuEduEloquent();
+//            $stuEdu->sid=$id;
+//            $stuEdu->school=$school;
+//            $stuEdu->department=$department;
+//            $stuEdu->degree=$degree;
+//            $stuEdu->enterDate=$enterDate;
+//            $stuEdu->exitDate=$exitDate;
+//            $stuEdu->graduate=$graduate;
+//            $stuEdu->save();
+//            return response()->json("新增學歷資料成功",200,$headers, JSON_UNESCAPED_UNICODE);
+//        }
+//        return response()->json("新增學歷資料失敗",400,$headers, JSON_UNESCAPED_UNICODE);
 	}
 
 	public function createJobExperienceById(Request $request,$id){

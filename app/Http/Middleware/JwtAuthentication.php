@@ -25,7 +25,10 @@ class JwtAuthentication
                 'error' => '未登入',
                 ],401);
         }
-        return  $next($request);
+        $response=$next($request);
+        $response->headers->set('Content-Type', 'application/json; charset=UTF-8');
+        $response->headers->set('charset', 'utf-8');
+        return  $response;
     }
 
 }
