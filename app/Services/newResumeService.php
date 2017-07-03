@@ -18,18 +18,13 @@ use App\Stu_works as stuWorksEloquent;
 class newResumeService
 {
 
-    public static function newEduDataById($re, $id)
+    public function newEduDataById($re, $id)
     {
         $school = $re['school'];
         $department = $re['department'];
         $degree = $re['degree'];
         $enterDate = $re['enterDate'];
-        if($re['exitDate']!=null){
-            $exitDate = $re['exitDate'];
-        }else{
-            $exitDate = null;
-        }
-
+        $exitDate = $re['exitDate'];
         $graduate = $re['graduate'];
 
         $stuEdu = new stuEduEloquent();
@@ -43,8 +38,10 @@ class newResumeService
         $stuEdu->save();
         if (stuEduEloquent::count() != 0) {
             return '新增學歷資料成功';
+//            return response()->json('新增學歷資料成功',200,[], JSON_UNESCAPED_UNICODE);
         } else {
             return '新增學歷資料失敗';
+//            return response()->json('新增學歷資料失敗',400,[], JSON_UNESCAPED_UNICODE);
         }
     }
 

@@ -21,6 +21,11 @@ use Validator;
 use Log;
 class Stu_resumeController extends Controller
 {
+    protected $newResumeService;
+    public function __construct(newResumeService $newResumeService){
+        $this->newResumeService = $newResumeService;
+    }
+
 	public function findUserDetailsById(Request $request){
 		$input = $request->all();
 		$user = JWTAuth::toUser($input['token']);
@@ -46,7 +51,7 @@ class Stu_resumeController extends Controller
 		if($objValidator->fails()){
 			return response()->json($objValidator->errors(),400);//422
 		}else{
-            $responses=newResumeService::newEduDataById($re,$id);
+            $responses=$this->newResumeService->newEduDataById($re, $id);
             if($responses=='新增學歷資料成功'){
                 return response()->json($responses,200,[], JSON_UNESCAPED_UNICODE);
             }else{
@@ -54,41 +59,6 @@ class Stu_resumeController extends Controller
             }
 		}
 
-
-//        $headers = array('Content-Type' => 'application/json; <a href="http://superlevin.ifengyuan.tw/tag/charset/">charset</a>=utf-8');
-//        $re=$request->all();
-//        $school=$re['school'];
-//        $department=$re['department'];
-//        $degree=$re['degree'];
-//        $enterDate=$re['enterDate'];
-//        $exitDate=$re['exitDate'];
-//        $graduate=$re['graduate'];
-//
-//        $objValidator = Validator::make($request->all(), array(
-//            'school'=>'required',
-//            'department'=>'required',
-//            'enterDate' => 'required|date',
-//            'exitDate'=>'nullable|date',
-//            'graduate'=>'required'
-//        ),array(
-//            'required'=>'此欄位不可為空白',
-//            'date'=>'日期格式錯誤'
-//        ));
-//        if($objValidator->fails()){
-//            return response()->json($objValidator->errors(),400);//422
-//        }else{
-//            $stuEdu= new stuEduEloquent();
-//            $stuEdu->sid=$id;
-//            $stuEdu->school=$school;
-//            $stuEdu->department=$department;
-//            $stuEdu->degree=$degree;
-//            $stuEdu->enterDate=$enterDate;
-//            $stuEdu->exitDate=$exitDate;
-//            $stuEdu->graduate=$graduate;
-//            $stuEdu->save();
-//            return response()->json("新增學歷資料成功",200,$headers, JSON_UNESCAPED_UNICODE);
-//        }
-//        return response()->json("新增學歷資料失敗",400,$headers, JSON_UNESCAPED_UNICODE);
 	}
 
 	public function createJobExperienceById(Request $request,$id){
