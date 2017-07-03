@@ -1,0 +1,118 @@
+* {
+    font-family: Microsoft Jhenghei;
+}
+
+a {
+    color: #777777;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #000000;
+    text-decoration: none;
+}
+
+.header {
+    border-bottom: 1px solid #aaa;
+    padding: 30px 0px;
+}
+
+.wrapper {
+    margin-top: 50px;
+}
+
+.tab {
+    margin-top: 20px;
+}
+
+#myTabs a {
+    color: #41594d;
+}
+
+#myTabs a:hover {
+    background-color: #aaa;
+    color: #fff;
+}
+
+.register {
+    margin-top: 50px;
+}
+
+.registerimg {
+    height: 550px;
+    background-image: url(../Images/Register.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    /*background-size: cover;*/
+}
+
+span {
+    font-size: 25px;
+}
+
+.col {
+    margin: 20px auto;
+}
+
+.col .lb {
+    margin-right: 10px;
+    width: 80px;
+    font-size: 18px;
+    text-align: justify;
+    text-align-last: justify;
+}
+select{
+    width: 157px;
+}
+button {
+    height: 35px;
+    width: 80px;
+    border-radius: 20px;
+    border-color: #777777;
+    border-width: 2px;
+    border-style: solid;
+    background-color: #FFFFFF;
+    font-size: 15px;
+}
+
+button:hover {
+    color: #FFFFFF;
+    background-color: #777777;
+    font-size: 15px;
+    transition-duration: 0.4s;
+}
+
+button a {
+    color: #000;
+    padding: 8px;
+}
+
+button a:hover {
+    color: #FFFFFF;
+}
+
+.footer {
+    border-top: 1px solid #aaa;
+    padding: 30px 0px;
+    margin-top: 100px;
+}
+
+@media screen and (max-width: 768px) {
+    .header {
+        border-bottom: none;
+        padding: 10px 0px;
+    }
+    .wrapper {
+        margin-top: 0px;
+    }
+    .register {
+        margin-top: 40px;
+    }
+    .registerimg {
+        height: 250px;
+        background-image: url(../Images/Register.png);
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+    }
+}
