@@ -15,7 +15,7 @@ use App\Stu_licence as stulicenceEloquent;
 use App\Stu_relatives as stuRelativesEloquent;
 use App\Stu_works as stuWorksEloquent;
 
-class newResumeService
+class ResumeService
 {
 
     public function newEduDataById($re, $id)

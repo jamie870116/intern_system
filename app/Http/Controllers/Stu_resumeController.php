@@ -21,9 +21,9 @@ use Validator;
 use Log;
 class Stu_resumeController extends Controller
 {
-    protected $newResumeService;
-    public function __construct(newResumeService $newResumeService){
-        $this->newResumeService = $newResumeService;
+    protected $ResumeService;
+    public function __construct(ResumeService $ResumeService){
+        $this->newResumeService = $ResumeService;
     }
 
 	public function findUserDetailsById(Request $request){
@@ -51,7 +51,7 @@ class Stu_resumeController extends Controller
 		if($objValidator->fails()){
 			return response()->json($objValidator->errors(),400);//422
 		}else{
-            $responses=$this->newResumeService->newEduDataById($re, $id);
+            $responses=$this->ResumeService->newEduDataById($re, $id);
             if($responses=='新增學歷資料成功'){
                 return response()->json($responses,200,[], JSON_UNESCAPED_UNICODE);
             }else{
