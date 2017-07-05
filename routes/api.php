@@ -21,7 +21,7 @@ Route::post('Register','AuthController@register');
 Route::get('Check_code','AuthController@check_code');
 Route::group(['middleware'=>'jwt'],function(){
 	//取得使用者資料
-	Route::post('findUserDetailsById','Stu_resumeController@findUserDetailsById');
+	Route::post('findUserDetailsByToken','Stu_resumeController@findUserDetailsByToken');
 	//履歷新增相關
 	Route::post('createEduDataById/{id}','Stu_resumeController@createEduDataById');
 	Route::post('createJobExperienceById/{id}','Stu_resumeController@createJobExperienceById');

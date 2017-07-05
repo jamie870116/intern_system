@@ -10,13 +10,11 @@ use App\Stu_licence as stulicenceEloquent;
 use App\Stu_relatives as stuRelativesEloquent;
 use App\Stu_works as stuWorksEloquent;
 
-use App\Services\newResumeService as newResumeService;
+use App\Services\ResumeService as ResumeService;
 
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
-use Cookie;
-use Auth;
 use Validator;
 use Log;
 class Stu_resumeController extends Controller
@@ -26,10 +24,15 @@ class Stu_resumeController extends Controller
         $this->newResumeService = $ResumeService;
     }
 
-	public function findUserDetailsById(Request $request){
+	public function findUserDetailsByToken(Request $request){
 		$input = $request->all();
 		$user = JWTAuth::toUser($input['token']);
-		return response()->json(['result' => $user],200);
+		if($user){
+            return response()->json(['result' => $user],200);
+        }else{
+            return response()->json('使用者不存在',400);
+        }
+
 	}
 	//新增履歷開始
 	public function createEduDataById(Request $request,$id){

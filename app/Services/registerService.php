@@ -15,7 +15,7 @@ class registerService
 
 	public static  function sendmail($mail,$code){
 		$data = ['mail'=>$mail, 'code'=>$code];
-		$flag=Mail::send('test.send', $data, function($message) use($data)
+		Mail::send('test.send', $data, function($message) use($data)
 		{
 			$message->to($data['mail'], $data['code'])->subject('會員驗證信');
 		});
