@@ -95,12 +95,12 @@ class AuthController extends Controller
 		$re=$request->all();
 		$status=$re['u_status'];
 		$account=$re['account'];
-		$u_tel=$re['u_name'];
+		$u_tel=$re['u_tel'];
+        $u_name=$re['u_name'];
 		$password=$re['password'];
 
-
 		$conf_pass=$re['conf_pass'];
-		$u_name=$re['u_name'];
+
 		$objValidator = Validator::make($request->all(), array(
 			'u_name'=>'required',
 			'u_tel'=>'required',

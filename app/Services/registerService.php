@@ -1,7 +1,8 @@
 <?php
 namespace App\Services;
 
-use Mail;
+use App\Jobs\SendEmail;
+
 class registerService
 {
 	public static  function randomkeys($length){
@@ -15,10 +16,7 @@ class registerService
 
 	public static  function sendmail($mail,$code){
 		$data = ['mail'=>$mail, 'code'=>$code];
-		Mail::send('test.send', $data, function($message) use($data)
-		{
-			$message->to($data['mail'], $data['code'])->subject('會員驗證信');
-		});
+		dispatch(new SendEmail($data));
 
 		return response()->json('sended',200);
 
