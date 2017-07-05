@@ -39,7 +39,7 @@ class AuthController extends Controller
         if($auth){
             if(password_verify($password['password'],$auth->password)){
                 if($auth->started==1){//登入成功
-                    $t=reService::randomkeys(30);
+//                    $t=reService::randomkeys(30);
                     // Auth::login($auth);
                     // $token=new TokensEloquent();
                     // $token->token=$t;

@@ -10,7 +10,7 @@ use App\Stu_licence as stulicenceEloquent;
 use App\Stu_relatives as stuRelativesEloquent;
 use App\Stu_works as stuWorksEloquent;
 
-use App\Services\ResumeService as ResumeService;
+use App\Services\ResumeServices as ResumeServices;
 
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -19,9 +19,9 @@ use Validator;
 use Log;
 class Stu_resumeController extends Controller
 {
-    protected $ResumeService;
-    public function __construct(ResumeService $ResumeService){
-        $this->newResumeService = $ResumeService;
+    protected $ResumeServices;
+    public function __construct(ResumeServices $ResumeServices){
+        $this->ResumeServices = $ResumeServices;
     }
 
     public function findUserDetailsByToken(Request $request){
@@ -54,7 +54,7 @@ class Stu_resumeController extends Controller
         if($objValidator->fails()){
             return response()->json($objValidator->errors(),400);//422
         }else{
-            $responses=$this->ResumeService->newEduDataById($re, $id);
+            $responses=$this->ResumeServices->newEduDataById($re, $id);
             if($responses=='新增學歷資料成功'){
                 return response()->json($responses,200,[], JSON_UNESCAPED_UNICODE);
             }else{
@@ -65,10 +65,8 @@ class Stu_resumeController extends Controller
     }
 
     public function createJobExperienceById(Request $request,$id){
-        $headers = array('Content-Type' => 'application/json; <a href="http://superlevin.ifengyuan.tw/tag/charset/">charset</a>=utf-8');
+
         $re=$request->all();
-        $semester=$re['semester'];
-        $jobTitle=$re['jobTitle'];
 
         $objValidator = Validator::make($request->all(), array(
             'semester'=>'required',
@@ -79,14 +77,14 @@ class Stu_resumeController extends Controller
         if($objValidator->fails()){
             return response()->json($objValidator->errors(),400);
         }else{
-            $stuJExp= new stuJExpEloquent();
-            $stuJExp->sid=$id;
-            $stuJExp->semester=$semester;
-            $stuJExp->jobTitle=$jobTitle;
-            $stuJExp->save();
-            return response()->json("新增工作資料成功",200,$headers, JSON_UNESCAPED_UNICODE);
+            $responses=$this->ResumeServices->newJobExperienceById($re, $id);
+            if($responses=='新增工作資料成功'){
+                return response()->json($responses,200,[], JSON_UNESCAPED_UNICODE);
+            }else{
+                return response()->json($responses,400,[], JSON_UNESCAPED_UNICODE);
+            }
         }
-        return response()->json("新增工作資料失敗",400,$headers, JSON_UNESCAPED_UNICODE);
+
     }
 
     public function createLicenseById(Request $request,$id){
