@@ -8,8 +8,8 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 class testController extends Controller
 {
     public function test(Request $request){
-    	$input = $request->all();
+        $input = $request->all();
         $user = JWTAuth::toUser($input['token']);
         return response()->json(['result' => $user]);
-	}
+    }
 }

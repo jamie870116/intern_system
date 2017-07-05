@@ -23,7 +23,7 @@ class JwtAuthentication
         catch(JWTException $exception){
             return response()->json([
                 'error' => '未登入',
-                ],401);
+            ],401);
         }
         $response=$next($request);
         $response->headers->set('Content-Type', 'application/json; charset=UTF-8');

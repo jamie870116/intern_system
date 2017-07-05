@@ -9,7 +9,7 @@ class Stu_works extends Model
     protected $table='stu_works';
     protected $primaryKey = 'wid';
     public  $timestamps=false;
-	protected $fillable = [
-		'sid','wName','wLink','wCreatedDate'
-	];
+    protected $fillable = [
+        'sid','wName','wLink','wCreatedDate'
+    ];
 }

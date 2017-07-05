@@ -9,7 +9,7 @@ class Stu_licence extends Model
     protected $table='stu_licence';
     protected $primaryKey = 'lid';
     public  $timestamps=false;
-	protected $fillable = [
-		'sid','agency','lname','ldate'
-	];
+    protected $fillable = [
+        'sid','agency','lname','ldate'
+    ];
 }
