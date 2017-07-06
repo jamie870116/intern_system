@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User as UserEloquent;
 
-use App\Services\registerService as reService;
+use App\Services\registerService;
 use App\Stu_basic as stuBasicEloquent;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -16,7 +16,10 @@ use Log;
 
 class AuthController extends Controller
 {
-    public function __construct(){
+
+    protected $registerService;
+    public function __construct(registerService $registerService){
+        $this->registerService = $registerService;
         $this->middleware('guest',['except'=>['getLogout']]);
     }
 
@@ -39,7 +42,7 @@ class AuthController extends Controller
         if($auth){
             if(password_verify($password['password'],$auth->password)){
                 if($auth->started==1){//登入成功
-//                    $t=reService::randomkeys(30);
+                    //$t=reService::randomkeys(30);
                     // Auth::login($auth);
                     // $token=new TokensEloquent();
                     // $token->token=$t;
@@ -74,8 +77,8 @@ class AuthController extends Controller
         // 	$token->delete();
         // }
         $newToken	=	JWTAuth::parseToken()->refresh();
-        return	response()->json(['token'	=>	$newToken]);
-        // return response()->json('已登出',200);
+       // return	response()->json(['token'	=>	$newToken]);
+       return response()->json('已登出',200);
     }
 
 // protected function randomkeys($length){
@@ -88,7 +91,7 @@ class AuthController extends Controller
     public function register(Request $request){
 
         $length=10;
-        $key=reService::randomkeys($length);
+        $key=$this->registerService->randomkeys($length);
         $headers = array('Content-Type' => 'application/json; <a href="http://superlevin.ifengyuan.tw/tag/charset/">charset</a>=utf-8');
         $re=$request->all();
         $status=$re['u_status'];
@@ -128,7 +131,7 @@ class AuthController extends Controller
                 'password' => bcrypt($password),
                 'check_code'=>$key
             ]);
-            $m=reService::sendmail($email,$key);
+            $m=$this->registerService->sendmail($email,$key);
             Log::error($m);
             return response()->json('去收驗證信s',200,$headers, JSON_UNESCAPED_UNICODE);
         }else if($status==1){//teacher
@@ -142,7 +145,7 @@ class AuthController extends Controller
                 'password' => bcrypt($password),
                 'check_code'=>$key
             ]);
-            reService::sendmail($email,$key);
+            $this->registerService->sendmail($email,$key);
             return response()->json('去收驗證信t',200,$headers, JSON_UNESCAPED_UNICODE);
         }else if($status==2){//company
             $email=$re['email'];
@@ -155,7 +158,7 @@ class AuthController extends Controller
                 'password' => bcrypt($password),
                 'check_code'=>$key
             ]);
-            reService::sendmail($email,$key);
+            $this->registerService->sendmail($email,$key);
             return response()->json('去收驗證信c',200,$headers, JSON_UNESCAPED_UNICODE);
         }
 

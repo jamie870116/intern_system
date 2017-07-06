@@ -16,9 +16,9 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
 	return $request->user();
 });
-Route::post('Login','AuthController@postLogin');
-Route::post('Register','AuthController@register');
-Route::get('Check_code','AuthController@check_code');
+Route::post('Login','AuthController@postLogin');//登入
+Route::post('Register','AuthController@register');//註冊
+Route::get('Check_code','AuthController@check_code');//驗證信
 Route::group(['middleware'=>'jwt'],function(){
 	//取得使用者資料
 	Route::post('findUserDetailsByToken','Stu_resumeController@findUserDetailsByToken');
@@ -41,4 +41,4 @@ Route::group(['middleware'=>'jwt'],function(){
 	Route::get('findResumeDataById/{id}','Stu_resumeController@findResumeDataById');
 
 });
-Route::get('Logout','AuthController@getLogout');
+Route::get('Logout','AuthController@getLogout');//登出
