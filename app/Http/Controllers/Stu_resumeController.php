@@ -184,7 +184,7 @@ class Stu_resumeController extends Controller
             'engName' => 'required',
             'bornedPlace' => 'required',
             'nativePlace' => 'required',
-            'brithday' => 'required|date',
+            'birthday' => 'required|date',
             'gender' => 'required',
             'height' => 'required',
             'weight' => 'required',

@@ -10,7 +10,7 @@ class Stu_basic extends Model
     protected $primaryKey = 'sid';
     public  $timestamps=false;
     protected $fillable = [
-        'sid','chiName','engName','bornedPlace','nativePlace','brithday','gender','height','weight','bloodtype','address','email','contact','CL','CS','CR','CW','EL','ES','ER','EW','TL','TS','dataBase','programmingLanguage','webDesign','document','imageProcessing','drawingSoftware','animation','OS','musicEditor'
+        'sid','chiName','engName','bornedPlace','nativePlace','birthday','gender','height','weight','bloodtype','address','email','contact','CL','CS','CR','CW','EL','ES','ER','EW','TL','TS','dataBase','programmingLanguage','webDesign','document','imageProcessing','drawingSoftware','animation','OS','musicEditor'
     ];
 
 }

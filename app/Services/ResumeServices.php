@@ -137,7 +137,7 @@ class ResumeServices
         $engName = $re['engName'];
         $bornedPlace = $re['bornedPlace'];
         $nativePlace = $re['nativePlace'];
-        $brithday = $re['brithday'];
+        $birthday = $re['birthday'];
         $gender = $re['gender'];
         $height = $re['height'];
         $weight = $re['weight'];
@@ -150,7 +150,7 @@ class ResumeServices
         $stuBas->engName = $engName;
         $stuBas->bornedPlace = $bornedPlace;
         $stuBas->nativePlace = $nativePlace;
-        $stuBas->brithday = $brithday;
+        $stuBas->birthday = $birthday;
         $stuBas->gender = $gender;
         $stuBas->height = $height;
         $stuBas->weight = $weight;
