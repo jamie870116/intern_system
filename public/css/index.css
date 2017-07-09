@@ -2,22 +2,19 @@
 	font-family: Arial,Microsoft Jhenghei;
 	margin:0px;
 	padding: 0px;
-	
 }
+
 a{
 	text-decoration: none;
-	color: #000;
 }
 a:hover{
 	text-decoration: none;
-	color: #000;
 }
 a:visited{
 	text-decoration: none;
 }
 .container{
 	width: 100%;
-	padding:0px;
 }
 .sidebar{
 	width: 12.5%;
@@ -73,6 +70,16 @@ a:visited{
 	color: #fcc506;
 	opacity: 0.8;
 	transition: 0.5s;
+}
+.item a img{
+	width: auto;
+	height: 25px;
+	margin-right: 10px;
+}
+.function img{
+	width: auto;
+	height: 20px;
+	margin-right: 8px;
 }
 hr{
 	width: 90%;
@@ -159,184 +166,174 @@ h3{
 	color: #fcc506;
 	width: 200px;
 }
-/* form */
-.form{
-	width: 300px;
-	height: 600px;
-	margin: 230px auto 70px auto;/*原始top是85px*/
-	text-align: center;
-}
-.form .log{
-	color: #fcc506;
-	font-size: 45px;
-	font-weight: bold;
-	letter-spacing: 2px;
-	margin-bottom: 20px;
-}
-.form .in{
-	font-size: 28px;
-	font-weight: bold;
-	letter-spacing: 2px;
-	margin-bottom: 20px;
-}
-.col{ 
-	position:relative; 
-	margin-top:25px; 
-	margin-bottom: 5px;
-	float: left;
-}
-/*驗證碼*/
-
-.col img{
-	margin: 1px 0px 0px 0px;
-}
-/*.col*/ p{
-/*	width: 80px;*/
-	color: #999;
-	font-size: 18px;
-	text-align: left;
-/*	text-align-last: justify;*/
-}
-.col select{
-	margin-top: 5px;
-	width: 300px;
-	height: 30px;
-	font-size:16px;
-	background-color: #fff;
-}
-.col a{
-	padding-top: 10px;
-	color: #222;
-	letter-spacing: 3px;
-}
-.col button{
-	width: 80px;
-	height: 40px;
+button{
+	margin-top: 40px;
+	margin-bottom: 60px;
+	width: 175px;
+	height: 65px;
 	background-color: #000;
 	color: #fff;
 	border: none;
-	font-size: 14px;
-	letter-spacing: 3px;/*新改*/
+	font-size: 22px;
+	letter-spacing: 5px;
 }
-.col button:hover{
+button:hover{
 	color: #fcc506;
 	opacity: 0.9;
 }
-/*.col button a{
+.announcement{
+	padding-top: 30px;
+	text-align: center;
+	padding-bottom: 50px;
+}
+.cooperation{
+	padding-top: 10px;
+	text-align: center;
+	padding-bottom: 50px;
+}
+.list{
+	width: 100%;
+}
+.list img{
+	margin: 35px;
+	width: 12%;
+	height: auto;
+}
+.job{
+	padding-top: 10px;
+	text-align: center;
+	padding-bottom: 50px;
+}
+.resume{
+	padding-top: 10px;
+	text-align: center;
+	padding-bottom: 50px;
+}
+.report{
+	padding-top: 10px;
+	text-align: center;
+	padding-bottom: 50px;
+}
+.score{
+	padding-top: 10px;
+	text-align: center;
+	padding-bottom: 50px;
+}
+.download{
+	padding-top: 10px;
+	text-align: center;
+	padding-bottom: 50px;
+}
+.join{
+	padding-top: 10px;
+	text-align: center;
+	padding-bottom: 50px;
+}
+.contact{
+	padding-top: 10px;
+	text-align: center;
+	padding-bottom: 50px;
+}
+.contact a{
+	color: #000;
+}
+.position{
+	width: 35%;
+	height: 90px;
+	padding-top: 60px;
+	margin-left: 15%;
+	background-color: #333;
 	color: #fff;
-	line-height:40px;
+	float: left;
+	letter-spacing: 4px;
+	line-height: 2;
 }
-.col button a:hover{
-	color: #fcc506;
-}*/
-input{
-	font-size:16px;
-	padding:8px 0px 9px 0px;
-	display:block;
-	width:300px;
-	border:none;
-	border-bottom:1px solid #757575;
+.map{
+	width: 35%;
+	height: 90px;
+	padding-top: 60px;
+	margin-right: 15%;
+	background-color: #fff;
+	float: left;
+	line-height: 2;
 }
-input:focus{ 
-	outline:none; 
+.map:hover{
+	background-color: #ececec;
+	opacity: 0.5;
+	transition: 0.8s;
 }
-
-/* LABEL */
-label{
-/*	width: 180px;*/
-	text-align: justify;
-	text-align-last: justify;
-	color:#999; 
-	font-size:18px;
-	font-weight:normal;
-	position:absolute;
-	pointer-events:none;
-	left:5px;
-	top:10px;
-	transition:0.2s ease all; 
-	-moz-transition:0.2s ease all; 
-	-webkit-transition:0.2s ease all;
+.message{
+	width: 35%;
+	height: 100px;
+	padding-top: 50px;
+	margin-left: 15%;
+	margin-bottom: 50px;
+	background-color: #fff;
+	float: left;
+	line-height: 2;
 }
-
-/* active state */
-input:focus ~ label, input:valid ~ label{
-/*	width: 160px;*/
-	top:-20px;
-	font-size:16px;
-	color:#fcc506;
+.info{
+	width: 35%;
+	height: 90px;
+	padding-top: 60px;
+	margin-right: 15%;
+	margin-bottom: 50px;
+	background-color: #333;
+	color: #fff;
+	float: left;
+	letter-spacing: 4px;
+	line-height: 2;
 }
-
-/* BOTTOM BARS */
-.bar{ 
-	position:relative; 
-	display:block; 
-	width:300px; 
+.user{
+	width: 50%;
+    margin: 10px 0px 20px 0px;
+	float: left;
+	text-align: center;
 }
-.bar:before, .bar:after{
-	content:'';
-	height:2px; 
-	width:0;
-	bottom:1px; 
-	position:absolute;
-	background:#fcc506; 
-	transition:0.2s ease all; 
-	-moz-transition:0.2s ease all; 
-	-webkit-transition:0.2s ease all;
+/*3D box*/
+figure {
+	margin: 20px auto; 
+	height: 6.5em;
+	width: 14em;
+	padding: 1.2em 0px;
+	line-height: 1.5;
+	background-color: #222;
+	-webkit-transform: perspective(500);
+	-webkit-transform-style: preserve-3d;
+	-webkit-transition: .5s;
 }
-.bar:before {
-	left:50%;
+figure i{
+	margin-top: 20px;
+	color: #fff;
 }
-.bar:after {
-	right:50%; 
+figure:hover {
+	-webkit-transform: perspective(500) rotateX(90deg) translateY(-3em) translateZ(3em);
 }
-
-/* active state */
-input:focus ~ .bar:before, input:focus ~ .bar:after {
-	width:50%;
+figcaption {
+	padding: 2em;
+	background-color: #111;
+	color: #fff;
+	-webkit-transform: rotateX(-90deg);
+	-webkit-transform-origin: 100% 0;
+	-webkit-transition: .5s;
 }
-
-/* HIGHLIGHTER */
-.highlight {
-	position:absolute;
-	height:60%; 
-	width:100px; 
-	top:25%; 
-	left:0;
-	pointer-events:none;
-	opacity:0.5;
+figcaption p{
+	padding: 2px 0px;
+	font-size: 20px;
+	letter-spacing: 2.5px;
+	font-weight: normal;
+	font-weight: bold;
+	border-bottom: 2px solid #fcc506;
 }
-
-/* active state */
-input:focus ~ .highlight {
-	-webkit-animation:inputHighlighter 0.3s ease;
-	-moz-animation:inputHighlighter 0.3s ease;
-	animation:inputHighlighter 0.3s ease;
+figcaption h5{
+	padding: 2px 0px;
+	font-size: 20px;
+	letter-spacing: 12px;
+	font-weight: normal;
+	font-weight: bold;
 }
-
-/* ANIMATIONS */
-@-webkit-keyframes inputHighlighter {
-	from{ 
-		background:#fcc506; 
-	}
-	to{ 
-		width:0; background:transparent; 
-	}
-}
-@-moz-keyframes inputHighlighter {
-	from{ 
-		background:#fcc506; 
-	}
-	to{ 
-		width:0; background:transparent; 
-	}
-}
-@keyframes inputHighlighter {
-	from{ 
-		background:#fcc506; 
-	}
-	to{ 
-		width:0; background:transparent; 
-	}
+figure:hover figcaption {
+	box-shadow: 0 20px 15px -10px hsla(0,0%,0%,.25);
 }
 .footer{
 	height: 50px;
@@ -346,6 +343,7 @@ input:focus ~ .highlight {
 	line-height: 4.5;
 	letter-spacing: 2px;
 	font-size: 12px;
+	clear: both;
 }
 @media screen and (max-width: 1280px){
 	.sidebar{

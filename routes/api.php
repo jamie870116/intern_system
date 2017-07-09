@@ -21,7 +21,7 @@ Route::post('Register','AuthController@register');//註冊
 Route::get('Check_code','AuthController@check_code');//驗證信
 Route::group(['middleware'=>'jwt'],function(){
 	//取得使用者資料
-	Route::post('findUserDetailsByToken','AuthController@findUserDetailsByToken');
+	Route::get('findUserDetailsByToken','AuthController@findUserDetailsByToken');
 
 	//職缺相關
     Route::post('createJobOpening','Job_openingController@createJobOpening');//新增職缺

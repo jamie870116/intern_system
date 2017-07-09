@@ -20,7 +20,8 @@ class AuthController extends Controller
     protected $registerService;
     public function __construct(registerService $registerService){
         $this->registerService = $registerService;
-        $this->middleware('guest',['except'=>['getLogout']]);
+        $this->middleware('guest',['except'=>['getLogout','findUserDetailsByToken']]);
+        $this->middleware('jwt',['only'=>['findUserDetailsByToken']]);
     }
 
     public function postLogin(Request $request){
@@ -56,9 +57,8 @@ class AuthController extends Controller
                     } catch (JWTException $e) {
                         return response()->json(['error' => 'could_not_create_token'], 500);
                     }
-                    // $token = JWTAuth::attempt($auth);
-                    // return response()->json('登入成功',200,$headers, JSON_UNESCAPED_UNICODE)->cookie('token',$token,100);
-                    return response()->json(compact('token'));
+
+                    return response()->json($token);
                 }else{
                     return response()->json('帳號未開通',400,$headers, JSON_UNESCAPED_UNICODE);
                 }
@@ -72,22 +72,12 @@ class AuthController extends Controller
     }
 
     public function getLogout(){
-        // $token=TokensEloquent::where('id',Auth::id())->where('types',1)->first();
-        // if($token){
-        // 	$token->delete();
-        // }
-        $newToken	=	JWTAuth::parseToken()->refresh();
-       // return	response()->json(['token'	=>	$newToken]);
+        JWTAuth::invalidate(JWTAuth::getToken());
+//        $newToken	=	JWTAuth::parseToken()->refresh();
+//        return	response()->json(['token'	=>	$newToken]);
        return response()->json('已登出',200);
     }
 
-// protected function randomkeys($length){
-// 	$pattern = "1234567890abcdefghijklmnopqrstuvwxyz";
-// 	for($i=0;$i<$length;$i++){
-// 		$key .= $pattern{rand(0,35)};
-// 	}
-// 	return $key;
-// }
     public function register(Request $request){
 
         $length=10;
@@ -192,10 +182,10 @@ class AuthController extends Controller
 
     public function findUserDetailsByToken(Request $request)
     {
-        $re = $request->all();
-        $user = JWTAuth::toUser($re['token']);
+        $token = JWTAuth::getToken();
+        $user = JWTAuth::toUser($token);
         if ($user) {
-            return response()->json(['result' => $user], 200);
+            return response()->json($user, 200);
         } else {
             return response()->json('使用者不存在', 400);
         }

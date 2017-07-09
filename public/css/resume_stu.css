@@ -2,22 +2,13 @@
 	font-family: Arial,Microsoft Jhenghei;
 	margin:0px;
 	padding: 0px;
-	
 }
+
 a{
-	text-decoration: none;
-	color: #000;
-}
-a:hover{
-	text-decoration: none;
-	color: #000;
-}
-a:visited{
 	text-decoration: none;
 }
 .container{
 	width: 100%;
-	padding:0px;
 }
 .sidebar{
 	width: 12.5%;
@@ -33,9 +24,9 @@ a:visited{
 	position: fixed;
 	bottom: 30px;
 }
-.hamburger{
-	/*width: 20px;
-	height: 80px;*/
+.burger{
+	width: 20px;
+	height: 80px;
 	padding: 10px 10px 8px 8px;
 	background-color: #fcc506;
 	color: #221814;
@@ -74,6 +65,16 @@ a:visited{
 	opacity: 0.8;
 	transition: 0.5s;
 }
+.item a img{
+	width: auto;
+	height: 25px;
+	margin-right: 10px;
+}
+.function img{
+	width: auto;
+	height: 20px;
+	margin-right: 8px;
+}
 hr{
 	width: 90%;
 	border-style: solid;
@@ -89,10 +90,6 @@ hr{
 	line-height: 1.2;
 	font-size: 14px;
 	font-weight: bold;
-}
-.function i{
-	margin-right: 5px; 
-	font-size: 20px;
 }
 .function a{
 	color: #221814;
@@ -110,6 +107,7 @@ hr{
 	background-attachment: fixed;
 	background-size: cover;
 	border-bottom: 60px solid #4e4e4e;
+	margin-bottom:20px;/*新改*/
 }
 .header h2{
 	padding: 10% 0px 0px 12%;
@@ -145,198 +143,107 @@ hr{
 .pulse {
 	animation-name: pulse;
 }
-h1{
-	color: #191919;
-	letter-spacing: 3px;
-	margin: 60px 0px 0px 0px;
-}
-h3{
-	color: #191919;
-	letter-spacing: 1.5px;
-	margin: 5px 0px 50px 0px;
-}
 .wrapper hr{
 	color: #fcc506;
 	width: 200px;
 }
-/* form */
-.form{
-	width: 300px;
-	height: 600px;
-	margin: 230px auto 70px auto;/*原始top是85px*/
-	text-align: center;
-}
-.form .log{
-	color: #fcc506;
-	font-size: 45px;
-	font-weight: bold;
-	letter-spacing: 2px;
-	margin-bottom: 20px;
-}
-.form .in{
-	font-size: 28px;
-	font-weight: bold;
-	letter-spacing: 2px;
-	margin-bottom: 20px;
-}
-.col{ 
-	position:relative; 
-	margin-top:25px; 
-	margin-bottom: 5px;
-	float: left;
-}
-/*驗證碼*/
-
-.col img{
-	margin: 1px 0px 0px 0px;
-}
-/*.col*/ p{
-/*	width: 80px;*/
-	color: #999;
-	font-size: 18px;
-	text-align: left;
-/*	text-align-last: justify;*/
-}
-.col select{
-	margin-top: 5px;
-	width: 300px;
-	height: 30px;
-	font-size:16px;
-	background-color: #fff;
-}
-.col a{
-	padding-top: 10px;
-	color: #222;
-	letter-spacing: 3px;
-}
-.col button{
-	width: 80px;
-	height: 40px;
+button{
+	margin-top: 40px;
+	margin-bottom: 60px;
+	width: 175px;
+	height: 65px;
 	background-color: #000;
 	color: #fff;
 	border: none;
-	font-size: 14px;
-	letter-spacing: 3px;/*新改*/
+	font-size: 22px;
+	letter-spacing: 5px;
 }
-.col button:hover{
+button:hover{
 	color: #fcc506;
 	opacity: 0.9;
 }
-/*.col button a{
-	color: #fff;
-	line-height:40px;
-}
-.col button a:hover{
-	color: #fcc506;
-}*/
-input{
-	font-size:16px;
-	padding:8px 0px 9px 0px;
-	display:block;
-	width:300px;
-	border:none;
-	border-bottom:1px solid #757575;
-}
-input:focus{ 
-	outline:none; 
+h2 i:hover{
+	cursor:pointer;
 }
 
-/* LABEL */
-label{
-/*	width: 180px;*/
+.group1{
+	height: 580px;
+	width: 40%;
+	padding: 40px 5%;
+	float: left;
+}
+.group2{
+	width: 90%;
+	padding: 40px 5%;
+	float: left;
+}
+table{
+	margin-bottom:15px;
+	clear: both;
+}
+.group1 table input{
+	border: 1px solid #ccc;
+	border-radius:3px;
+	padding:5px 0px;
+	width:250px;
+}
+.group2 table input{
+	border: 1px solid #ccc;
+	border-radius:3px;
+	padding:5px 0px;
+	width:160px;
+}
+table input[type="textarea"]{
+	width:180px;
+}
+table input[type="date"]{
+	width:120px;
+}
+table input[type="radio"]{
+	width:12px;
+}
+.group h2{
+	letter-spacing:5px;
+	width:250px;
+	font-size: 22px;
+}
+.group1 hr{
+	margin-bottom: 10px;
+	color: #fcc506;
+	width: 60%;
+	float: left;
+}
+.group2 hr{
+	margin-bottom: 10px;
+	color: #fcc506;
+	width: 40%;
+	float: left;
+}
+.group img{
+	width: 30px;
+	margin-right: 10px;
+}
+.group1 th{
 	text-align: justify;
 	text-align-last: justify;
-	color:#999; 
-	font-size:18px;
-	font-weight:normal;
-	position:absolute;
-	pointer-events:none;
-	left:5px;
-	top:10px;
-	transition:0.2s ease all; 
-	-moz-transition:0.2s ease all; 
-	-webkit-transition:0.2s ease all;
+	padding:0px 10px 0px 3px;
 }
-
-/* active state */
-input:focus ~ label, input:valid ~ label{
-/*	width: 160px;*/
-	top:-20px;
-	font-size:16px;
-	color:#fcc506;
+.group2 th{
+	text-align: left;
+	padding:0px 0px 0px 3px;
+	letter-spacing: 2px;
 }
-
-/* BOTTOM BARS */
-.bar{ 
-	position:relative; 
-	display:block; 
-	width:300px; 
+.group2 select{
+	width: 120px;
+	height: 30px;
+	font-size: 14px;
+	background-color: #fff;
 }
-.bar:before, .bar:after{
-	content:'';
-	height:2px; 
-	width:0;
-	bottom:1px; 
-	position:absolute;
-	background:#fcc506; 
-	transition:0.2s ease all; 
-	-moz-transition:0.2s ease all; 
-	-webkit-transition:0.2s ease all;
+tr{
+	height: 40px;
 }
-.bar:before {
-	left:50%;
-}
-.bar:after {
-	right:50%; 
-}
-
-/* active state */
-input:focus ~ .bar:before, input:focus ~ .bar:after {
-	width:50%;
-}
-
-/* HIGHLIGHTER */
-.highlight {
-	position:absolute;
-	height:60%; 
-	width:100px; 
-	top:25%; 
-	left:0;
-	pointer-events:none;
-	opacity:0.5;
-}
-
-/* active state */
-input:focus ~ .highlight {
-	-webkit-animation:inputHighlighter 0.3s ease;
-	-moz-animation:inputHighlighter 0.3s ease;
-	animation:inputHighlighter 0.3s ease;
-}
-
-/* ANIMATIONS */
-@-webkit-keyframes inputHighlighter {
-	from{ 
-		background:#fcc506; 
-	}
-	to{ 
-		width:0; background:transparent; 
-	}
-}
-@-moz-keyframes inputHighlighter {
-	from{ 
-		background:#fcc506; 
-	}
-	to{ 
-		width:0; background:transparent; 
-	}
-}
-@keyframes inputHighlighter {
-	from{ 
-		background:#fcc506; 
-	}
-	to{ 
-		width:0; background:transparent; 
-	}
+td{
+	padding:0px 3px;
 }
 .footer{
 	height: 50px;
@@ -346,6 +253,7 @@ input:focus ~ .highlight {
 	line-height: 4.5;
 	letter-spacing: 2px;
 	font-size: 12px;
+
 }
 @media screen and (max-width: 1280px){
 	.sidebar{
@@ -378,6 +286,12 @@ input:focus ~ .highlight {
 	}
 	.wrapper{
 		width: 82.5%;
+	}
+	.group1{
+		height: 580px;
+		width: 90%;
+		padding: 40px 5%;
+		float: left;
 	}
 }
 @media screen and (max-width: 988px){

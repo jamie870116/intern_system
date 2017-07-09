@@ -7,11 +7,6 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
 	<link rel="stylesheet" href="css/login.css">
-	<script src="https://use.fontawesome.com/47c3283935.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-	<script src="js/index.js"></script>
-	<script src="../public/js/Register.js"></script>
 </head>
 <body>
 	<div class="container">
@@ -49,17 +44,17 @@
 									<option value="1">學生</option>
 								</select>
 							</div>
-							<div class="col" data-toggle="tooltip" data-placement="right" title="請輸入學號或學校信箱">
+							<div class="col">
 								<input type="text" required name="account" id='Saccount' class="data" >
 								<span class="highlight"></span>
 								<span class="bar"></span>
-								<label>帳號</label>
+								<label>帳號(請輸入學號或學校信箱)</label>
 							</div>
-							<div class="col" data-toggle="tooltip" data-placement="right" title="請輸入6~20字元" style="font-size: 16px">
+							<div class="col">
 								<input type="password" required name="password" id='Spassword' class="data">
 								<span class="highlight"></span>
 								<span class="bar"></span>
-								<label>密碼</label>
+								<label>密碼(請輸入6~20字元)</label>
 							</div>
 							<div class="col">      
 								<input type="password" required name="conf_pass" id='Sconf_pass' class="data">
@@ -80,8 +75,8 @@
 								<label>電話</label>
 							</div>
 							<div class="col">
-								<button type="submit" class='Register_Bt'>註冊</button>
-								<a href="http://his.nutc.edu.tw/s1110234015/intern_system/public/"><button type="submit">去登入</button></a>
+								<button type="submit">註冊</button>
+								<a href="login.html"><button type="submit">去登入</button></a>
 							</div>
 						</div>
 						<div role="tabpanel" class="tab-pane" id="enterprise">
@@ -122,8 +117,8 @@
 								<label>E-Mail</label>
 							</div>
 							<div class="col">
-								<button type="submit" class='Register_Bt'>註冊</button>
-								<a href="http://his.nutc.edu.tw/s1110234015/intern_system/public/"><button type="submit">去登入</button></a>
+								<button type="submit">註冊</button>
+								<a href="login.html"><button type="submit">去登入</button></a>
 							</div>
 						</div>
 					</div>
@@ -143,5 +138,9 @@
 			$('[data-toggle="tooltip"]').tooltip();
 		})
 	</script>
+	<script src="https://use.fontawesome.com/47c3283935.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+	<script src="jquery/index.js"></script>
 </body>
 </html>
