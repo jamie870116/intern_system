@@ -35,6 +35,6 @@ class CreateJobOpenningTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('jopOpening');
     }
 }
