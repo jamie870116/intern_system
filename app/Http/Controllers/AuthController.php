@@ -50,8 +50,9 @@ class AuthController extends Controller
                     // $token->id=Auth::user()->id;
                     // $token->types=$d_type['type'];
                     // $token->save();
+                    $token = JWTAuth::attempt($user_data);
                     try {
-                        if (! $token = JWTAuth::attempt($user_data)) {
+                        if (!$token) {
                             return response()->json(['error' => 'invalid_credentials'], 401);
                         }
                     } catch (JWTException $e) {
