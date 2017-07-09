@@ -10,6 +10,9 @@ class Job_opening extends Model
     protected $primaryKey = 'joid';
     public  $timestamps=false;
     protected $fillable = [
-        'c_account','jtypes','jduties','jdetails','jsalary','jcontact_name','jcontact_phone','jcontact_email','jstatus','jdelete_reason'
+        'c_account','jtypes','jduties',
+        'jdetails','jsalary','jcontact_name'
+        ,'jcontact_phone','jcontact_email'
+        ,'jstatus','jdelete_reason'
     ];
 }
