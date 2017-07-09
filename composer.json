@@ -8,10 +8,10 @@
         "php": ">=5.6.4",
         "barryvdh/laravel-ide-helper": "v2.4.0",
         "guzzlehttp/guzzle": "^6.2",
-        "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
         "recca0120/laravel-tracy": "v1.8.9",
-        "tymon/jwt-auth": "^0.5.11"
+        "tymon/jwt-auth": "^0.5.11",
+        "laravel/framework": "5.4.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -43,8 +43,8 @@
             "php artisan optimize"
         ],
         "post-update-cmd": [
-//            "Illuminate\\Foundation\\ComposerScripts::postUpdate",
-//            "php artisan optimize",
+            "Illuminate\\Foundation\\ComposerScripts::postUpdate",
+            "php artisan optimize",
             "php artisan clear-compiled",
             "php artisan ide-helper:generate",
             "php artisan optimize"
