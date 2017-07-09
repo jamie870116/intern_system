@@ -14,6 +14,8 @@ class Job_openingController extends Controller
 
     public function __construct(JobopeningServices $JobopeningServices)
     {
+        $this->middleware('company',['except'=>'reviewJobOpening']);
+        $this->middleware('admin',['only'=>'reviewJobOpening']);
         $this->JobopeningServices = $JobopeningServices;
     }
 

@@ -25,6 +25,7 @@ class Stu_resumeController extends Controller
 
     public function __construct(ResumeServices $ResumeServices)
     {
+        $this->middleware('student');
         $this->ResumeServices = $ResumeServices;
     }
 

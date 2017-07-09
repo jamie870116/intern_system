@@ -26,10 +26,7 @@ class JwtAuthentication
             ],401);
         }
 
-        $response=$next($request);
-        $response->headers->set('Content-Type', 'application/json; charset=UTF-8');
-        $response->headers->set('charset', 'utf-8');
-        return  $response;
+        return  $next($request);
     }
 
 }
