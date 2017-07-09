@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\User as UserEloquent;
 
 use App\Services\registerService;
 use App\Stu_basic as stuBasicEloquent;
+
+//use Jenssegers\Agent\Facades\Agent;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
-
+use Jenssegers\Agent\Agent;
 use Validator;
 use Log;
 
@@ -21,7 +24,7 @@ class AuthController extends Controller
     public function __construct(registerService $registerService){
         $this->registerService = $registerService;
         $this->middleware('guest',['except'=>['getLogout','findUserDetailsByToken']]);
-        $this->middleware('jwt',['only'=>['findUserDetailsByToken']]);
+        $this->middleware('jwt',['only'=>['findUserDetailsByToken','getLogout']]);
     }
 
     public function postLogin(Request $request){
@@ -50,7 +53,14 @@ class AuthController extends Controller
                     // $token->id=Auth::user()->id;
                     // $token->types=$d_type['type'];
                     // $token->save();
-                    $token = JWTAuth::attempt($user_data);
+                    $agent = new Agent();
+                    if($agent->isDesktop()){
+                        $ex_time=Carbon::now()->addHour()->timestamp;
+                        $token = JWTAuth::attempt($user_data,['exp'=>$ex_time]);
+                    }else{
+                        $token = JWTAuth::attempt($user_data);
+                    }
+
                     try {
                         if (!$token) {
                             return response()->json(['error' => 'invalid_credentials'], 401);
@@ -73,10 +83,17 @@ class AuthController extends Controller
     }
 
     public function getLogout(){
-        JWTAuth::invalidate(JWTAuth::getToken());
+        $token = JWTAuth::getToken();
+        if($token){
+            JWTAuth::invalidate($token);
+            return response()->json('已登出',200);
+        }else{
+            return response()->json('已登出',200);
+        }
+
 //        $newToken	=	JWTAuth::parseToken()->refresh();
 //        return	response()->json(['token'	=>	$newToken]);
-       return response()->json('已登出',200);
+
     }
 
     public function register(Request $request){
@@ -181,7 +198,7 @@ class AuthController extends Controller
 
     }
 
-    public function findUserDetailsByToken(Request $request)
+    public function findUserDetailsByToken()
     {
         $token = JWTAuth::getToken();
         $user = JWTAuth::toUser($token);

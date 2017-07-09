@@ -52,4 +52,4 @@ Route::group(['middleware'=>'jwt'],function(){
 Route::group(['middleware'=>'jwt','student'],function() {
 
 });
-Route::get('Logout','AuthController@getLogout');//登出
+Route::post('Logout','AuthController@getLogout');//登出
