@@ -28,17 +28,7 @@ class Stu_resumeController extends Controller
         $this->ResumeServices = $ResumeServices;
     }
 
-    public function findUserDetailsByToken(Request $request)
-    {
-        $input = $request->all();
-        $user = JWTAuth::toUser($input['token']);
-        if ($user) {
-            return response()->json(['result' => $user], 200);
-        } else {
-            return response()->json('使用者不存在', 400);
-        }
 
-    }
 
     //新增履歷開始
     public function createEduDataById(Request $request, $id)

@@ -190,4 +190,16 @@ class AuthController extends Controller
 
     }
 
+    public function findUserDetailsByToken(Request $request)
+    {
+        $re = $request->all();
+        $user = JWTAuth::toUser($re['token']);
+        if ($user) {
+            return response()->json(['result' => $user], 200);
+        } else {
+            return response()->json('使用者不存在', 400);
+        }
+
+    }
+
 }
