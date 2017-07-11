@@ -31,7 +31,6 @@ Route::group(['middleware'=>'jwt'],function(){
     Route::get('getJobOpeningbyAccount','Stu_resumeController@getJobOpeningbyAccount');//廠商帳號取得該廠商所有職缺資料
     Route::get('getJobOpeningbyId','Stu_resumeController@getJobOpeningbyId');//廠商帳號取得該廠商所有職缺資料
 
-
     //履歷新增相關
     Route::post('createEduDataById/{id}', 'Stu_resumeController@createEduDataById');
     Route::post('createJobExperienceById/{id}', 'Stu_resumeController@createJobExperienceById');
