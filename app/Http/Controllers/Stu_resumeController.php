@@ -32,11 +32,12 @@ class Stu_resumeController extends Controller
 
 
     //新增履歷開始
-    public function createEduDataById(Request $request, $id)
+    public function createEduDataById(Request $request)
     {
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
+            'id'=>'required',
             'school' => 'required',
             'department' => 'required',
             'enterDate' => 'required|date',
@@ -50,7 +51,7 @@ class Stu_resumeController extends Controller
         if ($objValidator->fails()) {
             return response()->json($objValidator->errors(), 400);//422
         } else {
-            $responses = $this->ResumeServices->newEduDataById($re, $id);
+            $responses = $this->ResumeServices->newEduDataById($re);
             if ($responses == '新增學歷資料成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -59,11 +60,12 @@ class Stu_resumeController extends Controller
         }
     }
 
-    public function createJobExperienceById(Request $request, $id)
+    public function createJobExperienceById(Request $request)
     {
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
+            'id'=>'required',
             'semester' => 'required',
             'jobTitle' => 'required'
         ), array(
@@ -72,7 +74,7 @@ class Stu_resumeController extends Controller
         if ($objValidator->fails()) {
             return response()->json($objValidator->errors(), 400);
         } else {
-            $responses = $this->ResumeServices->newJobExperienceById($re, $id);
+            $responses = $this->ResumeServices->newJobExperienceById($re);
             if ($responses == '新增工作資料成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -81,10 +83,11 @@ class Stu_resumeController extends Controller
         }
     }
 
-    public function createLicenseById(Request $request, $id)
+    public function createLicenseById(Request $request)
     {
         $re = $request->all();
         $objValidator = Validator::make($request->all(), array(
+            'id'=>'required',
             'agency' => 'required',
             'lname' => 'required',
             'ldate' => 'required|date'
@@ -95,7 +98,7 @@ class Stu_resumeController extends Controller
         if ($objValidator->fails()) {
             return response()->json($objValidator->errors(), 400);//422
         } else {
-            $responses = $this->ResumeServices->newLicenseById($re, $id);
+            $responses = $this->ResumeServices->newLicenseById($re);
             if ($responses == '新增證照資料成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -104,11 +107,12 @@ class Stu_resumeController extends Controller
         }
     }
 
-    public function createWorksDataById(Request $request, $id)
+    public function createWorksDataById(Request $request)
     {
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
+            'id'=>'required',
             'wName' => 'required',
             'wCreatedDate' => 'nullable|date'
         ), array(
@@ -118,7 +122,7 @@ class Stu_resumeController extends Controller
         if ($objValidator->fails()) {
             return response()->json($objValidator->errors(), 400);//422
         } else {
-            $responses = $this->ResumeServices->newWorksDataById($re, $id);
+            $responses = $this->ResumeServices->newWorksDataById($re);
             if ($responses == '新增作品資料成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -127,11 +131,12 @@ class Stu_resumeController extends Controller
         }
     }
 
-    public function createRelativeDataById(Request $request, $id)
+    public function createRelativeDataById(Request $request)
     {
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
+            'id'=>'required',
             'rType' => 'required',
             'rName' => 'required'
         ), array(
@@ -140,7 +145,7 @@ class Stu_resumeController extends Controller
         if ($objValidator->fails()) {
             return response()->json($objValidator->errors(), 400);//422
         } else {
-            $responses = $this->ResumeServices->newRelativeDataById($re, $id);
+            $responses = $this->ResumeServices->newRelativeDataById($re);
             if ($responses == '新增親屬資料成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -151,9 +156,10 @@ class Stu_resumeController extends Controller
     //新增履歷結束
 
     //取得履歷開始
-    public function findResumeDataById($id)
+    public function findResumeDataById(Request $request)
     {
-        $headers = array('Content-Type' => 'application/json; <a href="http://superlevin.ifengyuan.tw/tag/charset/">charset</a>=utf-8');
+        $re=$request->all();
+        $id=$re['id'];
         $stuBas = stuBasicEloquent::where('sid', $id)->get();
         $stuEdu = stuEduEloquent::where('sid', $id)->get();
         $stuJExp = stuJExpEloquent::where('sid', $id)->get();
@@ -161,16 +167,17 @@ class Stu_resumeController extends Controller
         $stuRel = stuRelativesEloquent::where('sid', $id)->get();
         $stuWor = stuWorksEloquent::where('sid', $id)->get();
         $stdRe = array($stuBas, $stuEdu, $stuJExp, $stuLic, $stuRel, $stuWor);
-        return response()->json(['stdRe' => $stdRe], 200, $headers, JSON_UNESCAPED_UNICODE);
+        return response()->json(['stdRe' => $stdRe], 200, [], JSON_UNESCAPED_UNICODE);
     }
     //取得履歷結束
     //
     //修改履歷開始
-    public function editBasicDataById(Request $request, $id)
+    public function editBasicDataById(Request $request)
     {
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
+            'id'=>'required',
             'chiName' => 'required',
             'engName' => 'required',
             'bornedPlace' => 'required',
@@ -191,7 +198,7 @@ class Stu_resumeController extends Controller
         if ($objValidator->fails()) {
             return response()->json($objValidator->errors(), 400);//422
         } else {
-            $responses = $this->ResumeServices->editBasicDataById_ser($re, $id);
+            $responses = $this->ResumeServices->editBasicDataById_ser($re);
             if ($responses == '修改基本資料成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -200,11 +207,12 @@ class Stu_resumeController extends Controller
         }
     }
 
-    public function editEduDataById(Request $request, $edu_id)
+    public function editEduDataById(Request $request)
     {
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
+            'edu_id'=>'required',
             'school' => 'required',
             'department' => 'required',
             'enterDate' => 'required|date',
@@ -217,7 +225,7 @@ class Stu_resumeController extends Controller
         if ($objValidator->fails()) {
             return response()->json($objValidator->errors(), 400);
         } else {
-            $responses = $this->ResumeServices->editEduDataById_ser($re, $edu_id);
+            $responses = $this->ResumeServices->editEduDataById_ser($re);
             if ($responses == '修改學歷資料成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -226,11 +234,12 @@ class Stu_resumeController extends Controller
         }
     }
 
-    public function editJobExperienceById(Request $request, $jid)
+    public function editJobExperienceById(Request $request)
     {
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
+            'jid'=>'required',
             'semester' => 'required',
             'jobTitle' => 'required'
         ), array(
@@ -239,7 +248,7 @@ class Stu_resumeController extends Controller
         if ($objValidator->fails()) {
             return response()->json($objValidator->errors(), 400);
         } else {
-            $responses = $this->ResumeServices->editJobExperienceById_ser($re, $jid);
+            $responses = $this->ResumeServices->editJobExperienceById_ser($re);
             if ($responses == '修改工作資料成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -248,11 +257,12 @@ class Stu_resumeController extends Controller
         }
     }
 
-    public function editLicenseById(Request $request, $lid)
+    public function editLicenseById(Request $request)
     {
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
+            'lid'=>'required',
             'agency' => 'required',
             'lname' => 'required',
             'ldate' => 'required|date'
@@ -263,7 +273,7 @@ class Stu_resumeController extends Controller
         if ($objValidator->fails()) {
             return response()->json($objValidator->errors(), 400);
         } else {
-            $responses = $this->ResumeServices->editLicenseById_ser($re, $lid);
+            $responses = $this->ResumeServices->editLicenseById_ser($re);
             if ($responses == '修改證照資料成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -272,10 +282,11 @@ class Stu_resumeController extends Controller
         }
     }
 
-    public function editLanguageById(Request $request, $id)
+    public function editLanguageById(Request $request)
     {
         $re = $request->all();
         $objValidator = Validator::make($request->all(), array(
+            'id'=>'required',
             'cl' => 'required|integer',
             'cs' => 'required|integer',
             'cw' => 'required|integer',
@@ -293,7 +304,7 @@ class Stu_resumeController extends Controller
         if ($objValidator->fails()) {
             return response()->json($objValidator->errors(), 400);
         } else {
-            $responses = $this->ResumeServices->editLanguageById_ser($re, $id);
+            $responses = $this->ResumeServices->editLanguageById_ser($re);
             if ($responses == '修改語言能力成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -302,11 +313,12 @@ class Stu_resumeController extends Controller
         }
     }
 
-    public function editAbilityById(Request $request, $id)
+    public function editAbilityById(Request $request)
     {
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
+            'id'=>'required',
             'dataBase' => 'required|integer',
             'programmingLanguage' => 'required|integer',
             'document' => 'required|integer',
@@ -324,7 +336,7 @@ class Stu_resumeController extends Controller
         if ($objValidator->fails()) {
             return response()->json($objValidator->errors(), 400);
         } else {
-            $responses = $this->ResumeServices->editAbilityById_ser($re, $id);
+            $responses = $this->ResumeServices->editAbilityById_ser($re);
             if ($responses == '修改電腦技術資料成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -333,10 +345,11 @@ class Stu_resumeController extends Controller
         }
     }
 
-    public function editWorksDataById(Request $request, $wid)
+    public function editWorksDataById(Request $request)
     {
         $re = $request->all();
         $objValidator = Validator::make($request->all(), array(
+            'wid'=>'required',
             'wName' => 'required',
             'wCreatedDate' => 'nullable|date'
         ), array(
@@ -346,7 +359,7 @@ class Stu_resumeController extends Controller
         if ($objValidator->fails()) {
             return response()->json($objValidator->errors(), 400);
         } else {
-            $responses = $this->ResumeServices->editWorksDataById_ser($re, $wid);
+            $responses = $this->ResumeServices->editWorksDataById_ser($re);
             if ($responses == '修改作品資料成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -355,11 +368,12 @@ class Stu_resumeController extends Controller
         }
     }
 
-    public function editRelativeDataById(Request $request, $rid)
+    public function editRelativeDataById(Request $request)
     {
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
+            'rid'=>'required',
             'rType' => 'required',
             'rName' => 'required'
         ), array(
@@ -368,7 +382,7 @@ class Stu_resumeController extends Controller
         if ($objValidator->fails()) {
             return response()->json($objValidator->errors(), 400);//422
         } else {
-            $responses = $this->ResumeServices->editRelativeDataById_ser($re, $rid);
+            $responses = $this->ResumeServices->editRelativeDataById_ser($re);
             if ($responses == '修改親屬資料成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {

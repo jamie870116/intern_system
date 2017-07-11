@@ -19,7 +19,7 @@ use Log;
 class ResumeServices
 {
 //新增履歷開始
-    public function newEduDataById($re, $id)
+    public function newEduDataById($re)
     {
         $school = $re['school'];
         $department = $re['department'];
@@ -29,7 +29,7 @@ class ResumeServices
         $graduate = $re['graduate'];
 
         $stuEdu = new stuEduEloquent();
-        $stuEdu->sid = $id;
+        $stuEdu->sid = $re['id'];
         $stuEdu->school = $school;
         $stuEdu->department = $department;
         $stuEdu->degree = $degree;
@@ -44,14 +44,14 @@ class ResumeServices
         }
     }
 
-    public function newJobExperienceById($re, $id)
+    public function newJobExperienceById($re)
     {
 
         $semester = $re['semester'];
         $jobTitle = $re['jobTitle'];
 
         $stuJExp = new stuJExpEloquent();
-        $stuJExp->sid = $id;
+        $stuJExp->sid = $re['id'];
         $stuJExp->semester = $semester;
         $stuJExp->jobTitle = $jobTitle;
         $stuJExp->save();
@@ -63,7 +63,7 @@ class ResumeServices
 
     }
 
-    public function newLicenseById($re, $id)
+    public function newLicenseById($re)
     {
 
         $agency = $re['agency'];
@@ -71,7 +71,7 @@ class ResumeServices
         $ldate = $re['ldate'];
 
         $stulic = new stulicenceEloquent();
-        $stulic->sid = $id;
+        $stulic->sid = $re['id'];
         $stulic->agency = $agency;
         $stulic->lname = $lname;
         $stulic->ldate = $ldate;
@@ -83,14 +83,14 @@ class ResumeServices
         }
     }
 
-    public function newWorksDataById($re, $id)
+    public function newWorksDataById($re)
     {
         $wName = $re['wName'];
         $wLink = $re['wLink'];
         $wCreatedDate = $re['wCreatedDate'];
 
         $stuWor = new stuWorksEloquent();
-        $stuWor->sid = $id;
+        $stuWor->sid = $re['id'];
         $stuWor->wName = $wName;
         $stuWor->wLink = $wLink;
         $stuWor->wCreatedDate = $wCreatedDate;
@@ -104,7 +104,7 @@ class ResumeServices
 
     }
 
-    public function newRelativeDataById($re, $id)
+    public function newRelativeDataById($re)
     {
         $rType = $re['rType'];
         $rName = $re['rName'];
@@ -113,7 +113,7 @@ class ResumeServices
         $rJob = $re['rJob'];
 
         $sturel = new stuRelativesEloquent();
-        $sturel->sid = $id;
+        $sturel->sid = $re['id'];
         $sturel->rType = $rType;
         $sturel->rName = $rName;
         $sturel->rAge = $rAge;
@@ -130,9 +130,9 @@ class ResumeServices
     //新增履歷結束
     //
     //修改履歷開始
-    public function editBasicDataById_ser($re, $id)
+    public function editBasicDataById_ser($re)
     {
-        $stuBas = stuBasicEloquent::where('sid', $id)->first();
+        $stuBas = stuBasicEloquent::where('sid', $re['id'])->first();
         $chiName = $re['chiName'];
         $engName = $re['engName'];
         $bornedPlace = $re['bornedPlace'];
@@ -166,10 +166,10 @@ class ResumeServices
         }
     }
 
-    public function editEduDataById_ser($re, $edu_id)
+    public function editEduDataById_ser($re)
     {
 
-        $stuEdu = stuEduEloquent::where('edu_id', $edu_id)->first();
+        $stuEdu = stuEduEloquent::where('edu_id', $re['edu_id'])->first();
         $school = $re['school'];
         $department = $re['department'];
         $degree = $re['degree'];
@@ -192,9 +192,9 @@ class ResumeServices
 
     }
 
-    public function editJobExperienceById_ser($re, $jid)
+    public function editJobExperienceById_ser($re)
     {
-        $stuJExp = stuJExpEloquent::where('jid', $jid)->first();
+        $stuJExp = stuJExpEloquent::where('jid', $re['jid'])->first();
         $semester = $re['semester'];
         $jobTitle = $re['jobTitle'];
 
@@ -208,9 +208,9 @@ class ResumeServices
         }
     }
 
-    public function editLicenseById_ser($re, $lid)
+    public function editLicenseById_ser($re)
     {
-        $stulic = stulicenceEloquent::where('lid', $lid)->first();
+        $stulic = stulicenceEloquent::where('lid', $re['lid'])->first();
         $agency = $re['agency'];
         $lname = $re['lname'];
         $ldate = $re['ldate'];
@@ -226,9 +226,9 @@ class ResumeServices
         }
     }
 
-    public function editLanguageById_ser($re, $id)
+    public function editLanguageById_ser($re)
     {
-        $stuBas = stuBasicEloquent::where('sid', $id)->first();
+        $stuBas = stuBasicEloquent::where('sid', $re['id'])->first();
         $CL = $re['cl'];
         $CS = $re['cs'];
         $CR = $re['cr'];
@@ -258,9 +258,9 @@ class ResumeServices
         }
     }
 
-    public function editAbilityById_ser($re, $id)
+    public function editAbilityById_ser($re)
     {
-        $stuBas = stuBasicEloquent::where('sid', $id)->first();
+        $stuBas = stuBasicEloquent::where('sid', $re['id'])->first();
         $dataBase = $re['dataBase'];
         $programmingLanguage = $re['programmingLanguage'];
         $webDesign = $re['webDesign'];
@@ -288,9 +288,9 @@ class ResumeServices
         }
     }
 
-    public function editWorksDataById_ser($re, $wid)
+    public function editWorksDataById_ser($re)
     {
-        $stuWor = stuWorksEloquent::where('wid', $wid)->first();
+        $stuWor = stuWorksEloquent::where('wid', $re['wid'])->first();
         $wName = $re['wName'];
         $wLink = $re['wLink'];
         $wCreatedDate = $re['wCreatedDate'];
@@ -306,9 +306,9 @@ class ResumeServices
         }
     }
 
-    public function editRelativeDataById_ser($re, $rid)
+    public function editRelativeDataById_ser($re)
     {
-        $sturel = stuRelativesEloquent::where('rid', $rid)->first();
+        $sturel = stuRelativesEloquent::where('rid', $re['rid'])->first();
         $rType = $re['rType'];
         $rName = $re['rName'];
         $rAge = $re['rAge'];
