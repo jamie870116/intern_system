@@ -25,13 +25,13 @@ class Job_openingController extends Controller
 
         $objValidator = Validator::make($request->all(), array(
             'jtypes' => 'required|integer',
-            'c_account' => 'required',
             'jduties' => 'required',
             'jdetails' => 'required',
             'jcontact_name' => 'required',
             'jcontact_phone' => 'required',
             'jcontact_email' => 'required|email',
-            'jsalary' => 'required'
+            'jsalary' => 'required',
+            'c_account' => 'required'
             ), array(
             'required' => '此欄位不可為空白',
             'integer' => 'int格式錯誤',
@@ -49,7 +49,7 @@ class Job_openingController extends Controller
      }
  }
 //修改職缺
- public function editJobOpening(Request $request,$joid){
+ public function editJobOpening(Request $request){
     $re = $request->all();
 
     $objValidator = Validator::make($request->all(), array(
@@ -59,7 +59,8 @@ class Job_openingController extends Controller
         'jcontact_name' => 'required',
         'jcontact_phone' => 'required',
         'jcontact_email' => 'required|email',
-        'jsalary' => 'required'
+        'jsalary' => 'required',
+        'joid' => 'required'
         ), array(
         'required' => '此欄位不可為空白',
         'integer' => 'int格式錯誤',
@@ -68,7 +69,7 @@ class Job_openingController extends Controller
     if ($objValidator->fails()) {
             return response()->json($objValidator->errors(), 400);//422
         } else {
-            $responses=$this->JobopeningServices->editJobOpening_ser($re,$joid);
+            $responses=$this->JobopeningServices->editJobOpening_ser($re);
             if ($responses == '修改職缺資料成功，職缺將撤下待重新審核') {
              return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
          } else {
@@ -77,10 +78,11 @@ class Job_openingController extends Controller
      }
  }
     //軟刪除
- public function deleteJobOpening(Request $request,$joid){
+ public function deleteJobOpening(Request $request){
     $re = $request->all();
 
     $objValidator = Validator::make($request->all(), array(
+        'joid' => 'required',
         'jdelete_reason' => 'required'
         ), array(
         'required' => '此欄位不可為空白'
@@ -88,7 +90,7 @@ class Job_openingController extends Controller
     if ($objValidator->fails()) {
             return response()->json($objValidator->errors(), 400);//422
         } else {
-            $responses=$this->JobopeningServices->deleteJobOpening_ser($re,$joid);
+            $responses=$this->JobopeningServices->deleteJobOpening_ser($re);
             if ($responses == '職缺已刪除') {
              return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
          } else {
@@ -119,10 +121,21 @@ class Job_openingController extends Controller
      }
  }
 
- //廠商取得自家職缺資料
-    public function getJobOpeningbycompany(Request $request){
+ //廠商帳號取得該廠商所有職缺資料
+    public function getJobOpeningbyAccount(Request $request){
         $re=$request->all();
-        $jobOp=job_opEloquent::where('c_account',$re['c_account']);
+        $jobOp=job_opEloquent::where('c_account',$re['c_account'])->get();
+        if($jobOp){
+            return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
+        }else{
+            return response()->json('取得職缺資料失敗', 200, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    //廠商帳號取得該廠商所有職缺資料
+    public function getJobOpeningbyId(Request $request){
+        $re=$request->all();
+        $jobOp=job_opEloquent::where('joid',$re['joid'])->get();
         if($jobOp){
             return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
         }else{

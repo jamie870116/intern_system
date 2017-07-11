@@ -8,7 +8,7 @@ class JobopeningServices
 
 	public function createJobOpening_ser($re){
 		$jobOpen = new job_opEloquent();
-		$jobOpen->c_account=$re['c_account'];
+        $jobOpen->c_account=$re['c_account'];
 		$jobOpen->jtypes=$re['jtypes'];
 		$jobOpen->jduties=$re['jduties'];
 		$jobOpen->jdetails=$re['jdetails'];
@@ -24,8 +24,8 @@ class JobopeningServices
 		}
 	}
 
-	public function editJobOpening_ser($re,$joid){
-		$jobOpen = job_opEloquent::where('joid', $joid)->first();
+	public function editJobOpening_ser($re){
+		$jobOpen = job_opEloquent::where('joid',$re['joid'])->first();
 		$jobOpen->jtypes=$re['jtypes'];
 		$jobOpen->jduties=$re['jduties'];
 		$jobOpen->jdetails=$re['jdetails'];
@@ -43,8 +43,8 @@ class JobopeningServices
 		}
 	}
 
-	public function deleteJobOpening_ser($re,$joid){
-		$jobOpen = job_opEloquent::where('joid', $joid)->first();
+	public function deleteJobOpening_ser($re){
+		$jobOpen = job_opEloquent::where('joid',$re['joid'])->first();
 		$jobOpen->jdelete_reason=$re['jdelete_reason'];
 		$jobOpen->jstatus=3;
 		$jobOpen->save();
