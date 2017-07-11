@@ -114,6 +114,7 @@ class Job_openingController extends Controller
         } else {
             $responses=$this->JobopeningServices->reviewJobOpening_ser($re);
             if ($responses == '職缺審核通過'||$responses == '職缺審核未通過') {
+                $this->JobopeningServices->sendResultMail($responses,$re['joid']);
              return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
          } else {
              return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);

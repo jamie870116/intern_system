@@ -3,6 +3,8 @@ namespace App\Services;
 
 
 use App\Job_opening as job_opEloquent;
+use App\Jobs\sendResultmail;
+use App\User as userEloquent;
 class JobopeningServices
 {
 
@@ -71,5 +73,17 @@ class JobopeningServices
 			return '職缺未審核';
 		}
 	}
+//寄審核結果通知信
+    public static  function sendResultMail($content,$joid){
+        $jobOpen = job_opEloquent::where('joid', $joid)->first();
+        $company=userEloquent::where('account',$jobOpen->c_account)->first();
+	    $mail=$company->email;
+	    $contents ='您編號為'.$joid.'的'.$content;
+        $data = ['mail'=>$mail, 'contents'=>$contents];
+        dispatch(new sendResultmail($data));
+
+        return response()->json('sended',200);
+
+    }
 
 }
