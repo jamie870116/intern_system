@@ -12,11 +12,11 @@
 */
 
 Route::get('/', function () {
-    return view('Login');
+    return view('index');
 });
-Route::get('register', function () {
-    return view('Register');
-});
-Route::post('Login','AuthController@postLogin');
-Route::get('Logout','AuthController@getLogout');
-Route::get('send','AuthController@sendmail');
+//Route::get('register', function () {
+//    return view('Register');
+//});
+//Route::post('Login','AuthController@postLogin');
+//Route::get('Logout','AuthController@getLogout');
+//Route::get('send','AuthController@sendmail');
