@@ -60,7 +60,7 @@ class JobopeningServices
 		if ($com) {
 			return $com;
 		} else {
-			return '刪除廠商失敗';
+			return '取得廠商失敗';
 		}
 	}
 }

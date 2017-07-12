@@ -100,7 +100,7 @@ class Com_basicController extends Controller
             return response()->json($objValidator->errors(), 400);//422
         } else {
         	$responses=$this->CompanyServices->getCompanyByAccount_ser($re);
-        	if ($responses == '刪除廠商失敗') {
+        	if ($responses == '取得廠商失敗') {
         		return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
         	} else {
         		return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
