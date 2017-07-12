@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateStuJexpTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('stu_jexp', function (Blueprint $table) {
+            $table->integer('sid');//id
+            $table->increments('jid');//AI
+            $table->string('semester',30);//學期
+            $table->string('jobTitle',100);//職稱
+         });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('stu_jExp');
+    }
+}

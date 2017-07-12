@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>登入</title>
+	<title>忘記密碼</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.5/sweetalert2.min.css">
 	<link rel="stylesheet" href="css/login.css">
 </head>
 <body>
@@ -29,36 +26,17 @@
 		</div>
 		<div class="hamburger">MENU</div>
 		<div class="wrapper">
-			<div class="form" id='Login'>
-				<span class="log">L</span><span class="in">OG IN</span>
-				<div class="col" data-toggle="tooltip" data-placement="right" title="請輸入學號或學校信箱">
-					<input type="text" required id='account' name='account'  >
-					<span class="highlight"></span>
-					<span class="bar"></span>
-					<label>帳 號</label>
-				</div>
-
-				<div class="col" >
-					<input type="text" required id='password' name='password' >
-					<span class="highlight"></span>
-					<span class="bar"></span>
-					<label>密 碼</label>
-				</div>
-				<div class="col">
-					<img src="https://api.fnkr.net/testimg/300x60/888888/FFF/?text=8888">
-				</div>
+			<div class="form" id="Password">
+				<span class="log">F</span><span class="in">ORGET</span>
 				<div class="col">      
 					<input type="text" required>
 					<span class="highlight"></span>
 					<span class="bar"></span>
-					<label>驗證碼</label>
+					<label>E-Mail</label>
 				</div>
+
 				<div class="col">
-					<a href="password.html">忘記密碼?</a>
-				</div>
-				<div class="col">
-					<button type="submit" id='Login_Bt'>登入</button>
-					<a href="http://his.nutc.edu.tw/s1110234015/intern_system/public/register"><button type="submit">去註冊</button></a>
+					<button type="submit">送出</button>
 				</div>
 			</div>
 			<div class="footer">
@@ -71,8 +49,6 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.5/sweetalert2.min.js"></script>
-	<script src="../public/js/index.js"></script>
-	<script src="../public/js/valid.js"></script>
-	<script src="../public/js/Login.js"></script>
+	<script src="js/index.js"></script>
 </body>
 </html>

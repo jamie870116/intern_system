@@ -245,6 +245,9 @@ tr{
 td{
 	padding:0px 3px;
 }
+.closeBtn:hover{
+	cursor:pointer;
+}
 .footer{
 	height: 50px;
 	text-align: center;

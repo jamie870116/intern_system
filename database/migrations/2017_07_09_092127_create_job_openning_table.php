@@ -25,6 +25,8 @@ class CreateJobOpenningTable extends Migration
             $table->string('jcontact_email',150);//聯絡人信箱
             $table->tinyInteger('jstatus')->default(0);//職缺狀態/0.尚未確認 1.通過 2.未通過 3.已刪
             $table->longText('jdelete_reason')->nullable();//刪除理由
+            $table->timestamps();//時間戳
+            $table->softDeletes();//軟刪除
         });
     }
 

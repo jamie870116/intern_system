@@ -5,13 +5,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.5/sweetalert2.min.css">
 	<link rel="stylesheet" href="css/login.css">
-	<script src="https://use.fontawesome.com/47c3283935.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-	<script src="js/index.js"></script>
-	<script src="../public/js/Register.js"></script>
 </head>
 <body>
 	<div class="container">
@@ -33,7 +28,7 @@
 		</div>
 		<div class="hamburger">MENU</div>
 		<div class="wrapper">
-			<div class="form">
+			<div class="form" id='Register'>
 				<span class="log">R</span><span class="in">EGISTER</span>
 				<div role="tabpanel" class="tab">
 					<ul id="myTabs" class="nav nav-tabs" role="tablist">
@@ -134,14 +129,13 @@
 			</div>
 		</div>
 	</div>
-	<script>
-		$('#myTabs a').click(function(e) {
-			e.preventDefault()
-			$(this).tab('show')
-		})
-		$(function () {
-			$('[data-toggle="tooltip"]').tooltip();
-		})
-	</script>
+	<script src="https://use.fontawesome.com/47c3283935.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.5/sweetalert2.min.js"></script>
+	<script src="../public/js/index.js"></script>
+	<script src="../public/js/valid.js"></script>
+	<script src="../public/js/Register.js"></script>
 </body>
 </html>

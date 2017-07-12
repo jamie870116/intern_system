@@ -97,10 +97,6 @@ hr{
 	font-size: 14px;
 	font-weight: bold;
 }
-.function i{
-	margin-right: 5px; 
-	font-size: 20px;
-}
 .function a{
 	color: #221814;
 }
@@ -182,177 +178,61 @@ button:hover{
 	color: #fcc506;
 	opacity: 0.9;
 }
-.announcement{
-	padding-top: 30px;
-	text-align: center;
-	padding-bottom: 50px;
+.search{
+	width: 350px;
+	margin: 50px auto;
 }
-.block{
-	/*width: 100%;
-	height: 100%;*/
+.search input[type="text"]{
+	height: 30px;
+	width: 250px;
+	border: 1px solid #ccc;
+	border-radius:3px;
 }
-.news{
-	width: 19.6%;
-	padding: 20px 1%;
-	margin: 10px 1.5%; 
-	float: left;
-	border: 1px solid #aaa;
-	box-shadow: 8px 8px 0px -3px #bbb;
+.search input[type="submit"]{
+	width: 70px;
+	height: 40px;
+	margin-left: 20px;
+	border: none;
+	background-color: #000;
+	color: #fff;
+	font-size: 16px;
+	letter-spacing: 5px;
 }
-.news img{
-	width: 60%;
-	margin: 10px 20%;
-}
-.news p{
-	color: #000;
-	line-height: 2;
-	word-break: break-all;
-}
-.news:hover{
-	background-color: #ececec;
-	opacity: 0.5;
-	transition: 0.8s;
-}
-.cooperation{
-	padding-top: 10px;
-	text-align: center;
-	padding-bottom: 50px;
-	clear: both;
-}
-.list{
-	width: 100%;
-}
-.list img{
-	margin: 35px;
-	width: 150px;
-	height: auto;
-}
-.job{
-	padding-top: 10px;
-	text-align: center;
-	padding-bottom: 50px;
-	background-color: #f1f1f1;
-}
-/*.joblist{
-	width: 100%;
-	padding-top: 20px;
-	padding-bottom: 20px;
-	background-color: #f1f1f1;
-	overflow: auto;
-}*/
-.job a{
-	color: #000;
+.search input[type="submit"]:hover{
+	background-color: #000;
+	color: #fcc506;
+	opacity: 0.9;
 }
 .jobitem{
-	height: 150px;
-	width: 200px;
-	padding: 15px;
-	margin: 5px 10px;
-	display: inline-block;
+	width: 28%;
+	padding: 30px 1%;
+	margin: 40px 1%;
+	float: left;
 	border: 8px double #ccc;
-	background-color: #fff;
 	text-align: center;
 }
+.jobitem a{
+	color: #000;
+}
 .jobitem hr{
-	margin: 5px auto;
+	margin: 8px auto;
 	padding: 0px;
 	width: 90%;
 }
 .jobitem h3{
-	width: 200px;
-	padding: 0px;
-	font-size: 28px;
+	font-size: 26px;
 	margin: 0px;
-	overflow:hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	text-align: center;
+	padding: 10px;
 }
 .jobitem h4{
-	width: 200px;
 	font-size: 18px;
 	line-height: 2;
-	overflow:hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
 }
 .jobitem:hover{
 	border: 8px double #777;
 	background-color: #ccc;
 	opacity: 0.7;
 	transition: 0.8s;
-}
-#marquee {
-	/*position:absolute;*/
-	width: 100%;
-	overflow:hidden;
-}
-#marquee img {
-	border:0px;
-}
-#marquee dl, #marquee dt,#marquee dd,#marquee a {
-	float:left;
-	margin:0;
-	padding:0;
-}
-#marquee dl{
-	width:1000%;
-	height:200px;
-}
-.contact{
-	padding-top: 10px;
-	text-align: center;
-	padding-bottom: 50px;
-}
-.contact a{
-	color: #000;
-}
-.position{
-	width: 35%;
-	height: 90px;
-	padding-top: 60px;
-	margin-left: 15%;
-	background-color: #333;
-	color: #fff;
-	float: left;
-	letter-spacing: 4px;
-	line-height: 2;
-}
-.map{
-	width: 35%;
-	height: 90px;
-	padding-top: 60px;
-	margin-right: 15%;
-	background-color: #fff;
-	float: left;
-	line-height: 2;
-}
-.map:hover{
-	background-color: #ececec;
-	opacity: 0.5;
-	transition: 0.8s;
-}
-.message{
-	width: 35%;
-	height: 100px;
-	padding-top: 50px;
-	margin-left: 15%;
-	margin-bottom: 50px;
-	background-color: #fff;
-	float: left;
-	line-height: 2;
-}
-.info{
-	width: 35%;
-	height: 90px;
-	padding-top: 60px;
-	margin-right: 15%;
-	margin-bottom: 50px;
-	background-color: #333;
-	color: #fff;
-	float: left;
-	letter-spacing: 4px;
-	line-height: 2;
 }
 .footer{
 	height: 50px;
@@ -384,6 +264,14 @@ button:hover{
 	}
 	.wrapper{
 		width: 83%;
+	}
+	.jobitem{
+		width: 44%;
+		padding: 20px 1%;
+		margin: 40px 1%;
+		float: left;
+		border: 8px double #ccc;
+		text-align: center;
 	}
 }
 @media screen and (max-width: 1024px){
@@ -497,5 +385,11 @@ button:hover{
 	}
 	.burger{
 		display: block;
+	}
+	.search{
+		width: 300px;
+	}
+	.search input[type="text"]{
+		width: 200px;
 	}
 }

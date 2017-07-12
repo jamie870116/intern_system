@@ -1,7 +1,7 @@
 
-$('#Login').click(function(){
+$('#LoginBtn').click(function(){
 	var account=$("#account").val(), passwd=$("#password").val(), code=$("#code").val();
-	if( code=='' || email=='' || passwd=='' ){
+	if( code=='' || account=='' || passwd=='' ){
 		swal({
 			title: 'Error!',
 			text: '所有欄位都要填寫才能登入喔!',
@@ -45,8 +45,26 @@ $('#ERegister').click(function(){
 		return false;
 	}
 });
+$('.AddAbi').click(function(){
+	$('.AbiInput').before('<tr >'+
+		'<td>'+
+		'<select >'+
+		'<option value="0">資料庫</option>'+
+		'<option value="1">程式語言</option>'+
+		'<option value="2">網頁設計</option>'+
+		'<option value="3">文書處理</option>'+
+		'<option value="4">影像剪輯</option>'+
+		'<option value="5">繪圖軟體</option>'+
+		'<option value="6">動畫製作</option>'+
+		'<option value="7">作業系統</option>'+
+		'<option value="8">音效剪輯</option>'+
+		'</select>'+
+		'</td>'+
+		'<td><input type="text" name="" ></td>'+
+		'<td><i class="fa fa-times closeBtn deltr" aria-hidden="true"></i></td></tr>');
+});
 $('.AddEdu').click(function(){
-	$('.EduInput').after('<tr >'+
+	$('.EduInput').before('<tr >'+
 		'<td><input type="text" name="" ></td>'+
 		'<td><input type="text" name=""></td>'+
 		'<td><input type="text" name=""></td>'+
@@ -59,30 +77,31 @@ $('.AddEdu').click(function(){
 		'<option value="2"> 在學中</option>'+
 		'</select>'+
 		'</td>'+
-		'</tr>');
-});
+		'<td><i class="fa fa-times closeBtn" aria-hidden="true"></i></td></tr>');
+});//<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 $('.AddJob').click(function(){
-	$('.JobInput').after('<tr >'+
+	$('.JobInput').before('<tr >'+
 		'<td><input type="text" name="" ></td>'+
 		'<td><input type="text" name=""></td>'+
-		'</tr>');
+		'<td><i class="fa fa-times closeBtn deltr" aria-hidden="true"></i></td></tr>');
 });
+
 $('.AddLic').click(function(){
-	$('.LicInput').after('<tr >'+
+	$('.LicInput').before('<tr >'+
 		'<td><input type="text" name="" ></td>'+
 		'<td><input type="text" name=""></td>'+
 		'<td><input type="date" name=""></td>'+
-		'</tr>');
+		'<td><i class="fa fa-times closeBtn deltr" aria-hidden="true"></i></td></tr>');
 });
 $('.AddWork').click(function(){
-	$('.WorkInput').after('<tr >'+
+	$('.WorkInput').before('<tr >'+
 		'<td><input type="text" name="" ></td>'+
 		'<td><input type="text" name=""></td>'+
 		'<td><input type="text" name=""></td>'+
-		'</tr>');
+		'<td><i class="fa fa-times closeBtn deltr" aria-hidden="true"></i></td></tr>');
 });
 $('.AddRel').click(function(){
-	$('.RelInput').after('<tr >'+
+	$('.RelInput').before('<tr >'+
 		'<td><input type="text" name="" ></td>'+
 		'<td><input type="text" name=""></td>'+
 		'<td><input type="text" name=""></td>'+
@@ -99,5 +118,8 @@ $('.AddRel').click(function(){
 		'</select>'+
 		'</td>'+
 		'<td><input type="text" name="" required></td>'+
-		'</tr>');
+		'<td><i class="fa fa-times closeBtn deltr" aria-hidden="true"></i></td></tr>');
+});
+$(document).delegate('.deltr','click',function(){
+	$(this).closest('tr').remove();
 });

@@ -124,12 +124,12 @@ hr{
 	font-size: 50px;
 	font-weight: 300;
 	letter-spacing: 3px;
-	animation:pulse 1.5s;
-	-moz-animation:pulse 1.5s; /* Firefox */
-	-webkit-animation:pulse 1.5s; /* Safari and Chrome */
-	-o-animation:pulse 1.5s; /* Opera */
+/*	animation:pulse 1.5s;
+	-moz-animation:pulse 1.5s;
+	-webkit-animation:pulse 1.5s;
+	-o-animation:pulse 1.5s;
 	animation-iteration-count:infinite;
-
+*/
 }
 .animated {
 	animation-duration: 1s;
@@ -185,6 +185,28 @@ button:hover{
 	padding-top: 30px;
 	text-align: center;
 	padding-bottom: 50px;
+}
+.news{
+	width: 19.6%;
+	padding: 20px 1%;
+	margin: 10px 1.5%; 
+	float: left;
+	border: 1px solid #aaa;
+	box-shadow: 8px 8px 0px -3px #bbb;
+}
+.news img{
+	width: 60%;
+	margin: 10px 20%;
+}
+.news p{
+	color: #000;
+	line-height: 2;
+	word-break: break-all;
+}
+.news:hover{
+	background-color: #ececec;
+	opacity: 0.5;
+	transition: 0.8s;
 }
 .cooperation{
 	padding-top: 10px;

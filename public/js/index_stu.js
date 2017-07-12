@@ -81,7 +81,28 @@ $(function() {
 		return false;
 	});
 });
-
+// 無縫輪播
+var Marquee = function(id){
+	try{document.execCommand("BackgroundImageCache", false, true);}catch(e){};
+	var container = document.getElementById(id),
+	original = container.getElementsByTagName("dt")[0],
+	clone = container.getElementsByTagName("dd")[0],
+	speed = arguments[1] || 10;
+	clone.innerHTML=original.innerHTML;
+	var rolling = function(){
+		if(container.scrollLeft == clone.offsetLeft){      
+			container.scrollLeft = 0;
+		}else{
+			container.scrollLeft++;
+		}
+	}
+  var timer = setInterval(rolling,speed)//設置定時器
+  container.onmouseover=function() {clearInterval(timer)}//游標移到marquee上時，清除定時器，停止滚動
+  container.onmouseout=function() {timer=setInterval(rolling,speed)}//游標移開時重設定時器
+}
+window.onload = function(){
+	Marquee("marquee");
+}
 
 
 
