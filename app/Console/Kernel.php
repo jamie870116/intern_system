@@ -26,13 +26,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-         $schedule->call(function(){//每30分鐘，將閒置超過30分鐘的token刪除，並登出
-            $now=date("Y-m-d H:i:s",strtotime("-30 minute"));
-            $tokens=TokensEloquent::where('types',0)->where('updated_at','<',$now)->get();
-            foreach($tokens as $token){
-                $token->delete();
-            }
-       })->everyThirtyMinutes();
+        $schedule->command('queue:work')->everyMinute();
     }
 
     /**

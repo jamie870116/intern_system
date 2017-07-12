@@ -13,7 +13,7 @@ class CreateStuExpTable extends Migration
      */
     public function up()
     {
-        Schema::create('stu_jExp', function (Blueprint $table) {
+        Schema::create('stu_jexp', function (Blueprint $table) {
             $table->integer('sid');//id
             $table->increments('jid');//AI
             $table->string('semester',30);//學期
