@@ -15,7 +15,7 @@
         <h2><i class="fa fa-handshake-o" aria-hidden="true"></i></h2>
         <h2 style="font-weight:bold;">感謝您的註冊</h2>
         <h2>請點擊下方連結進行驗證</h2>
-        <h3><a href="../VerificationSuccess.php">http://his.nutc.edu.tw/s1110234015/intern_system/public/api/check_code?code={{$code}}</a></h3>
+        <h3><a href="http://his.nutc.edu.tw/s1110234015/intern_system/public/api/check_code?code={{$code}}">http://his.nutc.edu.tw/s1110234015/intern_system/public/api/check_code?code={{$code}}</a></h3>
         </div>
     </div>
     <script src="https://use.fontawesome.com/47c3283935.js"></script>
