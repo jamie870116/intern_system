@@ -34,7 +34,7 @@ class SendEmail implements ShouldQueue
     public function handle()
     {
         $data=$this->data;
-        Mail::send('mail.send', $data, function($message) use($data)
+        Mail::send('mail.VerificationLetter', $data, function($message) use($data)
         {
             $message->to($data['mail'], $data['code'])->subject('會員驗證信');
         });

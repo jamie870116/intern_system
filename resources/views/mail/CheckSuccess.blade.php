@@ -17,7 +17,7 @@
             <h2><i class="fa fa-check-square-o success" aria-hidden="true"></i></h2>
             <h2>審核通過</h2>
             <h3>您的職缺編號為 :</h3>
-            <h2>{QU287856}</h2>
+            <h2>{{$contents}}</h2>
         </div>
     </div>
     <script src="https://use.fontawesome.com/47c3283935.js"></script>

@@ -32,7 +32,7 @@ class sendResultmail implements ShouldQueue
     public function handle()
     {
         $data=$this->data;
-        Mail::send('mail.result', $data, function($message) use($data)
+        Mail::send('mail.CheckSuccess', $data, function($message) use($data)
         {
             $message->to($data['mail'], $data['content'])->subject('職缺審核結果通知');
         });

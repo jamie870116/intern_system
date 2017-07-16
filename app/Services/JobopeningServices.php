@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Job_opening as job_opEloquent;
 use App\Jobs\sendResultmail;
+use App\Jobs\sendResultmail_faild;
 use App\User as userEloquent;
 class JobopeningServices
 {
@@ -63,27 +64,33 @@ class JobopeningServices
 		$jobOpen->jstatus=$re['jstatus'];
 		$jobOpen->save();
 
+        $company=userEloquent::where('account',$jobOpen->c_account)->first();
+        $mail=$company->email;
+        $joid =$re['joid'];
+        $data = ['mail'=>$mail, 'contents'=>$joid];
 		if (job_opEloquent::count() != 0) {
 			if($re['jstatus']==1){
+                dispatch(new sendResultmail($data));
 				return '職缺審核通過';
 			}else{
+                dispatch(new sendResultmail_faild($data));
 				return '職缺審核未通過';
 			}
 		} else {
 			return '職缺未審核';
 		}
 	}
-//寄審核結果通知信
-    public static  function sendResultMail($content,$joid){
-        $jobOpen = job_opEloquent::where('joid', $joid)->first();
-        $company=userEloquent::where('account',$jobOpen->c_account)->first();
-	    $mail=$company->email;
-	    $contents ='您編號為'.$joid.'的'.$content;
-        $data = ['mail'=>$mail, 'contents'=>$contents];
-        dispatch(new sendResultmail($data));
-
-        return response()->json('sended',200);
-
-    }
+////寄審核結果通知信
+//    public static  function sendResultMail($content,$joid){
+//        $jobOpen = job_opEloquent::where('joid', $joid)->first();
+//        $company=userEloquent::where('account',$jobOpen->c_account)->first();
+//	    $mail=$company->email;
+//	    $contents ='您編號為'.$joid.'的'.$content;
+//        $data = ['mail'=>$mail, 'contents'=>$contents];
+//        dispatch(new sendResultmail($data));
+//
+//        return response()->json('sended',200);
+//
+//    }
 
 }
