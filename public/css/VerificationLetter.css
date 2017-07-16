@@ -1,0 +1,33 @@
+* {
+    font-family: Arial, Microsoft Jhenghei;
+    margin: 0px;
+    padding: 0px;
+}
+body{
+    background-image: url(../images/homebg.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #aaa;
+}
+
+.wrapper {
+    width: 500px;
+    margin: 250px auto 0px auto;
+    padding: 50px;
+    text-align: center;
+    border: 2px solid #ccc;
+    box-shadow: 3px 3px 3px #999;
+    word-break: break-all;
+    background-color:#fff;
+}
+.wrapper i{
+	color:#337ab7;
+	font-size:100px;
+}

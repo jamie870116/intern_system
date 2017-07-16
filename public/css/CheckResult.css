@@ -1,0 +1,37 @@
+* {
+    font-family: Arial, Microsoft Jhenghei;
+    margin: 0px;
+    padding: 0px;
+}
+body{
+    background-image: url(../images/homebg.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+a {
+    text-decoration: none;
+}
+
+.wrapper {
+	width:500px;
+    margin: 250px auto 0px auto;
+    padding:30px 0px 40px 0px;
+    text-align: center;
+    border:2px solid #ccc;
+    box-shadow: 3px 3px 5px grey;
+    background-color:#fff;
+}
+.wrapper .success{
+    color: #00AA55;
+    font-size: 100px;
+}
+.wrapper .failed{
+    color: #eb4c36;
+    font-size: 100px;
+}
+.wrapper label{
+	font-size:30px;
+}
+.wrapper h2,h3{
+	font-weight:bold;
+}
