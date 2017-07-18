@@ -55,7 +55,7 @@ class AuthController extends Controller
                     // $token->save();
                     $agent = new Agent();
                     if($agent->isDesktop()){
-                        $ex_time=Carbon::now()->addHour()->timestamp;
+                        $ex_time=Carbon::now()->addHour(5)->timestamp;
                         $token = JWTAuth::attempt($user_data,['exp'=>$ex_time]);
                     }else{
                         $token = JWTAuth::attempt($user_data);

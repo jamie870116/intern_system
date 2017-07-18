@@ -15,13 +15,17 @@ class JobopeningServices
 		$jobOpen->jtypes=$re['jtypes'];
 		$jobOpen->jduties=$re['jduties'];
 		$jobOpen->jdetails=$re['jdetails'];
-		$jobOpen->jsalary=$re['jsalary'];
+		$jobOpen->jsalary=$re['jsalary_up'];
+        $jobOpen->jsalary=$re['jsalary_low'];
+        $jobOpen->jsalary=$re['jaddress'];
+        $jobOpen->jsalary=$re['jdeadline'];
+        $jobOpen->jsalary=$re['jNOP'];
 		$jobOpen->jcontact_name=$re['jcontact_name'];
 		$jobOpen->jcontact_phone=$re['jcontact_phone'];
 		$jobOpen->jcontact_email=$re['jcontact_email'];
 		$jobOpen->save();
 		if (job_opEloquent::count() != 0) {
-			return '新增職缺資料成功，待審核';
+			return '新增職缺資料成功';
 		} else {
 			return '新增職缺資料失敗';
 		}
@@ -32,25 +36,28 @@ class JobopeningServices
 		$jobOpen->jtypes=$re['jtypes'];
 		$jobOpen->jduties=$re['jduties'];
 		$jobOpen->jdetails=$re['jdetails'];
-		$jobOpen->jsalary=$re['jsalary'];
+        $jobOpen->jsalary=$re['jsalary_up'];
+        $jobOpen->jsalary=$re['jsalary_low'];
+        $jobOpen->jsalary=$re['jaddress'];
+        $jobOpen->jsalary=$re['jdeadline'];
+        $jobOpen->jsalary=$re['jNOP'];
 		$jobOpen->jcontact_name=$re['jcontact_name'];
 		$jobOpen->jcontact_phone=$re['jcontact_phone'];
 		$jobOpen->jcontact_email=$re['jcontact_email'];
-		$jobOpen->jstatus=0;
 		$jobOpen->save();
 
 		if (job_opEloquent::count() != 0) {
-			return '修改職缺資料成功，職缺將撤下待重新審核';
+			return '修改職缺資料成功';
 		} else {
 			return '修改職缺資料失敗';
 		}
 	}
 
-	public function deleteJobOpening_ser($re){
+	public function deleteJobOpeningByAdmin_ser($re){
 		$jobOpen = job_opEloquent::where('joid',$re['joid'])->first();
 		$jobOpen->jdelete_reason=$re['jdelete_reason'];
-		$jobOpen->jstatus=3;
-		$jobOpen->save();
+
+		$jobOpen->delete();
 
 		if (job_opEloquent::count() != 0) {
 			return '職缺已刪除';
@@ -58,6 +65,18 @@ class JobopeningServices
 			return '職缺刪除失敗';
 		}
 	}
+
+    public function deleteJobOpeningByCom_ser($re){
+        $jobOpen = job_opEloquent::where('joid',$re['joid'])->first();
+
+        $jobOpen->delete();
+
+        if (job_opEloquent::count() != 0) {
+            return '職缺已刪除';
+        } else {
+            return '職缺刪除失敗';
+        }
+    }
 
 	public function reviewJobOpening_ser($re){
 		$jobOpen = job_opEloquent::where('joid', $re['joid'])->first();
