@@ -56,7 +56,12 @@ class Job_openingController extends Controller
             'email' => 'email格式錯誤'
         ));
         if ($objValidator->fails()) {
-            return response()->json($objValidator->errors(), 400);//422
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
         } else {
             $responses = $this->JobopeningServices->createJobOpening_ser($re);
             if ($responses == '新增職缺資料成功') {
@@ -103,7 +108,12 @@ class Job_openingController extends Controller
             'email' => 'email格式錯誤'
         ));
         if ($objValidator->fails()) {
-            return response()->json($objValidator->errors(), 400);//422
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
         } else {
             $responses = $this->JobopeningServices->editJobOpening_ser($re);
             if ($responses == '修改職缺資料成功，職缺將撤下待重新審核') {
@@ -127,7 +137,12 @@ class Job_openingController extends Controller
             'jdelete_reason.required' => '請填寫刪除該職缺之原因'
         ));
         if ($objValidator->fails()) {
-            return response()->json($objValidator->errors(), 400);//422
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
         } else {
             $responses = $this->JobopeningServices->deleteJobOpeningByAdmin_ser($re);
             if ($responses == '職缺已刪除') {
@@ -149,7 +164,12 @@ class Job_openingController extends Controller
             'joid.required' => '請輸入職缺ID'
         ));
         if ($objValidator->fails()) {
-            return response()->json($objValidator->errors(), 400);//422
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
         } else {
             $responses = $this->JobopeningServices->deleteJobOpeningByCom_ser($re);
             if ($responses == '職缺已刪除') {

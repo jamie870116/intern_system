@@ -53,7 +53,12 @@ class Stu_resumeController extends Controller
             'integer' => 'int格式錯誤'
         ));
         if ($objValidator->fails()) {
-            return response()->json($objValidator->errors(), 400);//422
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
         } else {
             $responses = $this->ResumeServices->newEduDataById($re);
             if ($responses == '新增學歷資料成功') {
@@ -78,7 +83,12 @@ class Stu_resumeController extends Controller
             'jobTitle.required' => '請輸入職位名稱'
         ));
         if ($objValidator->fails()) {
-            return response()->json($objValidator->errors(), 400);
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
         } else {
             $responses = $this->ResumeServices->newJobExperienceById($re);
             if ($responses == '新增工作資料成功') {
@@ -105,7 +115,12 @@ class Stu_resumeController extends Controller
             'date' => '日期格式錯誤'
         ));
         if ($objValidator->fails()) {
-            return response()->json($objValidator->errors(), 400);//422
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
         } else {
             $responses = $this->ResumeServices->newLicenseById($re);
             if ($responses == '新增證照資料成功') {
@@ -130,7 +145,12 @@ class Stu_resumeController extends Controller
             'date' => '日期格式錯誤'
         ));
         if ($objValidator->fails()) {
-            return response()->json($objValidator->errors(), 400);//422
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
         } else {
             $responses = $this->ResumeServices->newWorksDataById($re);
             if ($responses == '新增作品資料成功') {
@@ -155,7 +175,12 @@ class Stu_resumeController extends Controller
             'rName.required' => '請輸入親屬姓名',
         ));
         if ($objValidator->fails()) {
-            return response()->json($objValidator->errors(), 400);//422
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
         } else {
             $responses = $this->ResumeServices->newRelativeDataById($re);
             if ($responses == '新增親屬資料成功') {
@@ -219,7 +244,12 @@ class Stu_resumeController extends Controller
             'email' => '信箱格式錯誤'
         ));
         if ($objValidator->fails()) {
-            return response()->json($objValidator->errors(), 400);//422
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
         } else {
             $responses = $this->ResumeServices->editBasicDataById_ser($re);
             if ($responses == '修改基本資料成功') {
@@ -250,7 +280,12 @@ class Stu_resumeController extends Controller
             'date' => '日期格式錯誤'
         ));
         if ($objValidator->fails()) {
-            return response()->json($objValidator->errors(), 400);
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
         } else {
             $responses = $this->ResumeServices->editEduDataById_ser($re);
             if ($responses == '修改學歷資料成功') {
@@ -275,7 +310,12 @@ class Stu_resumeController extends Controller
             'jobTitle.required' => '請輸入職位名稱'
         ));
         if ($objValidator->fails()) {
-            return response()->json($objValidator->errors(), 400);
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
         } else {
             $responses = $this->ResumeServices->editJobExperienceById_ser($re);
             if ($responses == '修改工作資料成功') {
@@ -303,7 +343,12 @@ class Stu_resumeController extends Controller
             'date' => '日期格式錯誤'
         ));
         if ($objValidator->fails()) {
-            return response()->json($objValidator->errors(), 400);
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
         } else {
             $responses = $this->ResumeServices->editLicenseById_ser($re);
             if ($responses == '修改證照資料成功') {
@@ -344,7 +389,12 @@ class Stu_resumeController extends Controller
             'integer' => 'int格式錯誤'
         ));
         if ($objValidator->fails()) {
-            return response()->json($objValidator->errors(), 400);
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
         } else {
             $responses = $this->ResumeServices->editLanguageById_ser($re);
             if ($responses == '修改語言能力成功') {
@@ -385,7 +435,12 @@ class Stu_resumeController extends Controller
 //            'integer' => 'int格式錯誤'
         ));
         if ($objValidator->fails()) {
-            return response()->json($objValidator->errors(), 400);
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
         } else {
             $responses = $this->ResumeServices->editAbilityById_ser($re);
             if ($responses == '修改電腦技術資料成功') {
@@ -408,7 +463,12 @@ class Stu_resumeController extends Controller
             'date' => '日期格式錯誤'
         ));
         if ($objValidator->fails()) {
-            return response()->json($objValidator->errors(), 400);
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
         } else {
             $responses = $this->ResumeServices->editWorksDataById_ser($re);
             if ($responses == '修改作品資料成功') {
@@ -433,7 +493,12 @@ class Stu_resumeController extends Controller
             'date' => '日期格式錯誤'
         ));
         if ($objValidator->fails()) {
-            return response()->json($objValidator->errors(), 400);//422
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
         } else {
             $responses = $this->ResumeServices->editRelativeDataById_ser($re);
             if ($responses == '修改親屬資料成功') {

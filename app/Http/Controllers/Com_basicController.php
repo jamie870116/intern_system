@@ -32,7 +32,12 @@ class Com_basicController extends Controller
 			'integer' => 'int格式錯誤'
 			));
 		if ($objValidator->fails()) {
-            return response()->json($objValidator->errors(), 400);//422
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
         } else {
         	$responses=$this->CompanyServices->createCompany_ser($re);
         	if ($responses == '新增廠商資料成功') {
@@ -56,7 +61,12 @@ class Com_basicController extends Controller
     		'integer' => 'int格式錯誤'
     		));
     	if ($objValidator->fails()) {
-            return response()->json($objValidator->errors(), 400);//422
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
         } else {
         	$responses=$this->CompanyServices->editCompany_ser($re);
         	if ($responses == '修改廠商資料成功') {
@@ -75,10 +85,16 @@ class Com_basicController extends Controller
     		'c_account' => 'required',
     		'cdeleteReason' => 'required'
     		), array(
-    		'required' => '此欄位不可為空白'
+            'c_account.required' => '請輸入廠商帳號',
+            'cdeleteReason.required' => '請填寫刪除之理由'
     		));
     	if ($objValidator->fails()) {
-            return response()->json($objValidator->errors(), 400);//422
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
         } else {
         	$responses=$this->CompanyServices->deleteCompany_ser($re);
         	if ($responses == '刪除廠商成功') {
@@ -96,10 +112,15 @@ class Com_basicController extends Controller
     	$objValidator = Validator::make($request->all(), array(
     		'c_account' => 'required'
     		), array(
-    		'required' => '此欄位不可為空白'
+    		'c_account.required' => '請輸入廠商帳號'
     		));
     	if ($objValidator->fails()) {
-            return response()->json($objValidator->errors(), 400);//422
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
         } else {
         	$responses=$this->CompanyServices->getCompanyByAccount_ser($re);
         	if ($responses == '取得廠商失敗') {
