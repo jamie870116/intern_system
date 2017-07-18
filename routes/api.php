@@ -18,7 +18,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::post('Login','AuthController@postLogin');//登入
 Route::post('Register','AuthController@register');//註冊
+Route::post('Logout','AuthController@getLogout');//登出
 Route::get('Check_code','AuthController@check_code');//驗證信
+
 Route::group(['middleware'=>'jwt'],function(){
 	//取得使用者資料
 	Route::get('findUserDetailsByToken','AuthController@findUserDetailsByToken');
@@ -53,8 +55,3 @@ Route::group(['middleware'=>'jwt'],function(){
     //取得履歷資料
     Route::get('findResumeDataById', 'Stu_resumeController@findResumeDataById');
 });
-
-Route::group(['middleware'=>'jwt','student'],function() {
-
-});
-Route::post('Logout','AuthController@getLogout');//登出
