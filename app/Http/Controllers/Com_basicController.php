@@ -26,7 +26,9 @@ class Com_basicController extends Controller
 			'ctypes' => 'required|integer',
 			'caddress' => 'required'
 			), array(
-			'required' => '此欄位不可為空白',
+			'c_account.required' => '請輸入廠商帳號(統一編號)',
+            'ctypes.required' => '此欄位不可為空白',
+            'caddress.required' => '此欄位不可為空白',
 			'integer' => 'int格式錯誤'
 			));
 		if ($objValidator->fails()) {

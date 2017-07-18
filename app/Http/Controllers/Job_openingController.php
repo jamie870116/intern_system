@@ -35,11 +35,21 @@ class Job_openingController extends Controller
             'jsalary_up' => 'nullable|integer|min:0',
             'jsalary_low' => 'required|integer',
             'jaddress' => 'required',
-            'jdeadline' => 'nullable|date',
+            'jdeadline' => 'required|date',
             'jNOP' => 'required|integer|min:0',
             'c_account' => 'required'
         ), array(
-            'required' => '此欄位不可為空白',
+            'jtypes.required' => '請選擇職缺類型',
+            'jduties.required' => '請輸入職稱',
+            'jdetails.required' => '請填寫職務詳細內容',
+            'jcontact_name.required' => '請輸入聯絡人姓名',
+            'jcontact_phone.required' => '請輸入聯絡人電話',
+            'jcontact_email.required' => '請輸入聯絡人信箱',
+            'jsalary_low.required' => '請輸入薪水',
+            'jaddress.required' => '請輸入工作地點',
+            'jdeadline.required' => '請輸入截止日期',
+            'jNOP.required' => '請輸入需求人數',
+            'c_account.required' => '請輸入廠商帳號',
             'integer' => 'int格式錯誤',
             'min' => '不得輸入低於0的數字',
             'date' => '日期格式錯誤',
@@ -76,7 +86,17 @@ class Job_openingController extends Controller
             'jNOP' => 'required|integer|min:0',
             'joid' => 'required'
         ), array(
-            'required' => '此欄位不可為空白',
+            'jtypes.required' => '請選擇職缺類型',
+            'jduties.required' => '請輸入職稱',
+            'jdetails.required' => '請填寫職務詳細內容',
+            'jcontact_name.required' => '請輸入聯絡人姓名',
+            'jcontact_phone.required' => '請輸入聯絡人電話',
+            'jcontact_email.required' => '請輸入聯絡人信箱',
+            'jsalary_low.required' => '請輸入薪水',
+            'jaddress.required' => '請輸入工作地點',
+            'jdeadline.required' => '請輸入截止日期',
+            'jNOP.required' => '請輸入需求人數',
+            'c_account.required' => '請輸入廠商帳號',
             'integer' => 'int格式錯誤',
             'min' => '不得輸入低於0的數字',
             'date' => '日期格式錯誤',
@@ -103,7 +123,8 @@ class Job_openingController extends Controller
             'joid' => 'required',
             'jdelete_reason' => 'required'
         ), array(
-            'required' => '此欄位不可為空白'
+            'joid.required' => '請輸入職缺ID',
+            'jdelete_reason.required' => '請填寫刪除該職缺之原因'
         ));
         if ($objValidator->fails()) {
             return response()->json($objValidator->errors(), 400);//422
@@ -125,7 +146,7 @@ class Job_openingController extends Controller
         $objValidator = Validator::make($request->all(), array(
             'joid' => 'required'
         ), array(
-            'required' => '此欄位不可為空白'
+            'joid.required' => '請輸入職缺ID'
         ));
         if ($objValidator->fails()) {
             return response()->json($objValidator->errors(), 400);//422
@@ -139,30 +160,30 @@ class Job_openingController extends Controller
         }
     }
 
-//系辦審核
-    public function reviewJobOpening(Request $request)
-    {
-        $re = $request->all();
-
-        $objValidator = Validator::make($request->all(), array(
-            'joid' => 'required',
-            'jstatus' => 'required|integer'
-        ), array(
-            'required' => '此欄位不可為空白',
-            'integer' => 'int格式錯誤'
-        ));
-        if ($objValidator->fails()) {
-            return response()->json($objValidator->errors(), 400);//422
-        } else {
-            $responses = $this->JobopeningServices->reviewJobOpening_ser($re);
-            if ($responses == '職缺審核通過' || $responses == '職缺審核未通過') {
-//                $this->JobopeningServices->sendResultMail($responses,$re['joid']);
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
-            } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
-            }
-        }
-    }
+////系辦審核
+//    public function reviewJobOpening(Request $request)
+//    {
+//        $re = $request->all();
+//
+//        $objValidator = Validator::make($request->all(), array(
+//            'joid' => 'required',
+//            'jstatus' => 'required|integer'
+//        ), array(
+//            'required' => '此欄位不可為空白',
+//            'integer' => 'int格式錯誤'
+//        ));
+//        if ($objValidator->fails()) {
+//            return response()->json($objValidator->errors(), 400);//422
+//        } else {
+//            $responses = $this->JobopeningServices->reviewJobOpening_ser($re);
+//            if ($responses == '職缺審核通過' || $responses == '職缺審核未通過') {
+////                $this->JobopeningServices->sendResultMail($responses,$re['joid']);
+//                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+//            } else {
+//                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+//            }
+//        }
+//    }
 
     //廠商帳號取得該廠商所有職缺資料
     public function getJobOpeningbyAccount(Request $request)

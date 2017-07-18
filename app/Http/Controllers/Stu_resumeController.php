@@ -44,7 +44,11 @@ class Stu_resumeController extends Controller
             'exitDate' => 'nullable|date',
             'graduate' => 'required|integer'
         ), array(
-            'required' => '此欄位不可為空白',
+            'id.required' => '請輸入學生ID',
+            'school.required' => '請輸入學校名稱',
+            'department.required' => '請輸入科系名稱',
+            'enterDate.required' => '請輸入入學日期',
+            'graduate.required' => '請選擇就讀狀態',
             'date' => '日期格式錯誤',
             'integer' => 'int格式錯誤'
         ));
@@ -69,7 +73,9 @@ class Stu_resumeController extends Controller
             'semester' => 'required',
             'jobTitle' => 'required'
         ), array(
-            'required' => '此欄位不可為空白'
+            'id.required' => '請輸入學生ID',
+            'semester.required' => '請輸入學期',
+            'jobTitle.required' => '請輸入職位名稱'
         ));
         if ($objValidator->fails()) {
             return response()->json($objValidator->errors(), 400);
@@ -92,7 +98,10 @@ class Stu_resumeController extends Controller
             'lname' => 'required',
             'ldate' => 'required|date'
         ), array(
-            'required' => '此欄位不可為空白',
+            'ldate.required' => '請輸入發證日期',
+            'id.required' => '請輸入學生ID',
+            'agency.required' => '請輸入發照單位',
+            'lname.required' => '請輸入證照名稱',
             'date' => '日期格式錯誤'
         ));
         if ($objValidator->fails()) {
@@ -116,7 +125,8 @@ class Stu_resumeController extends Controller
             'wName' => 'required',
             'wCreatedDate' => 'nullable|date'
         ), array(
-            'required' => '此欄位不可為空白',
+            'id.required' => '請輸入學生ID',
+            'wName.required' => '請輸入作品名稱',
             'date' => '日期格式錯誤'
         ));
         if ($objValidator->fails()) {
@@ -140,7 +150,9 @@ class Stu_resumeController extends Controller
             'rType' => 'required',
             'rName' => 'required'
         ), array(
-            'required' => '此欄位不可為空白'
+            'id.required' => '請輸入學生ID',
+            'rType.required' => '請選擇親屬關係',
+            'rName.required' => '請輸入親屬姓名',
         ));
         if ($objValidator->fails()) {
             return response()->json($objValidator->errors(), 400);//422
@@ -191,7 +203,18 @@ class Stu_resumeController extends Controller
             'email' => 'required|email',
             'contact' => 'required',
         ), array(
-            'required' => '此欄位不可為空白',
+            'id.required' => '請輸入學生ID',
+            'chiName.required' => '請輸入中文姓名',
+            'engName.required' => '請輸入英文姓名',
+            'bornedPlace.required' => '請輸入出生地',
+            'nativePlace.required' => '請輸入籍貫',
+            'birthday.required' => '請輸入生日日期',
+            'gender.required' => '請選擇性別',
+            'height.required' => '請輸入身高(公分)',
+            'weight.required' => '請輸入體重(公分)',
+            'bloodtype.required' => '請選擇血型',
+            'email.required' => '請輸入電子信箱',
+            'contact.required' => '請輸入連絡電話',
             'date' => '日期格式錯誤',
             'email' => '信箱格式錯誤'
         ));
@@ -219,7 +242,11 @@ class Stu_resumeController extends Controller
             'exitDate' => 'nullable|date',
             'graduate' => 'required'
         ), array(
-            'required' => '此欄位不可為空白',
+            'edu_id.required' => '請輸入edu_id',
+            'school.required' => '請輸入學校名稱',
+            'department.required' => '請輸入科系名稱',
+            'enterDate.required' => '請輸入入學日期',
+            'graduate.required' => '請選擇就讀狀態',
             'date' => '日期格式錯誤'
         ));
         if ($objValidator->fails()) {
@@ -243,7 +270,9 @@ class Stu_resumeController extends Controller
             'semester' => 'required',
             'jobTitle' => 'required'
         ), array(
-            'required' => '此欄位不可為空白'
+            'jid.required' => '請輸入jid',
+            'semester.required' => '請輸入學期',
+            'jobTitle.required' => '請輸入職位名稱'
         ));
         if ($objValidator->fails()) {
             return response()->json($objValidator->errors(), 400);
@@ -267,7 +296,10 @@ class Stu_resumeController extends Controller
             'lname' => 'required',
             'ldate' => 'required|date'
         ), array(
-            'required' => '此欄位不可為空白',
+            'ldate.required' => '請輸入發證日期',
+            'lid.required' => '請輸入lid',
+            'agency.required' => '請輸入發照單位',
+            'lname.required' => '請輸入證照名稱',
             'date' => '日期格式錯誤'
         ));
         if ($objValidator->fails()) {
@@ -298,7 +330,17 @@ class Stu_resumeController extends Controller
             'tl' => 'required|integer',
             'ts' => 'required|integer',
         ), array(
-            'required' => '此欄位不可為空白',
+            'id.required' => '請輸入學生ID',
+            'cl.required' => '請選擇中聽能力',
+            'cs.required' => '請選擇中說能力',
+            'cw.required' => '請選擇中寫能力',
+            'cr.required' => '請選擇中讀能力',
+            'el.required' => '請選擇英聽能力',
+            'es.required' => '請選擇英說能力',
+            'ew.required' => '請選擇英寫能力',
+            'er.required' => '請選擇英讀能力',
+            'tl.required' => '請選擇台聽能力',
+            'ts.required' => '請選擇台說能力',
             'integer' => 'int格式錯誤'
         ));
         if ($objValidator->fails()) {
@@ -319,19 +361,28 @@ class Stu_resumeController extends Controller
 
         $objValidator = Validator::make($request->all(), array(
             'id'=>'required',
-            'dataBase' => 'required|integer',
-            'programmingLanguage' => 'required|integer',
-            'document' => 'required|integer',
-            'webDesign' => 'required|integer',
-            'imageProcessing' => 'required|integer',
-            'drawingSoftware' => 'required|integer',
-            'animation' => 'required|integer',
-            'OS' => 'required|integer',
-            'musicEditor' => 'required|integer',
+//            'dataBase' => 'required',
+//            'programmingLanguage' => 'required',
+//            'document' => 'required',
+//            'webDesign' => 'requiredr',
+//            'imageProcessing' => 'required',
+//            'drawingSoftware' => 'required',
+//            'animation' => 'required',
+//            'OS' => 'required',
+//            'musicEditor' => 'required',
 
         ), array(
-            'required' => '此欄位不可為空白',
-            'integer' => 'int格式錯誤'
+            'id.required' => '請輸入學生ID',
+//            'dataBase.required' => '請輸入學生ID',
+//            'programmingLanguage.required' => '請輸入學生ID',
+//            'document.required' => '請輸入學生ID',
+//            'webDesign.required' => '請輸入學生ID',
+//            'imageProcessing.required' => '請輸入學生ID',
+//            'drawingSoftware.required' => '請輸入學生ID',
+//            'animation.required' => '請輸入學生ID',
+//            'OS.required' => '請輸入學生ID',
+//            'musicEditor.required' => '請輸入學生ID',
+//            'integer' => 'int格式錯誤'
         ));
         if ($objValidator->fails()) {
             return response()->json($objValidator->errors(), 400);
@@ -377,7 +428,9 @@ class Stu_resumeController extends Controller
             'rType' => 'required',
             'rName' => 'required'
         ), array(
-            'required' => '此欄位不可為空白'
+            'rid.required' => '請輸入rid',
+            'wName.required' => '請輸入作品名稱',
+            'date' => '日期格式錯誤'
         ));
         if ($objValidator->fails()) {
             return response()->json($objValidator->errors(), 400);//422

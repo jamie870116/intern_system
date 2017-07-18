@@ -116,16 +116,27 @@ class AuthController extends Controller
             'account'=>'required|unique:users',
             'password' => 'required|max:20|min:6',
             'conf_pass'=>'required',
-            'email'=>'email'
+            'email'=>'email',
+            'u_status'=>'required'
         ),array(
-            'required'=>'此欄位不可為空白',
+            'u_name.required'=>'請輸入姓名',
+            'u_status.required'=>'請選擇要註冊的身分',
+            'u_tel.required'=>'請輸入電話',
+            'account.required'=>'請輸入帳號',
+            'password.required'=>'請輸入密碼',
+            'conf_pass.required'=>'請再次輸入密碼',
             'max'=>'字數請介於6~20位元',
             'min'=>'字數請介於6~20位元',
             'unique' => '帳號已存在',
             'email'=>'信箱格式錯誤'
         ));
         if($objValidator->fails()){
-            return response()->json($objValidator->errors(),400);//422
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
         }else if($conf_pass!=$password){
             return response()->json('兩次密碼不一致',400,$headers, JSON_UNESCAPED_UNICODE);
         }else if($status==0){ //學生
