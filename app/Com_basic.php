@@ -3,10 +3,10 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 class Com_basic extends Model
 {
-    use SoftDeletingTrait;
+    use SoftDeletes;
 
     protected $table='com_basic';
     protected $primaryKey = 'c_account';
@@ -15,6 +15,6 @@ class Com_basic extends Model
 
     protected $fillable = [
         'c_account','ctypes','caddress',
-        'cfax','cdeleteReason','tmiestamps'
+        'cfax','cdeleteReason','cintroduction','cempolyee_num'
     ];
 }
