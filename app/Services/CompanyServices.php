@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Com_basic as comEloquent;
 use App\User as userEloquent;
 
-class JobopeningServices
+class CompanyServices
 {
 
 	public function createCompany_ser($re){
@@ -15,6 +15,8 @@ class JobopeningServices
         $com->c_account=$re['ctypes'];
         $com->c_account=$re['caddress'];
         $com->c_account=$re['cfax'];
+        $com->cintroduction=$re['cintroduction'];
+        $com->cempolyee_num=$re['cempolyee_num'];
 		$com->save();
 		if (comEloquent::count() != 0) {
 			return '新增廠商資料成功';
@@ -29,6 +31,8 @@ class JobopeningServices
         $com->c_account=$re['ctypes'];
         $com->c_account=$re['caddress'];
         $com->c_account=$re['cfax'];
+        $com->cintroduction=$re['cintroduction'];
+        $com->cempolyee_num=$re['cempolyee_num'];
 		$com->save();
 		if (comEloquent::count() != 0) {
 			return '修改廠商資料成功';

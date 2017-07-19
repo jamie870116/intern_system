@@ -24,11 +24,13 @@ class Com_basicController extends Controller
 		$objValidator = Validator::make($request->all(), array(
 			'c_account' => 'required',
 			'ctypes' => 'required|integer',
-			'caddress' => 'required'
+			'caddress' => 'required',
+            'cintroduction' =>'nullable',
+            'cempolyee_num' =>'nullable|integer'
 			), array(
 			'c_account.required' => '請輸入廠商帳號(統一編號)',
-            'ctypes.required' => '此欄位不可為空白',
-            'caddress.required' => '此欄位不可為空白',
+            'ctypes.required' => '請輸入行業類別',
+            'caddress.required' => '請輸入公司地址',
 			'integer' => 'int格式錯誤'
 			));
 		if ($objValidator->fails()) {
@@ -55,9 +57,13 @@ class Com_basicController extends Controller
     	$objValidator = Validator::make($request->all(), array(
     		'c_account' => 'required',
     		'ctypes' => 'required|integer',
-    		'caddress' => 'required'
+    		'caddress' => 'required',
+            'cintroduction' =>'nullable',
+            'cempolyee_num' =>'nullable|integer'
     		), array(
-    		'required' => '此欄位不可為空白',
+            'c_account.required' => '請輸入廠商帳號(統一編號)',
+            'ctypes.required' => '請輸入行業類別',
+            'caddress.required' => '請輸入公司地址',
     		'integer' => 'int格式錯誤'
     		));
     	if ($objValidator->fails()) {
