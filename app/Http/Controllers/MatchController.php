@@ -2,9 +2,161 @@
 
 namespace App\Http\Controllers;
 
+use App\Job_opening;
+use App\Services\MatchServices;
+
 use Illuminate\Http\Request;
+
+use App\Match as MatchEloquent;
+use App\Stu_basic as stuBasicEloquent;
+use App\Stu_edu as stuEduEloquent;
+use App\Stu_jExp as stuJExpEloquent;
+use App\Stu_licence as stulicenceEloquent;
+use App\Stu_relatives as stuRelativesEloquent;
+use App\Stu_works as stuWorksEloquent;
+
+use Validator;
 
 class MatchController extends Controller
 {
-    //
+    protected $MatchServices;
+
+    public function __construct(MatchServices $MatchServices)
+    {
+//        $this->middleware('company', ['only' => '', '']);
+//        $this->middleware('student', ['only' => '', '']);
+//        $this->middleware('admin', ['only' => '', '']);
+        $this->MatchServices = $MatchServices;
+    }
+
+    //投遞履歷resume
+    public function resumeSubmitted(Request $request)
+    {
+        $re = $request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'c_account' => 'required',
+            'sid' => 'required|integer',
+            'joid' => 'required|integer'
+        ), array(
+            'c_account.required' => '請輸入廠商帳號(統一編號)',
+            'sid.required' => '請輸入學生ID',
+            'joid.required' => '請輸入職缺ID',
+            'integer' => 'int格式錯誤',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $responses = $this->MatchServices->resumeSubmitted_ser($re);
+            if ($responses == '新增媒合資料成功') {
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+
+
+    }
+
+    //廠商取得投遞的履歷
+    public function getResumeByAccount(Request $request)
+    {
+        $re = $request->all();
+
+        $match = MatchEloquent::where('c_account', $re['c_account'])->get();
+        if ($match) {
+            $response = array();
+            foreach ($match as $m) {
+                $id = $m->sid;
+                $mid = $m->mid;
+                $stuBas = stuBasicEloquent::where('sid', $id)->get();
+                $stuEdu = stuEduEloquent::where('sid', $id)->get();
+                $stuJExp = stuJExpEloquent::where('sid', $id)->get();
+                $stuLic = stulicenceEloquent::where('sid', $id)->get();
+                $stuRel = stuRelativesEloquent::where('sid', $id)->get();
+                $stuWor = stuWorksEloquent::where('sid', $id)->get();
+                $stdRe = array($mid,$stuBas, $stuEdu, $stuJExp, $stuLic, $stuRel, $stuWor);
+                $response[] = $stdRe;
+            }
+
+            return response()->json($response, 200, [], JSON_UNESCAPED_UNICODE);
+        } else {
+            return response()->json('取得資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    //廠商回應履歷-拒絕
+    public function refuseResume(Request $request){
+        $re=$request->all();
+        $objValidator = Validator::make($request->all(), array(
+            'mid' => 'required|integer',
+            'mfailedreason'=>'nullable'
+        ), array(
+            'mid.required' => '請輸入廠商帳號(統一編號)',
+            'mid.integer' => '請輸入int格式',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $responses = $this->MatchServices->refuseResume_ser($re);
+            if ($responses == '拒絕媒合成功') {
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
+
+    //廠商回應履歷-接受
+    public function acceptResume(Request $request){
+        $re=$request->all();
+        $objValidator = Validator::make($request->all(), array(
+            'mid' => 'required|integer',
+            'mstatus'=>'required|integer' //傳入1==去面試，其他是直接接受
+        ), array(
+            'mid.required' => '請輸入廠商帳號(統一編號)',
+            'mstatus.required' => '請輸入廠商帳號(統一編號)',
+            'integer' => '請輸入int格式',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $responses = $this->MatchServices->acceptResume_ser($re);
+            if ($responses == '接受媒合成功') {
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
+
+    //取得廠商聯絡資訊
+    public function getCompanyContactByMid(Request $request){
+        $re=$request->all();
+
+        $match = MatchEloquent::where('mid', $re['mid'])->first();
+        if ($match) {
+            $joid=$match->joid;
+            $jo=Job_opening::where('joid',$joid)->first();
+            $contact=array($jo->jcontact_name,$jo->jcontact_phone,$jo->jcontact_email);
+            return response()->json($contact, 200, [], JSON_UNESCAPED_UNICODE);
+        } else {
+            return response()->json('取得資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
 }

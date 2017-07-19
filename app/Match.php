@@ -12,4 +12,5 @@ class Match extends Model
     protected $fillable = [
         'sid','c_account','tid','mfailedreason','mstatus','joid'
     ];
+
 }

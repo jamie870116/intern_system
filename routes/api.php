@@ -36,7 +36,12 @@ Route::group(['middleware'=>'jwt'],function(){
     Route::get('getJobOpeningAll','Job_openingController@getJobOpeningAll');//取得所有職缺(截止日期未到期的
     Route::get('getJobOpeningAll_ASC','Job_openingController@getJobOpeningAll_ASC');//取得所有職缺(截止日期未到期的 時間由舊到新
     Route::get('getJobOpeningBySearch','Job_openingController@getJobOpeningBySearch');//職缺條件排序
-
+    //媒合相關resumeSubmitted
+    Route::post('resumeSubmitted', 'MatchController@resumeSubmitted');
+    Route::get('getResumeByAccount', 'MatchController@getResumeByAccount');
+    Route::put('refuseResume', 'MatchController@refuseResume');
+    Route::put('acceptResume', 'MatchController@acceptResume');//
+    Route::get('getCompanyContactByMid', 'MatchController@getCompanyContactByMid');
     //履歷新增相關
     Route::post('createEduDataById', 'Stu_resumeController@createEduDataById');
     Route::post('createJobExperienceById', 'Stu_resumeController@createJobExperienceById');
