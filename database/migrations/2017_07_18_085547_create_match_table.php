@@ -16,9 +16,12 @@ class CreateMatchTable extends Migration
         Schema::create('match', function (Blueprint $table) {
             $table->increments('mid'); //AI
             $table->integer('sid'); //學生ID
-            $table->integer('cid'); //廠商ID
+            $table->string('c_account',50); //廠商帳號
+            $table->integer('joid'); //職缺ID
+            $table->tinyInteger('mstatus')->default(1); //媒合狀態
             $table->integer('tid')->nullable(); //老師ID(系辦給；如果為空值，代表系辦未審核，成功才可輸入tid)
             $table->longText('mfailedreason')->nullable();//如果不為空值代表審核失敗，可供日後追蹤
+            $table->timestamps();
         });
     }
 
