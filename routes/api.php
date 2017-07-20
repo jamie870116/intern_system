@@ -39,9 +39,11 @@ Route::group(['middleware'=>'jwt'],function(){
     //媒合相關resumeSubmitted
     Route::post('resumeSubmitted', 'MatchController@resumeSubmitted');
     Route::get('getResumeByAccount', 'MatchController@getResumeByAccount');
-    Route::put('refuseResume', 'MatchController@refuseResume');
+    Route::put('rejectResume', 'MatchController@rejectResume');
     Route::put('acceptResume', 'MatchController@acceptResume');//
     Route::get('getCompanyContactByMid', 'MatchController@getCompanyContactByMid');
+    Route::post('sendInterviewNotice', 'MatchController@sendInterviewNotice');//
+
     //履歷新增相關
     Route::post('createEduDataById', 'Stu_resumeController@createEduDataById');
     Route::post('createJobExperienceById', 'Stu_resumeController@createJobExperienceById');

@@ -25,7 +25,7 @@ class Job_opening extends Model
     public function scopeGetAll($query)
     {
         $now=Carbon::now();
-        return $query->where('jdeadline','>',$now);
+        return $query->where('jdeadline','>',$now)->where('jNOP','>',0);
     }
 
     public function scopeByTypes($query,$type)

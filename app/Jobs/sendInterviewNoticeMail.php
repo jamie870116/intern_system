@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Mail;
 
-class sendResultmail_faild implements ShouldQueue
+class sendInterviewNoticeMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     protected $data;
@@ -31,9 +31,9 @@ class sendResultmail_faild implements ShouldQueue
     public function handle()
     {
         $data=$this->data;
-        Mail::send('mail.CheckFailed', $data, function($message) use($data)
+        Mail::send('test.send', $data, function($message) use($data)
         {
-            $message->to($data['mail'], $data['content'])->subject('職缺審核結果通知');
+            $message->to($data['mail'], $data['interview'])->subject('面試通知');
         });
     }
 }

@@ -91,7 +91,7 @@ class MatchController extends Controller
     }
 
     //廠商回應履歷-拒絕
-    public function refuseResume(Request $request){
+    public function rejectResume(Request $request){
         $re=$request->all();
         $objValidator = Validator::make($request->all(), array(
             'mid' => 'required|integer',
@@ -108,7 +108,7 @@ class MatchController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
-            $responses = $this->MatchServices->refuseResume_ser($re);
+            $responses = $this->MatchServices->rejectResume_ser($re);
             if ($responses == '拒絕媒合成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -125,7 +125,7 @@ class MatchController extends Controller
             'mstatus'=>'required|integer' //傳入1==去面試，其他是直接接受
         ), array(
             'mid.required' => '請輸入廠商帳號(統一編號)',
-            'mstatus.required' => '請輸入廠商帳號(統一編號)',
+            'mstatus.required' => '請選擇是否接受',
             'integer' => '請輸入int格式',
         ));
         if ($objValidator->fails()) {
@@ -159,4 +159,137 @@ class MatchController extends Controller
             return response()->json('取得資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
         }
     }
+    //面試通知
+    public function sendInterviewNotice(Request $request){
+        $re=$request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'mid'=>'required',
+            'inadress' => 'required',
+            'intime' => 'required|date',
+            'jcontact_email' => 'required|email',
+            'jcontact_phone' => 'required',
+            'innotice' => 'required',
+            'jcontact_name' => 'required'
+        ), array(
+            'mid.required'=>'請輸入媒合ID',
+            'inadress.required' => '請輸入面試地點',
+            'intime.required' => '請輸入面試時間',
+            'jcontact_email.required' => '請輸入聯絡信箱',
+            'jcontact_phone.required' => '請輸入連絡電話',
+            'innotice.required' => '請填寫面試注意事項',
+            'jcontact_name.required' => '請輸入聯絡人姓名',
+            'integer' => 'int格式錯誤',
+            'date'=>'日期時間格式錯誤',
+            'email'=>'信箱格式錯誤'
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $responses = $this->MatchServices->sendInterviewNotice_ser($re);
+            if ($responses == '成功') {
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
+    //
+    //學生是否接受面試
+    public function acceptInterview(Request $request){
+        $re=$request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'mid'=>'required',
+            'mstatus' => 'required|integer',
+
+        ), array(
+            'mid.required'=>'請輸入媒合ID',
+            'mstatus.required'=>'請選擇是否接受', //傳入1==去面試，其他是拒絕
+            'integer' => 'int格式錯誤',
+
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $responses = $this->MatchServices->acceptInterview_ser($re);
+            if ($responses == '成功') {
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
+
+    //面試失敗
+//    public function interviewFailed(Request $request){
+//        $re=$request->all();
+//
+//        $objValidator = Validator::make($request->all(), array(
+//            'mid'=>'required',
+//            'mstatus' => 'required|integer',
+//
+//        ), array(
+//            'mid.required'=>'請輸入媒合ID',
+//            'mstatus.required'=>'請選擇是否接受', //傳入1==去面試，其他是拒絕
+//            'integer' => 'int格式錯誤',
+//
+//        ));
+//        if ($objValidator->fails()) {
+//            $errors = $objValidator->errors();
+//            $error = array();
+//            foreach ($errors->all() as $message) {
+//                $error[] = $message;
+//            }
+//            return response()->json($error, 400);//422
+//        } else {
+//            $responses = $this->MatchServices->acceptInterview_ser($re);
+//            if ($responses == '成功') {
+//                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+//            } else {
+//                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+//            }
+//        }
+//    }
+
+//面試成功
+//    public function interviewSuccess(Request $request){
+//        $re=$request->all();
+//
+//        $objValidator = Validator::make($request->all(), array(
+//            'mid'=>'required',
+//            'mstatus' => 'required|integer',
+//
+//        ), array(
+//            'mid.required'=>'請輸入媒合ID',
+//            'mstatus.required'=>'請選擇是否接受', //傳入1==去面試，其他是拒絕
+//            'integer' => 'int格式錯誤',
+//
+//        ));
+//        if ($objValidator->fails()) {
+//            $errors = $objValidator->errors();
+//            $error = array();
+//            foreach ($errors->all() as $message) {
+//                $error[] = $message;
+//            }
+//            return response()->json($error, 400);//422
+//        } else {
+//            $responses = $this->MatchServices->acceptInterview_ser($re);
+//            if ($responses == '成功') {
+//                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+//            } else {
+//                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+//            }
+//        }
+//    }
 }

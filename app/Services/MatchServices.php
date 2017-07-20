@@ -7,7 +7,10 @@
  */
 
 namespace App\Services;
+use App\Interviews;
+use App\Jobs\sendInterviewNoticeMail;
 use App\Match as MatchEloquent;
+use App\User;
 
 class MatchServices
 {
@@ -21,7 +24,7 @@ class MatchServices
         }
     }
 
-    public function refuseResume_ser($re){
+    public function rejectResume_ser($re){
         $match=MatchEloquent::where('mid',$re['mid'])->first();
         if($match){
             if($match->mstatus==1){
@@ -57,6 +60,54 @@ class MatchServices
                     return '接受媒合成功，進行接下來的流程去吧';
                 } else {
                     return '接受媒合失敗';
+                }
+            }else{
+                return '流程錯誤';
+            }
+
+        }else{
+            return '查無此媒合資料';
+        }
+    }
+//
+    public function sendInterviewNotice_ser($re){
+        $match=MatchEloquent::where('mid',$re['mid'])->first();
+        $user=User::where('id',$match->sid)->first();
+        if($match){
+            if($match->mstatus==3){
+              $interview=new Interviews($re);
+                $interview->save();
+                if (Interviews::count() != 0) {
+                    $data = ['mail'=> $user->mail, 'interview'=>$interview];
+                    dispatch(new sendInterviewNoticeMail($data));
+                    return '成功';
+                } else {
+                    return '失敗';
+                }
+            }else{
+                return '流程錯誤';
+            }
+
+        }else{
+            return '查無此媒合資料';
+        }
+    }
+
+    public function acceptInterview_ser($re){
+        $match=MatchEloquent::where('mid',$re['mid'])->first();
+        if($re['mstatus']==1){
+            $status=4;
+        }else{
+            $status=5;
+        }
+        if($match){
+            if($match->mstatus==3){
+                $match->mstatus=$status;
+                $match->save();
+                if (MatchEloquent::count() != 0) {
+                    return '接受面試成功，進行接下來的流程去吧';
+                } else {
+                    return '接受面試失敗';
                 }
             }else{
                 return '流程錯誤';
