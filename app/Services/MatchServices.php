@@ -121,5 +121,98 @@ class MatchServices
             return '查無此媒合資料';
         }
     }
+//companyFailedInterview_ser
+    public function companyFailedInterview_ser($re){
+        $match=MatchEloquent::where('mid',$re['mid'])->first();
+        if($match){
+            if($match->mstatus==4){
+                $match->mfailedreason=$re['mfailedreason'];
+                $match->mstatus=8;
+                $match->save();
+                $user=User::where('id',$match->sid)->first();
+                $data = ['mail'=> $user->mail, 'mfailedreason'=>$re['mfailedreason']];
+                dispatch(new sendInterviewNoticeMail($data));
+                if (MatchEloquent::count() != 0) {
+                    return '廠商通知學生未綠取成功';
+                } else {
+                    return '廠商通知學生未綠取失敗';
+                }
+            }else{
+                return '流程錯誤';
+            }
 
+        }else{
+            return '查無此媒合資料';
+        }
+    }
+    //
+    public function companyPassInterview_ser($re){
+        $match=MatchEloquent::where('mid',$re['mid'])->first();
+        if($match){
+            if($match->mstatus==4){
+                $match->mstatus=7;
+                $match->save();
+                if (MatchEloquent::count() != 0) {
+                    return '廠商通知學生綠取成功';
+                } else {
+                    return '廠商通知學生綠取失敗';
+                }
+            }else{
+                return '流程錯誤';
+            }
+
+        }else{
+            return '查無此媒合資料';
+        }
+    }
+
+    //
+    public function studentAcceptJob_ser($re){
+        $match=MatchEloquent::where('mid',$re['mid'])->first();
+        if($re['mstatus']==1){
+            $status=9;
+        }else{
+            $status=10;
+        }
+        if($match){
+            if($match->mstatus==7){
+                $match->mstatus=$status;
+                $match->save();
+                if (MatchEloquent::count() != 0||$status==9) {
+                    return '接受工作成功';
+                }elseif (MatchEloquent::count() != 0||$status==10){
+                    return '拒絕工作成功';
+                } else {
+                    return '接受面試失敗';
+                }
+            }else{
+                return '流程錯誤';
+            }
+
+        }else{
+            return '查無此媒合資料';
+        }
+    }
+    //
+    public function adminFillInTeacher_ser($re){
+        $match=MatchEloquent::where('mid',$re['mid'])->first();
+
+        if($match){
+            if($match->mstatus==9){
+                $match->mstatus=11;
+                $match->tid=$re['id'];
+                $match->save();
+                if (MatchEloquent::count() != 0) {
+                    return '選擇實習老師成功';
+                }else {
+                    return '選擇實習老師失敗';
+                }
+            }else{
+                return '流程錯誤';
+            }
+
+        }else{
+            return '查無此媒合資料';
+        }
+    }
 }

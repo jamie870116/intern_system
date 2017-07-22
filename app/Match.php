@@ -13,4 +13,13 @@ class Match extends Model
         'sid','c_account','tid','mfailedreason','mstatus','joid'
     ];
 
+    public function scopeSortByUpdates_DESC($query)
+    {
+        return $query->orderby('updated_at','desc');
+    }
+
+    public function scopeSortByUpdates_ASC($query)
+    {
+        return $query->orderby('updated_at','asc');
+    }
 }

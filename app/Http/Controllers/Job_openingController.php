@@ -210,7 +210,7 @@ class Job_openingController extends Controller
     public function getJobOpeningbyAccount(Request $request)
     {
         $re = $request->all();
-        $jobOp = job_opEloquent::where('c_account', $re['c_account'])->SortByUpdates_DESC()->get();
+        $jobOp = job_opEloquent::where('c_account', $re['c_account'])->SortByUpdates_DESC()->paginate(4);
         if ($jobOp) {
             return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
         } else {
@@ -233,7 +233,7 @@ class Job_openingController extends Controller
     //取得所有職缺(截止日期未到期的
     public function getJobOpeningAll()
     {
-        $jobOp = job_opEloquent::GetAll()->SortByUpdates_DESC()->paginate(9);
+        $jobOp = job_opEloquent::GetAll()->SortByUpdates_DESC()->paginate(6);
 
         if ($jobOp) {
             return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
@@ -245,7 +245,7 @@ class Job_openingController extends Controller
     //取得所有職缺(截止日期未到期的 時間由小到大
     public function getJobOpeningAll_ASC()
     {
-        $jobOp = job_opEloquent::GetAll()->SortByUpdates_ASC()->get();
+        $jobOp = job_opEloquent::GetAll()->SortByUpdates_ASC()->paginate(6);
 
         if ($jobOp) {
             return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
@@ -265,7 +265,7 @@ class Job_openingController extends Controller
         if ($re['keyword'] != null) {
             if ($jsalary_lows != null) {
                 $jobOp=job_opEloquent::GetAll()->where('jsalary_low','>=',$jsalary_lows)->ByTypes($jtypes);
-                $jobOp=$jobOp->where('jduties','like',$keyword)->orWhere('jdetails','like',$keyword)->get();
+                $jobOp=$jobOp->where('jduties','like',$keyword)->orWhere('jdetails','like',$keyword)->paginate(6);
                 if ($jobOp) {
                     return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
                 } else {
@@ -273,7 +273,7 @@ class Job_openingController extends Controller
                 }
             } else {
                 $jobOp=job_opEloquent::GetAll()->ByTypes($jtypes);
-                $jobOp=$jobOp->where('jduties','like',$keyword)->orWhere('jdetails','like',$keyword)->get();
+                $jobOp=$jobOp->where('jduties','like',$keyword)->orWhere('jdetails','like',$keyword)->paginate(6);
                 if ($jobOp) {
                     return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
                 } else {
@@ -282,14 +282,14 @@ class Job_openingController extends Controller
             }
         } else {
             if ($jsalary_lows != null) {
-                $jobOp=job_opEloquent::GetAll()->where('jsalary_low','>=',$jsalary_lows)->ByTypes($jtypes)->get();
+                $jobOp=job_opEloquent::GetAll()->where('jsalary_low','>=',$jsalary_lows)->ByTypes($jtypes)->paginate(6);
                 if ($jobOp) {
                     return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
                 } else {
                     return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
                 }
             } else {
-                $jobOp=job_opEloquent::GetAll()->ByTypes($jtypes)->get();
+                $jobOp=job_opEloquent::GetAll()->ByTypes($jtypes)->paginate(6);
                 if ($jobOp) {
                     return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
                 } else {
