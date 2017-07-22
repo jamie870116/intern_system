@@ -18,9 +18,9 @@ class MatchServices
         $match= new MatchEloquent($re);
         $match->save();
         if (MatchEloquent::count() != 0) {
-            return '新增媒合資料成功';
+            return '學生送出媒合資料成功';
         } else {
-            return '新增媒合資料失敗';
+            return '學生送出媒合資料失敗';
         }
     }
 
@@ -32,9 +32,9 @@ class MatchServices
                 $match->mstatus=2;
                 $match->save();
                 if (MatchEloquent::count() != 0) {
-                    return '拒絕媒合成功';
+                    return '廠商拒絕媒合成功';
                 } else {
-                    return '拒絕媒合失敗';
+                    return '廠商拒絕媒合失敗';
                 }
             }else{
                 return '流程錯誤';
@@ -57,11 +57,11 @@ class MatchServices
                 $match->mstatus=$status;
                 $match->save();
                 if (MatchEloquent::count() != 0||$status==6) {
-                    return '接受媒合成功，直接錄取成功';
+                    return '廠商直接錄取成功';
                 } elseif (MatchEloquent::count() != 0||$status==3){
-                    return '接受媒合成功，去填寫面試通知吧';
+                    return '廠商接受面試成功';
                 }else {
-                    return '接受媒合失敗';
+                    return '廠商接受面試失敗';
                 }
             }else{
                 return '流程錯誤';

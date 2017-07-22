@@ -53,7 +53,7 @@ class MatchController extends Controller
             return response()->json($error, 400);//422
         } else {
             $responses = $this->MatchServices->studentSubmitResume_ser($re);
-            if ($responses == '新增媒合資料成功') {
+            if ($responses == '學生送出媒合資料成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
@@ -109,7 +109,7 @@ class MatchController extends Controller
             return response()->json($error, 400);//422
         } else {
             $responses = $this->MatchServices->companyRejectResume_ser($re);
-            if ($responses == '拒絕媒合成功') {
+            if ($responses == '廠商拒絕媒合成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
@@ -137,7 +137,7 @@ class MatchController extends Controller
             return response()->json($error, 400);//422
         } else {
             $responses = $this->MatchServices->companyAcceptResume_ser($re);
-            if ($responses == '接受媒合成功，直接錄取成功'||$responses == '接受媒合成功，去填寫面試通知吧') {
+            if ($responses == '廠商直接錄取成功'||$responses == '廠商接受面試成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
@@ -232,35 +232,33 @@ class MatchController extends Controller
     }
 
     //面試失敗
-//    public function interviewFailed(Request $request){
-//        $re=$request->all();
-//
-//        $objValidator = Validator::make($request->all(), array(
-//            'mid'=>'required',
-//            'mstatus' => 'required|integer',
-//
-//        ), array(
-//            'mid.required'=>'請輸入媒合ID',
-//            'mstatus.required'=>'請選擇是否接受', //傳入1==去面試，其他是拒絕
-//            'integer' => 'int格式錯誤',
-//
-//        ));
-//        if ($objValidator->fails()) {
-//            $errors = $objValidator->errors();
-//            $error = array();
-//            foreach ($errors->all() as $message) {
-//                $error[] = $message;
-//            }
-//            return response()->json($error, 400);//422
-//        } else {
-//            $responses = $this->MatchServices->acceptInterview_ser($re);
-//            if ($responses == '成功') {
-//                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
-//            } else {
-//                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
-//            }
-//        }
-//    }
+    public function interviewFailed(Request $request){
+        $re=$request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'mid'=>'required|integer',
+            'mfailedreason'=>'nullable'
+        ), array(
+            'mid.required'=>'請輸入媒合ID',
+            'integer' => 'int格式錯誤',
+
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $responses = $this->MatchServices->interviewFailed_ser($re);
+            if ($responses == '成功') {
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
 
 //面試成功
 //    public function interviewSuccess(Request $request){
