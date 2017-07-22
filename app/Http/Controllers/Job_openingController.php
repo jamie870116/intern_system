@@ -181,30 +181,6 @@ class Job_openingController extends Controller
         }
     }
 
-////系辦審核
-//    public function reviewJobOpening(Request $request)
-//    {
-//        $re = $request->all();
-//
-//        $objValidator = Validator::make($request->all(), array(
-//            'joid' => 'required',
-//            'jstatus' => 'required|integer'
-//        ), array(
-//            'required' => '此欄位不可為空白',
-//            'integer' => 'int格式錯誤'
-//        ));
-//        if ($objValidator->fails()) {
-//            return response()->json($objValidator->errors(), 400);//422
-//        } else {
-//            $responses = $this->JobopeningServices->reviewJobOpening_ser($re);
-//            if ($responses == '職缺審核通過' || $responses == '職缺審核未通過') {
-////                $this->JobopeningServices->sendResultMail($responses,$re['joid']);
-//                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
-//            } else {
-//                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
-//            }
-//        }
-//    }
 
     //廠商帳號取得該廠商所有職缺資料
     public function getJobOpeningbyAccount(Request $request)
@@ -254,7 +230,7 @@ class Job_openingController extends Controller
         }
     }
 
-    //條件排序
+    //條件排序-DESC
     public function getJobOpeningBySearch(Request $request)
     {
         $re = $request->all();
@@ -265,7 +241,7 @@ class Job_openingController extends Controller
         if ($re['keyword'] != null) {
             if ($jsalary_lows != null) {
                 $jobOp=job_opEloquent::GetAll()->where('jsalary_low','>=',$jsalary_lows)->ByTypes($jtypes);
-                $jobOp=$jobOp->where('jduties','like',$keyword)->orWhere('jdetails','like',$keyword)->paginate(6);
+                $jobOp=$jobOp->where('jduties','like',$keyword)->orWhere('jdetails','like',$keyword)->SortByUpdates_DESC()->paginate(6);
                 if ($jobOp) {
                     return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
                 } else {
@@ -273,7 +249,7 @@ class Job_openingController extends Controller
                 }
             } else {
                 $jobOp=job_opEloquent::GetAll()->ByTypes($jtypes);
-                $jobOp=$jobOp->where('jduties','like',$keyword)->orWhere('jdetails','like',$keyword)->paginate(6);
+                $jobOp=$jobOp->where('jduties','like',$keyword)->orWhere('jdetails','like',$keyword)->SortByUpdates_DESC()->paginate(6);
                 if ($jobOp) {
                     return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
                 } else {
@@ -282,14 +258,14 @@ class Job_openingController extends Controller
             }
         } else {
             if ($jsalary_lows != null) {
-                $jobOp=job_opEloquent::GetAll()->where('jsalary_low','>=',$jsalary_lows)->ByTypes($jtypes)->paginate(6);
+                $jobOp=job_opEloquent::GetAll()->where('jsalary_low','>=',$jsalary_lows)->ByTypes($jtypes)->SortByUpdates_DESC()->paginate(6);
                 if ($jobOp) {
                     return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
                 } else {
                     return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
                 }
             } else {
-                $jobOp=job_opEloquent::GetAll()->ByTypes($jtypes)->paginate(6);
+                $jobOp=job_opEloquent::GetAll()->ByTypes($jtypes)->SortByUpdates_DESC()->paginate(6);
                 if ($jobOp) {
                     return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
                 } else {
@@ -300,5 +276,49 @@ class Job_openingController extends Controller
 
     }
 
+//條件排-ASC
+    public function getJobOpeningBySearch_ASC(Request $request)
+    {
+        $re = $request->all();
+        $keyword = '%'.$re['keyword'].'%';
+        $jtypes = $re['jtypes'];
+        $jsalary_lows = $re['jsalary_lows'];
 
+        if ($re['keyword'] != null) {
+            if ($jsalary_lows != null) {
+                $jobOp=job_opEloquent::GetAll()->where('jsalary_low','>=',$jsalary_lows)->ByTypes($jtypes);
+                $jobOp=$jobOp->where('jduties','like',$keyword)->orWhere('jdetails','like',$keyword)->SortByUpdates_ASC()->paginate(6);
+                if ($jobOp) {
+                    return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
+                } else {
+                    return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
+                }
+            } else {
+                $jobOp=job_opEloquent::GetAll()->ByTypes($jtypes);
+                $jobOp=$jobOp->where('jduties','like',$keyword)->orWhere('jdetails','like',$keyword)->SortByUpdates_ASC()->paginate(6);
+                if ($jobOp) {
+                    return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
+                } else {
+                    return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
+                }
+            }
+        } else {
+            if ($jsalary_lows != null) {
+                $jobOp=job_opEloquent::GetAll()->where('jsalary_low','>=',$jsalary_lows)->ByTypes($jtypes)->SortByUpdates_ASC()->paginate(6);
+                if ($jobOp) {
+                    return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
+                } else {
+                    return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
+                }
+            } else {
+                $jobOp=job_opEloquent::GetAll()->ByTypes($jtypes)->SortByUpdates_ASC()->paginate(6);
+                if ($jobOp) {
+                    return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
+                } else {
+                    return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
+                }
+            }
+        }
+
+    }
 }
