@@ -30,7 +30,7 @@ class MatchController extends Controller
     }
 
     //投遞履歷resume
-    public function resumeSubmitted(Request $request)
+    public function studentSubmitResume(Request $request)
     {
         $re = $request->all();
 
@@ -52,7 +52,7 @@ class MatchController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
-            $responses = $this->MatchServices->resumeSubmitted_ser($re);
+            $responses = $this->MatchServices->studentSubmitResume_ser($re);
             if ($responses == '新增媒合資料成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -64,7 +64,7 @@ class MatchController extends Controller
     }
 
     //廠商取得投遞的履歷
-    public function getResumeByAccount(Request $request)
+    public function companyGetResumeByAccount(Request $request)
     {
         $re = $request->all();
 
@@ -91,13 +91,13 @@ class MatchController extends Controller
     }
 
     //廠商回應履歷-拒絕
-    public function rejectResume(Request $request){
+    public function companyRejectResume(Request $request){
         $re=$request->all();
         $objValidator = Validator::make($request->all(), array(
             'mid' => 'required|integer',
             'mfailedreason'=>'nullable'
         ), array(
-            'mid.required' => '請輸入廠商帳號(統一編號)',
+            'mid.required' => '請輸入媒合ID',
             'mid.integer' => '請輸入int格式',
         ));
         if ($objValidator->fails()) {
@@ -108,7 +108,7 @@ class MatchController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
-            $responses = $this->MatchServices->rejectResume_ser($re);
+            $responses = $this->MatchServices->companyRejectResume_ser($re);
             if ($responses == '拒絕媒合成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -118,14 +118,14 @@ class MatchController extends Controller
     }
 
     //廠商回應履歷-接受
-    public function acceptResume(Request $request){
+    public function companyAcceptResume(Request $request){
         $re=$request->all();
         $objValidator = Validator::make($request->all(), array(
             'mid' => 'required|integer',
             'mstatus'=>'required|integer' //傳入1==去面試，其他是直接接受
         ), array(
-            'mid.required' => '請輸入廠商帳號(統一編號)',
-            'mstatus.required' => '請選擇是否接受',
+            'mid.required' => '請輸入媒合ID',
+            'mstatus.required' => '請回傳1，讓他來面試或回傳2直接接受',
             'integer' => '請輸入int格式',
         ));
         if ($objValidator->fails()) {
@@ -136,7 +136,7 @@ class MatchController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
-            $responses = $this->MatchServices->acceptResume_ser($re);
+            $responses = $this->MatchServices->companyAcceptResume_ser($re);
             if ($responses == '接受媒合成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -146,7 +146,7 @@ class MatchController extends Controller
     }
 
     //取得廠商聯絡資訊
-    public function getCompanyContactByMid(Request $request){
+    public function companyGetJobOpeningContactByMid(Request $request){
         $re=$request->all();
 
         $match = MatchEloquent::where('mid', $re['mid'])->first();
@@ -160,7 +160,7 @@ class MatchController extends Controller
         }
     }
     //面試通知
-    public function sendInterviewNotice(Request $request){
+    public function companySendInterviewNotice(Request $request){
         $re=$request->all();
 
         $objValidator = Validator::make($request->all(), array(
@@ -191,7 +191,7 @@ class MatchController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
-            $responses = $this->MatchServices->sendInterviewNotice_ser($re);
+            $responses = $this->MatchServices->companySendInterviewNotice_ser($re);
             if ($responses == '成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -201,7 +201,7 @@ class MatchController extends Controller
     }
     //
     //學生是否接受面試
-    public function acceptInterview(Request $request){
+    public function studentAcceptInterview(Request $request){
         $re=$request->all();
 
         $objValidator = Validator::make($request->all(), array(
@@ -210,7 +210,7 @@ class MatchController extends Controller
 
         ), array(
             'mid.required'=>'請輸入媒合ID',
-            'mstatus.required'=>'請選擇是否接受', //傳入1==去面試，其他是拒絕
+            'mstatus.required'=>'請回傳1，去面試或回傳2拒絕', //傳入1==去面試，其他是拒絕
             'integer' => 'int格式錯誤',
 
         ));
@@ -222,7 +222,7 @@ class MatchController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
-            $responses = $this->MatchServices->acceptInterview_ser($re);
+            $responses = $this->MatchServices->studentAcceptInterview_ser($re);
             if ($responses == '成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {

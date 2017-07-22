@@ -37,12 +37,12 @@ Route::group(['middleware'=>'jwt'],function(){
     Route::get('getJobOpeningAll_ASC','Job_openingController@getJobOpeningAll_ASC');//取得所有職缺(截止日期未到期的 時間由舊到新
     Route::get('getJobOpeningBySearch','Job_openingController@getJobOpeningBySearch');//職缺條件排序
     //媒合相關resumeSubmitted
-    Route::post('resumeSubmitted', 'MatchController@resumeSubmitted');
-    Route::get('getResumeByAccount', 'MatchController@getResumeByAccount');
-    Route::put('rejectResume', 'MatchController@rejectResume');
-    Route::put('acceptResume', 'MatchController@acceptResume');//
-    Route::get('getCompanyContactByMid', 'MatchController@getCompanyContactByMid');
-    Route::post('sendInterviewNotice', 'MatchController@sendInterviewNotice');//
+    Route::post('studentSubmitResume', 'MatchController@studentSubmitResume');//投遞履歷resume
+    Route::get('companyGetResumeByAccount', 'MatchController@companyGetResumeByAccount');//廠商取得投遞的履歷
+    Route::put('companyRejectResume', 'MatchController@companyRejectResume');//廠商回應履歷-拒絕
+    Route::put('companyAcceptResume', 'MatchController@companyAcceptResume');// //廠商回應履歷-接受
+    Route::get('companyGetJobOpeningContactByMid', 'MatchController@companyGetJobOpeningContactByMid');//取得廠商聯絡資訊
+    Route::post('companySendInterviewNotice', 'MatchController@companySendInterviewNotice'); //面試通知
 
     //履歷新增相關
     Route::post('createEduDataById', 'Stu_resumeController@createEduDataById');

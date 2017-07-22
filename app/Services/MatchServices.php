@@ -14,7 +14,7 @@ use App\User;
 
 class MatchServices
 {
-    public function resumeSubmitted_ser($re){
+    public function studentSubmitResume_ser($re){
         $match= new MatchEloquent($re);
         $match->save();
         if (MatchEloquent::count() != 0) {
@@ -24,7 +24,7 @@ class MatchServices
         }
     }
 
-    public function rejectResume_ser($re){
+    public function companyRejectResume_ser($re){
         $match=MatchEloquent::where('mid',$re['mid'])->first();
         if($match){
             if($match->mstatus==1){
@@ -45,7 +45,7 @@ class MatchServices
         }
     }
 
-    public function acceptResume_ser($re){
+    public function companyAcceptResume_ser($re){
         $match=MatchEloquent::where('mid',$re['mid'])->first();
         if($re['mstatus']==1){
             $status=3;
@@ -56,9 +56,11 @@ class MatchServices
             if($match->mstatus==1){
                 $match->mstatus=$status;
                 $match->save();
-                if (MatchEloquent::count() != 0) {
+                if (MatchEloquent::count() != 0||$status==6) {
                     return '接受媒合成功，進行接下來的流程去吧';
-                } else {
+                } elseif (MatchEloquent::count() != 0||$status==3){
+
+                }else {
                     return '接受媒合失敗';
                 }
             }else{
@@ -70,7 +72,7 @@ class MatchServices
         }
     }
 //
-    public function sendInterviewNotice_ser($re){
+    public function companySendInterviewNotice_ser($re){
         $match=MatchEloquent::where('mid',$re['mid'])->first();
         $user=User::where('id',$match->sid)->first();
         if($match){
@@ -93,7 +95,7 @@ class MatchServices
         }
     }
 
-    public function acceptInterview_ser($re){
+    public function studentAcceptInterview_ser($re){
         $match=MatchEloquent::where('mid',$re['mid'])->first();
         if($re['mstatus']==1){
             $status=4;
