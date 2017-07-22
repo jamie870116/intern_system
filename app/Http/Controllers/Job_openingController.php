@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\JobopeningServices;
 use Illuminate\Http\Request;
 use App\Job_opening as job_opEloquent;
+
 use Log;
 use Validator;
 
@@ -232,7 +233,7 @@ class Job_openingController extends Controller
     //取得所有職缺(截止日期未到期的
     public function getJobOpeningAll()
     {
-        $jobOp = job_opEloquent::GetAll()->SortByUpdates_DESC()->get();
+        $jobOp = job_opEloquent::GetAll()->SortByUpdates_DESC()->paginate(9);
 
         if ($jobOp) {
             return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
