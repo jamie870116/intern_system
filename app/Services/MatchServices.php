@@ -57,9 +57,9 @@ class MatchServices
                 $match->mstatus=$status;
                 $match->save();
                 if (MatchEloquent::count() != 0||$status==6) {
-                    return '接受媒合成功，進行接下來的流程去吧';
+                    return '接受媒合成功，直接錄取成功';
                 } elseif (MatchEloquent::count() != 0||$status==3){
-
+                    return '接受媒合成功，去填寫面試通知吧';
                 }else {
                     return '接受媒合失敗';
                 }
@@ -106,8 +106,10 @@ class MatchServices
             if($match->mstatus==3){
                 $match->mstatus=$status;
                 $match->save();
-                if (MatchEloquent::count() != 0) {
-                    return '接受面試成功，進行接下來的流程去吧';
+                if (MatchEloquent::count() != 0||$status==4) {
+                    return '接受面試成功';
+                }elseif (MatchEloquent::count() != 0||$status==5){
+                    return '拒絕面試成功';
                 } else {
                     return '接受面試失敗';
                 }

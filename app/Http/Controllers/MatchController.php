@@ -137,7 +137,7 @@ class MatchController extends Controller
             return response()->json($error, 400);//422
         } else {
             $responses = $this->MatchServices->companyAcceptResume_ser($re);
-            if ($responses == '接受媒合成功') {
+            if ($responses == '接受媒合成功，直接錄取成功'||$responses == '接受媒合成功，去填寫面試通知吧') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
@@ -223,7 +223,7 @@ class MatchController extends Controller
             return response()->json($error, 400);//422
         } else {
             $responses = $this->MatchServices->studentAcceptInterview_ser($re);
-            if ($responses == '成功') {
+            if ($responses == '接受面試成功'||$responses == '接受面試失敗') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
