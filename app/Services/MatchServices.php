@@ -8,6 +8,7 @@
 
 namespace App\Services;
 use App\Interviews;
+use App\Job_opening;
 use App\Jobs\sendInterviewNoticeMail;
 use App\Match as MatchEloquent;
 use App\User;
@@ -201,6 +202,9 @@ class MatchServices
             if($match->mstatus==9){
                 $match->mstatus=11;
                 $match->tid=$re['id'];
+                $jobOp=Job_opening::where('joid',$match->joid)->first();
+                $jobOp->jNOP-=1;
+                $jobOp->save();
                 $match->save();
                 if (MatchEloquent::count() != 0) {
                     return '選擇實習老師成功';

@@ -214,7 +214,8 @@ class AuthController extends Controller
         $token = JWTAuth::getToken();
         $user = JWTAuth::toUser($token);
         if ($user) {
-            return response()->json($user, 200);
+            $ex_time=Carbon::now()->addHour(5)->timestamp;
+            return response()->json($user, 200)->cookie('token',$token,$ex_time);
         } else {
             return response()->json('使用者不存在', 400);
         }

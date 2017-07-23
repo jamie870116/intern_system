@@ -2,10 +2,12 @@
 
 namespace App\Console;
 
+use App\Interviews;
+use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Match as MatchEloquent;
 
-use App\Tokens as TokensEloquent;
 
 class Kernel extends ConsoleKernel
 {
@@ -26,7 +28,22 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('queue:work')->everyMinute();
+//        $schedule->command('queue:work')->everyMinute();
+
+        $schedule->call(function(){
+
+            $match=MatchEloquent::where('mstatus',3)->get();
+
+            foreach ($match as $m){
+                $in=Interviews::where('mid',$m->mid)->first();
+               $twoDayLater= $in->intime->subDays(2);
+                $now=Carbon::now();
+                if($now>$twoDayLater){
+                   $m->mstatus=5;
+                   $m->save();
+                }
+            }
+        })->everyMinute();
     }
 
     /**
