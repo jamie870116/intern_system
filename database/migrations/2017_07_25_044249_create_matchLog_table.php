@@ -18,7 +18,7 @@ class CreateMatchLogTable extends Migration
             $table->tinyInteger('mstatus');//信件種類
             $table->integer('mid');//媒合編號
             $table->date('mailDeadline')->nullable();//過期時間
-            $table->boolean('readed')->default(false);//是否已讀
+            $table->boolean('read')->default(false);//是否已讀
             $table->boolean('favourite')->default(false);//我的最愛
             $table->softDeletes();//軟刪除
             $table->timestamps();//時間戳
