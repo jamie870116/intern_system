@@ -15,6 +15,7 @@ use App\Stu_licence as stulicenceEloquent;
 use App\Stu_relatives as stuRelativesEloquent;
 use App\Stu_works as stuWorksEloquent;
 use App\User as UserElopuent;
+use JWTAuth;
 use Validator;
 
 class MatchController extends Controller
@@ -37,11 +38,9 @@ class MatchController extends Controller
 
         $objValidator = Validator::make($request->all(), array(
             'c_account' => 'required',
-            'sid' => 'required|integer',
             'joid' => 'required|integer'
         ), array(
             'c_account.required' => '請輸入廠商帳號(統一編號)',
-            'sid.required' => '請輸入學生ID',
             'joid.required' => '請輸入職缺ID',
             'integer' => 'int格式錯誤',
         ));
@@ -65,11 +64,12 @@ class MatchController extends Controller
     }
 
     //廠商取得投遞的履歷
-    public function companyGetResumeByAccount(Request $request)
+    public function companyGetResumeByAccount()
     {
-        $re = $request->all();
 
-        $match = MatchEloquent::where('c_account', $re['c_account'])->get();
+        $token = JWTAuth::getToken();
+        $user = JWTAuth::toUser($token);
+        $match = MatchEloquent::where('c_account', $user->account)->get();
         if ($match) {
             $response = array();
             foreach ($match as $m) {

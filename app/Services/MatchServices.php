@@ -15,12 +15,16 @@ use App\Match as MatchEloquent;
 use App\MatchLog as MatchLogEloquent;
 use App\User;
 use Carbon\Carbon;
+use JWTAuth;
 
 class MatchServices
 {
     public function studentSubmitResume_ser($re)
     {
         $match = new MatchEloquent($re);
+        $token = JWTAuth::getToken();
+        $user = JWTAuth::toUser($token);
+        $match->sid=$user->id;
         $match->save();
         $log = new MatchLogEloquent();//給企業信件->學生的履歷
         $log->mstatus = 1;
