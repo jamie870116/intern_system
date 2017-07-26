@@ -91,37 +91,19 @@ class MailController extends Controller
     //取得企業信件
     public function getMailTitleByC_account(Request $request)
     {
-        $re = $request->all();
 
-        $objValidator = Validator::make($request->all(), array(
-            'c_account' => 'required',
-        ), array(
-            'c_account.required' => '請輸入廠商帳號',
-            'integer' => 'int格式錯誤',
-        ));
-        if ($objValidator->fails()) {
-            $errors = $objValidator->errors();
-            $error = array();
-            foreach ($errors->all() as $message) {
-                $error[] = $message;
-            }
-            return response()->json($error, 400);//422
-        } else {
-            $token = JWTAuth::getToken();
-            $users = JWTAuth::toUser($token);
-            $match = MatchEloquent::where('c_account', $re['c_account'])->get();
-            $user = UserEloquent::where('account', $re['c_account'])->first();
-            if (!$user || $user->u_status != 2) {
-                return response()->json('使用者不存在或該使用者不是廠商', 400, [], JSON_UNESCAPED_UNICODE);
-            }
-            if ($users != $user) {
-                return response()->json('不同人', 400, [], JSON_UNESCAPED_UNICODE);
-            }
+        $token = JWTAuth::getToken();
+        $users = JWTAuth::toUser($token);
+
+
+        if ($users) {
+            $match = MatchEloquent::where('c_account', $users->account)->get();
+
             if (!$match) {
                 return response()->json('取得媒合資料錯誤', 400, [], JSON_UNESCAPED_UNICODE);
             }
             $response = array();
-            $com_name = $user->u_name;
+            $com_name = $users->u_name;
 
             foreach ($match as $m) {
                 $stu = UserEloquent::where('id', $m->sid)->first();
@@ -143,6 +125,9 @@ class MailController extends Controller
                 }
             }
             return response()->json($response, 200, [], JSON_UNESCAPED_UNICODE);
+
+        } else {
+            return response()->json('error', 400);
         }
 
 

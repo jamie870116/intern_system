@@ -6,6 +6,7 @@ use App\Services\JobopeningServices;
 use Illuminate\Http\Request;
 use App\Job_opening as job_opEloquent;
 
+use JWTAuth;
 use Log;
 use Validator;
 
@@ -16,7 +17,7 @@ class Job_openingController extends Controller
 
     public function __construct(JobopeningServices $JobopeningServices)
     {
-        $this->middleware('company', ['except' => 'reviewJobOpening', 'deleteJobOpeningByAdmin']);
+        $this->middleware('company', ['except' => 'reviewJobOpening', 'deleteJobOpeningByAdmin','getJobOpeningbyId','getJobOpeningAll','getJobOpeningAll_ASC','getJobOpeningBySearch','getJobOpeningBySearch_ASC']);
         $this->middleware('admin', ['only' => 'reviewJobOpening', 'deleteJobOpeningByAdmin']);
         $this->JobopeningServices = $JobopeningServices;
     }
@@ -38,7 +39,6 @@ class Job_openingController extends Controller
             'jaddress' => 'required',
             'jdeadline' => 'required|date',
             'jNOP' => 'required|integer|min:0',
-            'c_account' => 'required'
         ), array(
             'jtypes.required' => '請選擇職缺類型',
             'jduties.required' => '請輸入職稱',
@@ -50,7 +50,6 @@ class Job_openingController extends Controller
             'jaddress.required' => '請輸入工作地點',
             'jdeadline.required' => '請輸入截止日期',
             'jNOP.required' => '請輸入需求人數',
-            'c_account.required' => '請輸入廠商帳號',
             'integer' => 'int格式錯誤',
             'min' => '不得輸入低於0的數字',
             'date' => '日期格式錯誤',
@@ -183,10 +182,11 @@ class Job_openingController extends Controller
 
 
     //廠商帳號取得該廠商所有職缺資料
-    public function getJobOpeningbyAccount(Request $request)
+    public function getJobOpeningbyAccount()
     {
-        $re = $request->all();
-        $jobOp = job_opEloquent::where('c_account', $re['c_account'])->SortByUpdates_DESC()->paginate(4);
+        $token = JWTAuth::getToken();
+        $user = JWTAuth::toUser($token);
+        $jobOp = job_opEloquent::where('c_account', $user->account)->SortByUpdates_DESC()->paginate(4);
         if ($jobOp) {
             return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
         } else {

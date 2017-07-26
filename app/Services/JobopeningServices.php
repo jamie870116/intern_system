@@ -6,12 +6,16 @@ use App\Job_opening as job_opEloquent;
 use App\Jobs\sendResultmail;
 use App\Jobs\sendResultmail_faild;
 use App\User as userEloquent;
+use JWTAuth;
+
 class JobopeningServices
 {
 
 	public function createJobOpening_ser($re){
 		$jobOpen = new job_opEloquent();
-        $jobOpen->c_account=$re['c_account'];
+        $token = JWTAuth::getToken();
+        $user = JWTAuth::toUser($token);
+        $jobOpen->c_account=$user->account;
 		$jobOpen->jtypes=$re['jtypes'];
 		$jobOpen->jduties=$re['jduties'];
 		$jobOpen->jdetails=$re['jdetails'];
