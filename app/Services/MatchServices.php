@@ -16,19 +16,23 @@ use App\MatchLog as MatchLogEloquent;
 use App\User;
 use Carbon\Carbon;
 use JWTAuth;
+use Log;
 
 class MatchServices
 {
     public function studentSubmitResume_ser($re)
     {
-        $match = new MatchEloquent($re);
+        $match = new MatchEloquent();
         $token = JWTAuth::getToken();
         $user = JWTAuth::toUser($token);
+        $match->joid=$re['joid'];
+        $com=Job_opening::where('joid',$re['joid'])->first();
+        $match->c_account=$com->c_account;
         $match->sid=$user->id;
         $match->save();
         $log = new MatchLogEloquent();//給企業信件->學生的履歷
         $log->mstatus = 1;
-        $log->mid = $re['mid'];
+        $log->mid = $match->mid;
         $log->mailDeadline = Carbon::now()->addDays(30);
         $log->save();
 
@@ -235,7 +239,7 @@ class MatchServices
                     return '接受面試失敗';
                 }
             } else {
-                return '流程錯誤';
+                return $match;
             }
 
         } else {

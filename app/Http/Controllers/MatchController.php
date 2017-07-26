@@ -24,8 +24,8 @@ class MatchController extends Controller
 
     public function __construct(MatchServices $MatchServices)
     {
-        $this->middleware('company', ['except' => 'studentSubmitResume', 'studentAcceptInterview', 'studentAcceptJob',
-            'adminGetSuccessMatch', 'adminGetTeacherData', 'adminFillInTeacher']);
+        $this->middleware('company', ['only' => 'companyGetResumeByAccount', 'companyRejectResume', 'companyAcceptResume',
+            'companyGetJobOpeningContactByMid', 'companySendInterviewNotice', 'companyFailedInterview','companyPassInterview']);
         $this->middleware('student', ['only' => 'studentSubmitResume', 'studentAcceptInterview', 'studentAcceptJob']);
         $this->middleware('admin', ['only' => 'adminGetSuccessMatch', 'adminGetTeacherData', 'adminFillInTeacher']);
         $this->MatchServices = $MatchServices;
@@ -37,10 +37,8 @@ class MatchController extends Controller
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
-            'c_account' => 'required',
             'joid' => 'required|integer'
         ), array(
-            'c_account.required' => '請輸入廠商帳號(統一編號)',
             'joid.required' => '請輸入職缺ID',
             'integer' => 'int格式錯誤',
         ));
@@ -152,16 +150,31 @@ class MatchController extends Controller
     public function companyGetJobOpeningContactByMid(Request $request)
     {
         $re = $request->all();
-
-        $match = MatchEloquent::where('mid', $re['mid'])->first();
-        if ($match) {
-            $joid = $match->joid;
-            $jo = Job_opening::where('joid', $joid)->first();
-            $contact = array($jo->jcontact_name, $jo->jcontact_phone, $jo->jcontact_email);
-            return response()->json($contact, 200, [], JSON_UNESCAPED_UNICODE);
+        $objValidator = Validator::make($request->all(), array(
+            'mid' => 'required|integer',
+        ), array(
+            'mid.required' => '請輸入媒合ID',
+            'integer' => '請輸入int格式',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
         } else {
-            return response()->json('取得資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
+            $match = MatchEloquent::where('mid', $re['mid'])->first();
+            if ($match) {
+                $joid = $match->joid;
+                $jo = Job_opening::where('joid', $joid)->first();
+                $contact = array($jo->jcontact_name, $jo->jcontact_phone, $jo->jcontact_email);
+                return response()->json($contact, 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json('取得資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
+            }
         }
+
     }
 
     //面試通知
@@ -205,7 +218,7 @@ class MatchController extends Controller
             }
         }
     }
-    //
+
     //學生是否接受面試
     public function studentAcceptInterview(Request $request)
     {
@@ -229,7 +242,7 @@ class MatchController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
-            $responses = $this->MatchServices->studentAcceptInterview_ser($re);
+            $responses = $this->MatchServices->studentAcceptJob_ser($re);
             if ($responses == '接受面試成功' || $responses == '拒絕面試成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -268,7 +281,7 @@ class MatchController extends Controller
         }
     }
 
-//面試成功
+    //面試成功
     public function companyPassInterview(Request $request)
     {
         $re = $request->all();
@@ -326,6 +339,7 @@ class MatchController extends Controller
             }
         }
     }
+
 
     //系辦取得已成功的媒合資料
     public function adminGetSuccessMatch()

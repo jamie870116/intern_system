@@ -48,6 +48,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::post('studentAcceptInterview', 'MatchController@studentAcceptInterview'); //學生是否接受面試
     Route::post('companyFailedInterview', 'MatchController@companyFailedInterview'); //面試失敗
     Route::post('companyPassInterview', 'MatchController@companyPassInterview'); //面試成功
+    Route::post('studentAcceptJob', 'MatchController@studentAcceptJob'); //學生是否接受入職
     Route::get('adminGetSuccessMatch', 'MatchController@adminGetSuccessMatch'); //系辦取得已成功的媒合資料
     Route::get('adminGetTeacherData', 'MatchController@adminGetTeacherData'); //系辦取得所有老師資訊
     Route::post('adminFillInTeacher', 'MatchController@adminFillInTeacher'); //系辦選擇實習老師
