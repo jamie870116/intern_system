@@ -17,7 +17,7 @@ class Job_openingController extends Controller
 
     public function __construct(JobopeningServices $JobopeningServices)
     {
-        $this->middleware('company', ['except' => 'reviewJobOpening', 'deleteJobOpeningByAdmin', 'getJobOpeningbyId', 'getJobOpeningAll', 'getJobOpeningAll_ASC', 'getJobOpeningBySearch', 'getJobOpeningBySearch_ASC']);
+        $this->middleware('company', ['only' => 'createJobOpening', 'editJobOpening', 'deleteJobOpeningByCom', 'getJobOpeningbyAccount']);
         $this->middleware('admin', ['only' => 'reviewJobOpening', 'deleteJobOpeningByAdmin']);
         $this->JobopeningServices = $JobopeningServices;
     }
