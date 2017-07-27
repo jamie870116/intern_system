@@ -17,7 +17,7 @@ class Job_openingController extends Controller
 
     public function __construct(JobopeningServices $JobopeningServices)
     {
-        $this->middleware('company', ['except' => 'reviewJobOpening', 'deleteJobOpeningByAdmin','getJobOpeningbyId','getJobOpeningAll','getJobOpeningAll_ASC','getJobOpeningBySearch','getJobOpeningBySearch_ASC']);
+        $this->middleware('company', ['except' => 'reviewJobOpening', 'deleteJobOpeningByAdmin', 'getJobOpeningbyId', 'getJobOpeningAll', 'getJobOpeningAll_ASC', 'getJobOpeningBySearch', 'getJobOpeningBySearch_ASC']);
         $this->middleware('admin', ['only' => 'reviewJobOpening', 'deleteJobOpeningByAdmin']);
         $this->JobopeningServices = $JobopeningServices;
     }
@@ -28,7 +28,7 @@ class Job_openingController extends Controller
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
-            'jtypes' => 'required|integer',
+            'jtypes' => 'required|integer',//1，正職 2，工讀 3，暑期實習 4，學期實習
             'jduties' => 'required',
             'jdetails' => 'required',
             'jcontact_name' => 'required',
@@ -57,11 +57,11 @@ class Job_openingController extends Controller
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
-            $error=array();
+            $error = array();
             foreach ($errors->all() as $message) {
-                $error[]=$message;
+                $error[] = $message;
             }
-            return response()->json($error,400);//422
+            return response()->json($error, 400);//422
         } else {
             $responses = $this->JobopeningServices->createJobOpening_ser($re);
             if ($responses == '新增職缺資料成功') {
@@ -72,13 +72,13 @@ class Job_openingController extends Controller
         }
     }
 
-//修改職缺
+    //修改職缺
     public function editJobOpening(Request $request)
     {
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
-            'jtypes' => 'required|integer',
+            'jtypes' => 'required|integer',//1，正職 2，工讀 3，暑期實習 4，學期實習
             'jduties' => 'required',
             'jdetails' => 'required',
             'jcontact_name' => 'required',
@@ -109,11 +109,11 @@ class Job_openingController extends Controller
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
-            $error=array();
+            $error = array();
             foreach ($errors->all() as $message) {
-                $error[]=$message;
+                $error[] = $message;
             }
-            return response()->json($error,400);//422
+            return response()->json($error, 400);//422
         } else {
             $responses = $this->JobopeningServices->editJobOpening_ser($re);
             if ($responses == '修改職缺資料成功，職缺將撤下待重新審核') {
@@ -138,11 +138,11 @@ class Job_openingController extends Controller
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
-            $error=array();
+            $error = array();
             foreach ($errors->all() as $message) {
-                $error[]=$message;
+                $error[] = $message;
             }
-            return response()->json($error,400);//422
+            return response()->json($error, 400);//422
         } else {
             $responses = $this->JobopeningServices->deleteJobOpeningByAdmin_ser($re);
             if ($responses == '職缺已刪除') {
@@ -165,11 +165,11 @@ class Job_openingController extends Controller
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
-            $error=array();
+            $error = array();
             foreach ($errors->all() as $message) {
-                $error[]=$message;
+                $error[] = $message;
             }
-            return response()->json($error,400);//422
+            return response()->json($error, 400);//422
         } else {
             $responses = $this->JobopeningServices->deleteJobOpeningByCom_ser($re);
             if ($responses == '職缺已刪除') {
@@ -230,95 +230,63 @@ class Job_openingController extends Controller
         }
     }
 
-    //條件排序-DESC
+
+    //條件排序
     public function getJobOpeningBySearch(Request $request)
     {
         $re = $request->all();
-        $keyword = '%'.$re['keyword'].'%';
-        $jtypes = $re['jtypes'];
-        $jsalary_lows = $re['jsalary_lows'];
 
-        if ($re['keyword'] != null) {
-            if ($jsalary_lows != null) {
-                $jobOp=job_opEloquent::GetAll()->where('jsalary_low','>=',$jsalary_lows)->ByTypes($jtypes);
-                $jobOp=$jobOp->where('jduties','like',$keyword)->orWhere('jdetails','like',$keyword)->SortByUpdates_DESC()->paginate(6);
-                if ($jobOp) {
-                    return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
-                } else {
-                    return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
-                }
-            } else {
-                $jobOp=job_opEloquent::GetAll()->ByTypes($jtypes);
-                $jobOp=$jobOp->where('jduties','like',$keyword)->orWhere('jdetails','like',$keyword)->SortByUpdates_DESC()->paginate(6);
-                if ($jobOp) {
-                    return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
-                } else {
-                    return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
-                }
+        $objValidator = Validator::make($request->all(), array(
+            'keyword' => 'nullable',
+            'jtypes' => 'required', //1，正職 2，工讀 3，暑期實習 4，學期實習
+            'jsalary_lows' => 'nullable',
+            'sortBy' => 'required', //1,時間DESC 2，時間ASC 3，薪水DESC 4，薪水ASC
+        ), array(
+            'sortBy.required' => '請選擇排序方式',
+            'jtypes.required' => '請選擇種類',
+            'integer' => '請回傳INT格式'
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
             }
+            return response()->json($error, 400);//422
         } else {
-            if ($jsalary_lows != null) {
-                $jobOp=job_opEloquent::GetAll()->where('jsalary_low','>=',$jsalary_lows)->ByTypes($jtypes)->SortByUpdates_DESC()->paginate(6);
-                if ($jobOp) {
-                    return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
-                } else {
-                    return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
+
+            if ($re['sortBy'] == 1) {
+                $responses = $this->JobopeningServices->sortByTime_DESC($re);
+                if($responses!='取得職缺資料失敗'){
+                    return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                }else{
+                    return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                }
+            } elseif ($re['sortBy'] == 2) {
+                $responses = $this->JobopeningServices->sortByTime_DESC($re);
+                if($responses!='取得職缺資料失敗'){
+                    return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                }else{
+                    return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                }
+            } elseif ($re['sortBy'] == 3) {
+                $responses = $this->JobopeningServices->sortByTime_DESC($re);
+                if($responses!='取得職缺資料失敗'){
+                    return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                }else{
+                    return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
                 }
             } else {
-                $jobOp=job_opEloquent::GetAll()->ByTypes($jtypes)->SortByUpdates_DESC()->paginate(6);
-                if ($jobOp) {
-                    return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
-                } else {
-                    return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
+                $responses = $this->JobopeningServices->sortByTime_DESC($re);
+                if($responses!='取得職缺資料失敗'){
+                    return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                }else{
+                    return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
                 }
             }
+
         }
 
     }
 
-//條件排-ASC
-    public function getJobOpeningBySearch_ASC(Request $request)
-    {
-        $re = $request->all();
-        $keyword = '%'.$re['keyword'].'%';
-        $jtypes = $re['jtypes'];
-        $jsalary_lows = $re['jsalary_lows'];
-
-        if ($re['keyword'] != null) {
-            if ($jsalary_lows != null) {
-                $jobOp=job_opEloquent::GetAll()->where('jsalary_low','>=',$jsalary_lows)->ByTypes($jtypes);
-                $jobOp=$jobOp->where('jduties','like',$keyword)->orWhere('jdetails','like',$keyword)->SortByUpdates_ASC()->paginate(6);
-                if ($jobOp) {
-                    return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
-                } else {
-                    return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
-                }
-            } else {
-                $jobOp=job_opEloquent::GetAll()->ByTypes($jtypes);
-                $jobOp=$jobOp->where('jduties','like',$keyword)->orWhere('jdetails','like',$keyword)->SortByUpdates_ASC()->paginate(6);
-                if ($jobOp) {
-                    return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
-                } else {
-                    return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
-                }
-            }
-        } else {
-            if ($jsalary_lows != null) {
-                $jobOp=job_opEloquent::GetAll()->where('jsalary_low','>=',$jsalary_lows)->ByTypes($jtypes)->SortByUpdates_ASC()->paginate(6);
-                if ($jobOp) {
-                    return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
-                } else {
-                    return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
-                }
-            } else {
-                $jobOp=job_opEloquent::GetAll()->ByTypes($jtypes)->SortByUpdates_ASC()->paginate(6);
-                if ($jobOp) {
-                    return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
-                } else {
-                    return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
-                }
-            }
-        }
-
-    }
 }
