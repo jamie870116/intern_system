@@ -34,16 +34,21 @@ class AuthController extends Controller
         $user_data=$request->only(['account','password']);
         $account=$request->only(['account']);
         $password=$request->only(['password']);
+        $error=array();
 
         $ex_time=Carbon::now()->addHour(5)->timestamp;
         $auth=UserEloquent::where('account',$account)->first();
         if($account['account']==""&&$password['password']==""){
-            $msg=array('請輸入帳號','請輸入密碼');
-            return response()->json($msg,400,$headers, JSON_UNESCAPED_UNICODE);
+
+            $error[]='請輸入帳號';
+            $error[]='請輸入密碼';
+            return response()->json($error,400,$headers, JSON_UNESCAPED_UNICODE);
         }else if($password['password']==""){
-            return response()->json('請輸入密碼',400,$headers, JSON_UNESCAPED_UNICODE);
+            $error[]='請輸入密碼';
+            return response()->json($error,400,$headers, JSON_UNESCAPED_UNICODE);
         }else if($account['account']==""){
-            return response()->json('請輸入帳號',400,$headers, JSON_UNESCAPED_UNICODE);
+            $error[]='請輸入帳號';
+            return response()->json($error,400,$headers, JSON_UNESCAPED_UNICODE);
         }
         if($auth){
             if(password_verify($password['password'],$auth->password)){
@@ -66,13 +71,16 @@ class AuthController extends Controller
                     $cookie_token='Bearer '.$token;
                     return response()->json($token)->cookie('authorization', $cookie_token,300);
                 }else{
-                    return response()->json('帳號未開通',400,$headers, JSON_UNESCAPED_UNICODE);
+                    $error[]='帳號未開通';
+                    return response()->json($error,400,$headers, JSON_UNESCAPED_UNICODE);
                 }
             }else{
-                return response()->json('密碼錯誤',400,$headers, JSON_UNESCAPED_UNICODE);
+                $error[]='密碼錯誤';
+                return response()->json($error,400,$headers, JSON_UNESCAPED_UNICODE);
             }
         }else{
-            return response()->json('帳號不存在',400,$headers, JSON_UNESCAPED_UNICODE);
+            $error[]='帳號不存在';
+            return response()->json($error,400,$headers, JSON_UNESCAPED_UNICODE);
         }
 
     }
@@ -92,7 +100,7 @@ class AuthController extends Controller
     }
 
     public function register(Request $request){
-
+        $error=array();
         $length=10;
         $key=$this->registerService->randomkeys($length);
         $headers = array('Content-Type' => 'application/json; <a href="http://superlevin.ifengyuan.tw/tag/charset/">charset</a>=utf-8');
@@ -127,13 +135,14 @@ class AuthController extends Controller
         ));
         if($objValidator->fails()){
             $errors = $objValidator->errors();
-            $error=array();
+
             foreach ($errors->all() as $message) {
                 $error[]=$message;
             }
             return response()->json($error,400);//422
         }else if($conf_pass!=$password){
-            return response()->json('兩次密碼不一致',400,$headers, JSON_UNESCAPED_UNICODE);
+            $error[]='兩次密碼不一致';
+            return response()->json($error,400,$headers, JSON_UNESCAPED_UNICODE);
         }else if($status==0){ //學生
             $email=$account.'@nutc.edu.tw';
             userEloquent::create([
