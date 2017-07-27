@@ -13,7 +13,7 @@ class CreateStuAbilityTable extends Migration
      */
     public function up()
     {
-        Schema::create('stu_basic', function (Blueprint $table) {
+        Schema::create('stu_ability', function (Blueprint $table) {
 
             $table->increments('abiid');//AI
             $table->integer('sid');//
@@ -31,6 +31,6 @@ class CreateStuAbilityTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('stu_basic');
+        Schema::dropIfExists('stu_ability');
     }
 }
