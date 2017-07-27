@@ -53,21 +53,15 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::post('adminFillInTeacher', 'MatchController@adminFillInTeacher'); //系辦選擇實習老師
 
     //履歷新增相關
-    Route::post('createEduDataById', 'Stu_resumeController@createEduDataById');
     Route::post('createJobExperienceById', 'Stu_resumeController@createJobExperienceById');
     Route::post('createLicenseById', 'Stu_resumeController@createLicenseById');
     Route::post('createWorksDataById', 'Stu_resumeController@createWorksDataById');
-    Route::post('createRelativeDataById', 'Stu_resumeController@createRelativeDataById');
 
     //修改履歷相關
     Route::put('editBasicDataById', 'Stu_resumeController@editBasicDataById');
-    Route::put('editEduDataById', 'Stu_resumeController@editEduDataById');
     Route::put('editJobExperienceById', 'Stu_resumeController@editJobExperienceById');
     Route::put('editLicenseById', 'Stu_resumeController@editLicenseById');
     Route::put('editWorksDataById', 'Stu_resumeController@editWorksDataById');
-    Route::put('editLanguageById', 'Stu_resumeController@editLanguageById');
-    Route::put('editAbilityById', 'Stu_resumeController@editAbilityById');
-    Route::put('editRelativeDataById/', 'Stu_resumeController@editRelativeDataById');
 
     //取得履歷資料
     Route::get('findResumeDataById', 'Stu_resumeController@findResumeDataById');

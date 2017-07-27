@@ -31,11 +31,9 @@ class Stu_resumeController extends Controller
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
-            'id' => 'required',
             'semester' => 'required',
             'jobTitle' => 'required'
         ), array(
-            'id.required' => '請輸入學生ID',
             'semester.required' => '請輸入學期',
             'jobTitle.required' => '請輸入職位名稱'
         ));
@@ -60,13 +58,11 @@ class Stu_resumeController extends Controller
     {
         $re = $request->all();
         $objValidator = Validator::make($request->all(), array(
-            'id' => 'required',
             'agency' => 'required',
             'lname' => 'required',
             'ldate' => 'required|date'
         ), array(
             'ldate.required' => '請輸入發證日期',
-            'id.required' => '請輸入學生ID',
             'agency.required' => '請輸入發照單位',
             'lname.required' => '請輸入證照名稱',
             'date' => '日期格式錯誤'
@@ -93,11 +89,9 @@ class Stu_resumeController extends Controller
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
-            'id' => 'required',
             'wName' => 'required',
             'wCreatedDate' => 'nullable|date'
         ), array(
-            'id.required' => '請輸入學生ID',
             'wName.required' => '請輸入作品名稱',
             'date' => '日期格式錯誤'
         ));
@@ -146,7 +140,7 @@ class Stu_resumeController extends Controller
             'bornedPlace' => 'required',
             'nativePlace' => 'required',
             'birthday' => 'required|date',
-            'gender' => 'required',
+            'gender' => 'required|integer',//1，男生 2，女生
             'address' => 'required',
             'email' => 'required|email',
             'contact' => 'required',
