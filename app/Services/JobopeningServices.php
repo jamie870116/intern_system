@@ -7,6 +7,7 @@ use App\Job_opening as job_opEloquent;
 use App\Jobs\sendResultmail;
 use App\Jobs\sendResultmail_faild;
 use App\User as userEloquent;
+use Carbon\Carbon;
 use JWTAuth;
 use Log;
 
@@ -30,6 +31,7 @@ class JobopeningServices
         $jobOpen->jcontact_name = $re['jcontact_name'];
         $jobOpen->jcontact_phone = $re['jcontact_phone'];
         $jobOpen->jcontact_email = $re['jcontact_email'];
+//        $jobOpen->jdeadline =Carbon::parse($re['jdeadline'])->format('Y/m/d');
         $jobOpen->save();
         if (job_opEloquent::count() != 0) {
             return '新增職缺資料成功';

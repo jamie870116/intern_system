@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use Cookie;
 use Illuminate\Http\Request;
 use App\User as UserEloquent;
 
@@ -33,7 +34,8 @@ class AuthController extends Controller
         $user_data=$request->only(['account','password']);
         $account=$request->only(['account']);
         $password=$request->only(['password']);
-        $d_type=$request->only(['type']);
+
+        $ex_time=Carbon::now()->addHour(5)->timestamp;
         $auth=UserEloquent::where('account',$account)->first();
         if($account['account']==""&&$password['password']==""){
             $msg=array('請輸入帳號','請輸入密碼');
@@ -46,16 +48,9 @@ class AuthController extends Controller
         if($auth){
             if(password_verify($password['password'],$auth->password)){
                 if($auth->started==1){//登入成功
-                    //$t=reService::randomkeys(30);
-                    // Auth::login($auth);
-                    // $token=new TokensEloquent();
-                    // $token->token=$t;
-                    // $token->id=Auth::user()->id;
-                    // $token->types=$d_type['type'];
-                    // $token->save();
                     $agent = new Agent();
                     if($agent->isDesktop()){
-                        $ex_time=Carbon::now()->addHour(5)->timestamp;
+
                         $token = JWTAuth::attempt($user_data,['exp'=>$ex_time]);
                     }else{
                         $token = JWTAuth::attempt($user_data);
@@ -68,8 +63,8 @@ class AuthController extends Controller
                     } catch (JWTException $e) {
                         return response()->json(['error' => 'could_not_create_token'], 500);
                     }
-
-                    return response()->json($token);
+                    $cookie_token='Bearer '.$token;
+                    return response()->json($token)->cookie('authorization', $cookie_token,300);
                 }else{
                     return response()->json('帳號未開通',400,$headers, JSON_UNESCAPED_UNICODE);
                 }

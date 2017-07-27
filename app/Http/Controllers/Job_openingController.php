@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Job_opening as job_opEloquent;
 
 use JWTAuth;
-use Log;
+
 use Validator;
 
 class Job_openingController extends Controller
