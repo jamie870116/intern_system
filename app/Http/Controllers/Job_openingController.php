@@ -186,7 +186,7 @@ class Job_openingController extends Controller
     {
         $token = JWTAuth::getToken();
         $user = JWTAuth::toUser($token);
-        $jobOp = job_opEloquent::where('c_account', $user->account)->SortByUpdates_DESC()->paginate(4);
+        $jobOp = job_opEloquent::where('c_account', $user->account)->SortByUpdates_DESC()->paginate(12);
         if ($jobOp) {
             return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
         } else {
@@ -207,28 +207,28 @@ class Job_openingController extends Controller
     }
 
     //取得所有職缺(截止日期未到期的
-    public function getJobOpeningAll()
-    {
-        $jobOp = job_opEloquent::GetAll()->SortByUpdates_DESC()->paginate(6);
-
-        if ($jobOp) {
-            return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
-        } else {
-            return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
-        }
-    }
-
-    //取得所有職缺(截止日期未到期的 時間由小到大
-    public function getJobOpeningAll_ASC()
-    {
-        $jobOp = job_opEloquent::GetAll()->SortByUpdates_ASC()->paginate(6);
-
-        if ($jobOp) {
-            return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
-        } else {
-            return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
-        }
-    }
+//    public function getJobOpeningAll()
+//    {
+//        $jobOp = job_opEloquent::GetAll()->SortByUpdates_DESC()->paginate(12);
+//
+//        if ($jobOp) {
+//            return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
+//        } else {
+//            return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
+//        }
+//    }
+//
+//    //取得所有職缺(截止日期未到期的 時間由小到大
+//    public function getJobOpeningAll_ASC()
+//    {
+//        $jobOp = job_opEloquent::GetAll()->SortByUpdates_ASC()->paginate(12);
+//
+//        if ($jobOp) {
+//            return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
+//        } else {
+//            return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
+//        }
+//    }
 
 
     //條件排序
@@ -238,9 +238,9 @@ class Job_openingController extends Controller
 
         $objValidator = Validator::make($request->all(), array(
             'keyword' => 'nullable',
-            'jtypes' => 'required', //1，正職 2，工讀 3，暑期實習 4，學期實習
+            'jtypes' => 'required', //1，正職 2，工讀 3，暑期實習 4，學期實習 0，全部(預設)
             'jsalary_lows' => 'nullable',
-            'sortBy' => 'required', //1,時間DESC 2，時間ASC 3，薪水DESC 4，薪水ASC
+            'sortBy' => 'required', //1,時間DESC(預設) 2，時間ASC 3，薪水DESC 4，薪水ASC
         ), array(
             'sortBy.required' => '請選擇排序方式',
             'jtypes.required' => '請選擇種類',

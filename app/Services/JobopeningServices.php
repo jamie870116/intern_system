@@ -124,7 +124,7 @@ class JobopeningServices
         if ($re['keyword'] != null) {
             if ($jsalary_lows != null) {
                 $jobOp = job_opEloquent::GetAll()->where('jsalary_low', '>=', $jsalary_lows)->ByTypes($jtypes);
-                $jobOp = $jobOp->where('jduties', 'like', $keyword)->orWhere('jdetails', 'like', $keyword)->SortByUpdates_DESC()->paginate(6);
+                $jobOp = $jobOp->where('jduties', 'like', $keyword)->orWhere('jdetails', 'like', $keyword)->SortByUpdates_DESC()->paginate(12);
                 if ($jobOp) {
 
                     return $jobOp;
@@ -133,7 +133,7 @@ class JobopeningServices
                 }
             } else {
                 $jobOp = job_opEloquent::GetAll()->ByTypes($jtypes);
-                $jobOp = $jobOp->where('jduties', 'like', $keyword)->orWhere('jdetails', 'like', $keyword)->SortByUpdates_DESC()->paginate(6);
+                $jobOp = $jobOp->where('jduties', 'like', $keyword)->orWhere('jdetails', 'like', $keyword)->SortByUpdates_DESC()->paginate(12);
                 if ($jobOp) {
                     return $jobOp;
                 } else {
@@ -142,14 +142,14 @@ class JobopeningServices
             }
         } else {
             if ($jsalary_lows != null) {
-                $jobOp = job_opEloquent::GetAll()->where('jsalary_low', '>=', $jsalary_lows)->ByTypes($jtypes)->SortByUpdates_DESC()->paginate(6);
+                $jobOp = job_opEloquent::GetAll()->where('jsalary_low', '>=', $jsalary_lows)->ByTypes($jtypes)->SortByUpdates_DESC()->paginate(12);
                 if ($jobOp) {
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
                 }
             } else {
-                $jobOp = job_opEloquent::GetAll()->ByTypes($jtypes)->SortByUpdates_DESC()->paginate(6);
+                $jobOp = job_opEloquent::GetAll()->ByTypes($jtypes)->SortByUpdates_DESC()->paginate(12);
                 if ($jobOp) {
                     return $jobOp;
                 } else {
@@ -170,7 +170,7 @@ class JobopeningServices
         if ($re['keyword'] != null) {
             if ($jsalary_lows != null) {
                 $jobOp = job_opEloquent::GetAll()->where('jsalary_low', '>=', $jsalary_lows)->ByTypes($jtypes);
-                $jobOp = $jobOp->where('jduties', 'like', $keyword)->orWhere('jdetails', 'like', $keyword)->SortByUpdates_ASC()->paginate(6);
+                $jobOp = $jobOp->where('jduties', 'like', $keyword)->orWhere('jdetails', 'like', $keyword)->SortByUpdates_ASC()->paginate(12);
                 if ($jobOp) {
                     return $jobOp;
                 } else {
@@ -178,7 +178,7 @@ class JobopeningServices
                 }
             } else {
                 $jobOp = job_opEloquent::GetAll()->ByTypes($jtypes);
-                $jobOp = $jobOp->where('jduties', 'like', $keyword)->orWhere('jdetails', 'like', $keyword)->SortByUpdates_ASC()->paginate(6);
+                $jobOp = $jobOp->where('jduties', 'like', $keyword)->orWhere('jdetails', 'like', $keyword)->SortByUpdates_ASC()->paginate(12);
                 if ($jobOp) {
                     return $jobOp;
                 } else {
@@ -187,14 +187,14 @@ class JobopeningServices
             }
         } else {
             if ($jsalary_lows != null) {
-                $jobOp = job_opEloquent::GetAll()->where('jsalary_low', '>=', $jsalary_lows)->ByTypes($jtypes)->SortByUpdates_ASC()->paginate(6);
+                $jobOp = job_opEloquent::GetAll()->where('jsalary_low', '>=', $jsalary_lows)->ByTypes($jtypes)->SortByUpdates_ASC()->paginate(12);
                 if ($jobOp) {
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
                 }
             } else {
-                $jobOp = job_opEloquent::GetAll()->ByTypes($jtypes)->SortByUpdates_ASC()->paginate(6);
+                $jobOp = job_opEloquent::GetAll()->ByTypes($jtypes)->SortByUpdates_ASC()->paginate(12);
                 if ($jobOp) {
                     return $jobOp;
                 } else {

@@ -33,8 +33,8 @@ Route::group(['middleware' => 'jwt'], function () {
 
     Route::get('getJobOpeningbyAccount', 'Job_openingController@getJobOpeningbyAccount');//廠商帳號取得該廠商所有職缺資料
     Route::get('getJobOpeningbyId', 'Job_openingController@getJobOpeningbyId');//取得某一職缺細項
-    Route::get('getJobOpeningAll', 'Job_openingController@getJobOpeningAll');//取得所有職缺(截止日期未到期的
-    Route::get('getJobOpeningAll_ASC', 'Job_openingController@getJobOpeningAll_ASC');//取得所有職缺(截止日期未到期的 時間由舊到新
+//    Route::get('getJobOpeningAll', 'Job_openingController@getJobOpeningAll');//取得所有職缺(截止日期未到期的
+//    Route::get('getJobOpeningAll_ASC', 'Job_openingController@getJobOpeningAll_ASC');//取得所有職缺(截止日期未到期的 時間由舊到新
     Route::get('getJobOpeningBySearch', 'Job_openingController@getJobOpeningBySearch');//職缺條件排序
 
     //媒合相關
