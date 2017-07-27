@@ -8,6 +8,7 @@ use App\Stu_basic as stuBasicEloquent;
 use App\Stu_jExp as stuJExpEloquent;
 use App\Stu_licence as stulicenceEloquent;
 use App\Stu_works as stuWorksEloquent;
+use App\Stu_ability as stuAbilityEloquent;
 use App\Services\ResumeServices as ResumeServices;
 
 use JWTAuth;
@@ -112,6 +113,35 @@ class Stu_resumeController extends Controller
         }
     }
 
+    public function createAbilityById(Request $request)
+    {
+        $re = $request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'abiType' => 'required|integer',
+            'abiName' => 'required'
+        ), array(
+            'abiType.required' => '請選擇能力種類',
+            'abiName.required' => '請描述該能力',
+            'integer' => '請輸入職位名稱'
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $responses = $this->ResumeServices->newAbilityById($re);
+            if ($responses == '新增能力資料成功') {
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
+
     //新增履歷結束
 
     //取得自己的履歷開始
@@ -124,7 +154,8 @@ class Stu_resumeController extends Controller
         $stuJExp = stuJExpEloquent::where('sid', $id)->get();
         $stuLic = stulicenceEloquent::where('sid', $id)->get();
         $stuWor = stuWorksEloquent::where('sid', $id)->get();
-        $stdRe = array($stuBas, $stuJExp, $stuLic, $stuWor);
+        $stuA=stuAbilityEloquent::where('sid', $id)->get();
+        $stdRe = array($stuBas, $stuJExp, $stuLic, $stuWor,$stuA);
         return response()->json(['stdRe' => $stdRe], 200, [], JSON_UNESCAPED_UNICODE);
     }
     //取得自己的履歷結束
@@ -291,5 +322,36 @@ class Stu_resumeController extends Controller
         }
     }
 
+
+    public function editAbilityById(Request $request)
+    {
+        $re = $request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'abiType' => 'required|integer',
+            'abiid' => 'required|integer',
+            'abiName' => 'required'
+        ), array(
+            'abiType.required' => '請選擇能力種類',
+            'abiid.required' => '請回傳能力ID',
+            'abiName.required' => '請描述該能力',
+            'integer' => '請輸入職位名稱'
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $responses = $this->ResumeServices->editAbilityById_ser($re);
+            if ($responses == '修改能力資料成功') {
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
     //修改履歷結束
 }

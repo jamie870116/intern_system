@@ -12,6 +12,7 @@ use App\Stu_basic as stuBasicEloquent;
 use App\Stu_jExp as stuJExpEloquent;
 use App\Stu_licence as stulicenceEloquent;
 use App\Stu_works as stuWorksEloquent;
+use App\Stu_ability as stuAbilityEloquent;
 use JWTAuth;
 use Log;
 class ResumeServices
@@ -22,16 +23,13 @@ class ResumeServices
     public function newJobExperienceById($re)
     {
 
-        $semester = $re['semester'];
-        $jobTitle = $re['jobTitle'];
         $token = JWTAuth::getToken();
         $user = JWTAuth::toUser($token);
         $id = $user->id;
 
-        $stuJExp = new stuJExpEloquent();
+        $stuJExp = new stuJExpEloquent($re);
         $stuJExp->sid = $id;
-        $stuJExp->semester = $semester;
-        $stuJExp->jobTitle = $jobTitle;
+
         $stuJExp->save();
         if (stuJExpEloquent::count() != 0) {
             return '新增工作資料成功';
@@ -44,19 +42,13 @@ class ResumeServices
     public function newLicenseById($re)
     {
 
-        $agency = $re['agency'];
-        $lname = $re['lname'];
-        $ldate = $re['ldate'];
-
         $token = JWTAuth::getToken();
         $user = JWTAuth::toUser($token);
         $id = $user->id;
 
-        $stulic = new stulicenceEloquent();
+        $stulic = new stulicenceEloquent($re);
         $stulic->sid = $id;
-        $stulic->agency = $agency;
-        $stulic->lname = $lname;
-        $stulic->ldate = $ldate;
+
         $stulic->save();
         if (stulicenceEloquent::count() != 0) { //rowcount
             return '新增證照資料成功';
@@ -67,18 +59,13 @@ class ResumeServices
 
     public function newWorksDataById($re)
     {
-        $wName = $re['wName'];
-        $wLink = $re['wLink'];
-        $wCreatedDate = $re['wCreatedDate'];
         $token = JWTAuth::getToken();
         $user = JWTAuth::toUser($token);
         $id = $user->id;
 
-        $stuWor = new stuWorksEloquent();
+        $stuWor = new stuWorksEloquent($re);
         $stuWor->sid = $id;
-        $stuWor->wName = $wName;
-        $stuWor->wLink = $wLink;
-        $stuWor->wCreatedDate = $wCreatedDate;
+
         $stuWor->save();
 
         if (stuWorksEloquent::count() != 0) { //rowcount
@@ -86,7 +73,23 @@ class ResumeServices
         } else {
             return '新增作品資料失敗';
         }
+    }
 
+    public function newAbilityById($re){
+        $token = JWTAuth::getToken();
+        $user = JWTAuth::toUser($token);
+        $id = $user->id;
+
+        $stuA = new stuAbilityEloquent($re);
+        $stuA->sid = $id;
+
+        $stuA->save();
+
+        if (stuAbilityEloquent::count() != 0) { //rowcount
+            return '新增能力資料成功';
+        } else {
+            return '新增能力資料失敗';
+        }
     }
 
     //新增履歷結束
@@ -186,5 +189,18 @@ class ResumeServices
         }
     }
 
+    public function editAbilityById_ser($re){
+        $stuA = stuAbilityEloquent::where('abiid', $re['abiid'])->first();
+
+        $stuA->abiType = $re['abiType'];
+        $stuA->abiName = $re['abiName'];
+
+        $stuA->save();
+        if (stuAbilityEloquent::count() != 0) {
+            return '修改能力資料成功';
+        } else {
+            return '修改能力資料失敗';
+        }
+    }
     //修改履歷結束
 }
