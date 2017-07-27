@@ -74,8 +74,8 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('findResumeDataById', 'Stu_resumeController@findResumeDataById');
 
     //站內信相關
-    Route::get('getMailTitleBySid', 'MailController@getMailBySid');//取得學生信件
-    Route::get('getMailTitleByC_account', 'MailController@getMailByC_account');//取得企業信件
+    Route::get('getMailTitleBySid', 'MailController@getMailTitleBySid');//取得學生信件
+    Route::get('getMailTitleByC_account', 'MailController@getMailTitleByC_account');//取得企業信件
     Route::get('getMailDetails', 'MailController@getMailDetails');//已讀信件
     Route::post('mailDeleted', 'MailController@mailDeleted');//刪除信件
     Route::post('favouriteMail', 'MailController@favouriteMail');//加到最愛信件

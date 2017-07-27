@@ -20,76 +20,57 @@ class MailController extends Controller
 
     public function __construct(MailServices $MailServices)
     {
-//        $this->middleware('company', ['except' => 'studentSubmitResume', 'studentAcceptInterview', 'studentAcceptJob',
-//            'adminGetSuccessMatch', 'adminGetTeacherData', 'adminFillInTeacher']);
-//        $this->middleware('student', ['only' => 'studentSubmitResume', 'studentAcceptInterview', 'studentAcceptJob']);
+        $this->middleware('company', ['only' => 'getMailTitleByC_account']);
+        $this->middleware('student', ['only' => 'getMailTitleBySid']);
 //        $this->middleware('admin', ['only' => 'adminGetSuccessMatch', 'adminGetTeacherData', 'adminFillInTeacher']);
         $this->MailServices = $MailServices;
     }
 
-    //取得學生信件
-    public function getMailTitleBySid(Request $request)
-    {
-        $re = $request->all();
 
-        $objValidator = Validator::make($request->all(), array(
-            'sid' => 'required|integer',
-        ), array(
-            'sid.required' => '請輸入學生ID',
-            'integer' => 'int格式錯誤',
-        ));
-        if ($objValidator->fails()) {
-            $errors = $objValidator->errors();
-            $error = array();
-            foreach ($errors->all() as $message) {
-                $error[] = $message;
-            }
-            return response()->json($error, 400);//422
-        } else {
+    //取得學生信件
+    public function getMailTitleBySid()
+    {
+
+
             $token = JWTAuth::getToken();
             $users = JWTAuth::toUser($token);
-            $match = MatchEloquent::where('sid', $re['sid'])->get();
-            $user = UserEloquent::where('id', $re['sid'])->first();
+            $match = MatchEloquent::where('sid', $users->id)->get();
 
-            if (!$user || $user->u_status != 0) {
-                return response()->json('使用者不存在或該使用者不是學生', 400, [], JSON_UNESCAPED_UNICODE);
-            }
-            if ($users != $user) {
-                return response()->json('不同人', 400, [], JSON_UNESCAPED_UNICODE);
-            }
+
             if (!$match) {
                 return response()->json('取得媒合資料錯誤', 400, [], JSON_UNESCAPED_UNICODE);
-            }
-            $response = array();
-            $stu_name = $user->u_name;
+            }else{
+                $response = array();
+                $stu_name = $users->u_name;
 
-            foreach ($match as $m) {
-                $com = UserEloquent::where('account', $m->c_account)->first();
-                if (!$com) {
-                    return response()->json('取得廠商資料錯誤', 400, [], JSON_UNESCAPED_UNICODE);
+                foreach ($match as $m) {
+                    $com = UserEloquent::where('account', $m->c_account)->first();
+                    if (!$com) {
+                        return response()->json('取得廠商資料錯誤', 400, [], JSON_UNESCAPED_UNICODE);
+                    }
+                    $com_name = $com->u_name;
+                    $logs = MatchLogEloquent::where('mid', $m->mid)->whereIn('mstatus', array(2, 3, 6, 7, 8, 11))->SortByUpdates_DESC()->get();
+                    if (!$match) {
+                        return response()->json('取得信件內容錯誤', 400, [], JSON_UNESCAPED_UNICODE);
+                    }
+                    $job = JopOpEloquent::where('joid', $m->joid)->first();
+                    if (!$match) {
+                        return response()->json('取得該職缺資料錯誤', 400, [], JSON_UNESCAPED_UNICODE);
+                    }
+                    foreach ($logs as $log) {
+                        $mailData = array($stu_name, $com_name, $log, $job);
+                        $response[] = $mailData;
+                    }
                 }
-                $com_name = $com->u_name;
-                $logs = MatchLogEloquent::where('mid', $m->mid)->whereIn('mstatus', array(2, 3, 6, 7, 8, 11))->SortByUpdates_DESC()->get();
-                if (!$match) {
-                    return response()->json('取得信件內容錯誤', 400, [], JSON_UNESCAPED_UNICODE);
-                }
-                $job = JopOpEloquent::where('joid', $m->joid)->first();
-                if (!$match) {
-                    return response()->json('取得該職缺資料錯誤', 400, [], JSON_UNESCAPED_UNICODE);
-                }
-                foreach ($logs as $log) {
-                    $mailData = array($stu_name, $com_name, $log, $job);
-                    $response[] = $mailData;
-                }
+                return response()->json($response, 200, [], JSON_UNESCAPED_UNICODE);
             }
-            return response()->json($response, 200, [], JSON_UNESCAPED_UNICODE);
+
+
         }
 
 
-    }
-
     //取得企業信件
-    public function getMailTitleByC_account(Request $request)
+    public function getMailTitleByC_account()
     {
 
         $token = JWTAuth::getToken();
