@@ -303,9 +303,14 @@ class Stu_resumeController extends Controller
         $objValidator = Validator::make($request->all(), array(
             'wid' => 'required',
             'wName' => 'required',
-            'wCreatedDate' => 'nullable|date'
+            'wCreatedDate' => 'nullable|date',
+            'wLink' => 'nullable|date',
+
         ), array(
-            'required' => '此欄位不可為空白',
+            'wName.required' => '請輸入作品名稱',
+            'wid.required' => '請輸入wid',
+            'wLink.required' => '請輸入作品網址',
+            'wCreatedDate.required' => '請輸入作品完成日期',
             'date' => '日期格式錯誤'
         ));
         if ($objValidator->fails()) {
