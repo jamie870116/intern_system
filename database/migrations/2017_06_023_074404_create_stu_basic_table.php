@@ -46,6 +46,8 @@ class CreateStuBasicTable extends Migration
             $table->string('section',50)->nullable();//科
             $table->longText('autobiography')->nullable();//自傳
 
+            $table->string('profilePic',100)->nullable();//頭貼
+
         });
     }
 

@@ -127,7 +127,9 @@ class JobopeningServices
                 $jobOp = job_opEloquent::GetAll()->where('jsalary_low', '>=', $jsalary_lows)->ByTypes($jtypes);
                 $jobOp = $jobOp->where('jduties', 'like', $keyword)->orWhere('jdetails', 'like', $keyword)->SortByUpdates_DESC()->paginate(12);
                 if ($jobOp) {
-
+                    foreach ($jobOp as $j){
+                        $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -136,6 +138,9 @@ class JobopeningServices
                 $jobOp = job_opEloquent::GetAll()->ByTypes($jtypes);
                 $jobOp = $jobOp->where('jduties', 'like', $keyword)->orWhere('jdetails', 'like', $keyword)->SortByUpdates_DESC()->paginate(12);
                 if ($jobOp) {
+                    foreach ($jobOp as $j){
+                        $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -145,6 +150,9 @@ class JobopeningServices
             if ($jsalary_lows != null) {
                 $jobOp = job_opEloquent::GetAll()->where('jsalary_low', '>=', $jsalary_lows)->ByTypes($jtypes)->SortByUpdates_DESC()->paginate(12);
                 if ($jobOp) {
+                    foreach ($jobOp as $j){
+                        $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -152,6 +160,9 @@ class JobopeningServices
             } else {
                 $jobOp = job_opEloquent::GetAll()->ByTypes($jtypes)->SortByUpdates_DESC()->paginate(12);
                 if ($jobOp) {
+                    foreach ($jobOp as $j){
+                        $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -173,6 +184,9 @@ class JobopeningServices
                 $jobOp = job_opEloquent::GetAll()->where('jsalary_low', '>=', $jsalary_lows)->ByTypes($jtypes);
                 $jobOp = $jobOp->where('jduties', 'like', $keyword)->orWhere('jdetails', 'like', $keyword)->SortByUpdates_ASC()->paginate(12);
                 if ($jobOp) {
+                    foreach ($jobOp as $j){
+                        $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -181,6 +195,9 @@ class JobopeningServices
                 $jobOp = job_opEloquent::GetAll()->ByTypes($jtypes);
                 $jobOp = $jobOp->where('jduties', 'like', $keyword)->orWhere('jdetails', 'like', $keyword)->SortByUpdates_ASC()->paginate(12);
                 if ($jobOp) {
+                    foreach ($jobOp as $j){
+                        $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -190,6 +207,9 @@ class JobopeningServices
             if ($jsalary_lows != null) {
                 $jobOp = job_opEloquent::GetAll()->where('jsalary_low', '>=', $jsalary_lows)->ByTypes($jtypes)->SortByUpdates_ASC()->paginate(12);
                 if ($jobOp) {
+                    foreach ($jobOp as $j){
+                        $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -197,6 +217,9 @@ class JobopeningServices
             } else {
                 $jobOp = job_opEloquent::GetAll()->ByTypes($jtypes)->SortByUpdates_ASC()->paginate(12);
                 if ($jobOp) {
+                    foreach ($jobOp as $j){
+                        $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -218,6 +241,9 @@ class JobopeningServices
                 $jobOp = job_opEloquent::GetAll()->where('jsalary_low', '>=', $jsalary_lows)->ByTypes($jtypes);
                 $jobOp = $jobOp->where('jduties', 'like', $keyword)->orWhere('jdetails', 'like', $keyword)->SortBySalary_DESC()->paginate(6);
                 if ($jobOp) {
+                    foreach ($jobOp as $j){
+                        $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -226,6 +252,9 @@ class JobopeningServices
                 $jobOp = job_opEloquent::GetAll()->ByTypes($jtypes);
                 $jobOp = $jobOp->where('jduties', 'like', $keyword)->orWhere('jdetails', 'like', $keyword)->SortBySalary_DESC()->paginate(6);
                 if ($jobOp) {
+                    foreach ($jobOp as $j){
+                        $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -235,6 +264,9 @@ class JobopeningServices
             if ($jsalary_lows != null) {
                 $jobOp = job_opEloquent::GetAll()->where('jsalary_low', '>=', $jsalary_lows)->ByTypes($jtypes)->SortBySalary_DESC()->paginate(6);
                 if ($jobOp) {
+                    foreach ($jobOp as $j){
+                        $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -242,6 +274,9 @@ class JobopeningServices
             } else {
                 $jobOp = job_opEloquent::GetAll()->ByTypes($jtypes)->SortBySalary_DESC()->paginate(6);
                 if ($jobOp) {
+                    foreach ($jobOp as $j){
+                        $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -263,6 +298,9 @@ class JobopeningServices
                 $jobOp = job_opEloquent::GetAll()->where('jsalary_low', '>=', $jsalary_lows)->ByTypes($jtypes);
                 $jobOp = $jobOp->where('jduties', 'like', $keyword)->orWhere('jdetails', 'like', $keyword)->SortBySalary_ASC()->paginate(6);
                 if ($jobOp) {
+                    foreach ($jobOp as $j){
+                        $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -271,6 +309,9 @@ class JobopeningServices
                 $jobOp = job_opEloquent::GetAll()->ByTypes($jtypes);
                 $jobOp = $jobOp->where('jduties', 'like', $keyword)->orWhere('jdetails', 'like', $keyword)->SortBySalary_ASC()->paginate(6);
                 if ($jobOp) {
+                    foreach ($jobOp as $j){
+                        $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -280,6 +321,9 @@ class JobopeningServices
             if ($jsalary_lows != null) {
                 $jobOp = job_opEloquent::GetAll()->where('jsalary_low', '>=', $jsalary_lows)->ByTypes($jtypes)->SortBySalary_ASC()->paginate(6);
                 if ($jobOp) {
+                    foreach ($jobOp as $j){
+                        $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -287,6 +331,9 @@ class JobopeningServices
             } else {
                 $jobOp = job_opEloquent::GetAll()->ByTypes($jtypes)->SortBySalary_ASC()->paginate(6);
                 if ($jobOp) {
+                    foreach ($jobOp as $j){
+                        $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';

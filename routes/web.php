@@ -18,5 +18,6 @@ Route::get('/', function () {
 //    return view('Register');
 //});
 //Route::post('Login','AuthController@postLogin');
-//Route::get('Logout','AuthController@getLogout');
+Route::get('showForm','testController@showForm');
+Route::post('icon-upload','testController@iconUpload');
 //Route::get('send','AuthController@sendmail');

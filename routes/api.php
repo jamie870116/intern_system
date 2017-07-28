@@ -58,7 +58,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::post('createWorksDataById', 'Stu_resumeController@createWorksDataById');
 
     //修改履歷相關
-    Route::put('editBasicDataById', 'Stu_resumeController@editBasicDataById');
+    Route::post('editBasicDataById', 'Stu_resumeController@editBasicDataById');
     Route::put('editJobExperienceById', 'Stu_resumeController@editJobExperienceById');
     Route::put('editLicenseById', 'Stu_resumeController@editLicenseById');
     Route::put('editWorksDataById', 'Stu_resumeController@editWorksDataById');

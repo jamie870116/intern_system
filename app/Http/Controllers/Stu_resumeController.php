@@ -156,14 +156,13 @@ class Stu_resumeController extends Controller
         $stuWor = stuWorksEloquent::where('sid', $id)->get();
         $stuA=stuAbilityEloquent::where('sid', $id)->get();
         $stdRe = array($stuBas, $stuJExp, $stuLic, $stuWor,$stuA);
-        return response()->json(['stdRe' => $stdRe], 200, [], JSON_UNESCAPED_UNICODE);
+        return response()->json($stdRe, 200, [], JSON_UNESCAPED_UNICODE);
     }
     //取得自己的履歷結束
 
     //修改履歷開始
     public function editBasicDataById(Request $request)
     {
-        $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
             'chiName' => 'required',
@@ -190,6 +189,7 @@ class Stu_resumeController extends Controller
             'graduatedSchool' => 'required',
             'department' => 'nullable',//系
             'section' => 'nullable',//科(高中高職等的科)
+            'profilePic'=>'nullable|image',
         ), array(
             'chiName.required' => '請輸入中文姓名',
             'engName.required' => '請輸入英文姓名',
@@ -198,6 +198,7 @@ class Stu_resumeController extends Controller
             'birthday.required' => '請輸入生日日期',
             'gender.required' => '請選擇性別',
             'email.required' => '請輸入電子信箱',
+            'address.required' => '請輸入地址',
             'contact.required' => '請輸入連絡電話',
             'ES.required' => '請選擇英語會話能力',
             'ER.required' => '請選擇英語閱讀能力',
@@ -208,7 +209,8 @@ class Stu_resumeController extends Controller
             'graduatedSchool.required' => '請輸入畢業學校',
             'date' => '日期格式錯誤',
             'integer' => '請輸入數字',
-            'email' => '信箱格式錯誤'
+            'email' => '信箱格式錯誤',
+            'image'=>'圖檔格式錯誤(副檔名須為jpg ,jpeg, png, bmp, gif, or svg)'
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
@@ -218,7 +220,8 @@ class Stu_resumeController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
-            $responses = $this->ResumeServices->editBasicDataById_ser($re);
+            $file=$request->file('profilePic');
+            $responses = $this->ResumeServices->editBasicDataById_ser($request,$file);
             if ($responses == '修改基本資料成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {

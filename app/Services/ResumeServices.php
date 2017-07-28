@@ -13,8 +13,11 @@ use App\Stu_jExp as stuJExpEloquent;
 use App\Stu_licence as stulicenceEloquent;
 use App\Stu_works as stuWorksEloquent;
 use App\Stu_ability as stuAbilityEloquent;
+use File;
 use JWTAuth;
 use Log;
+use Storage;
+
 class ResumeServices
 {
 //新增履歷開始
@@ -95,12 +98,43 @@ class ResumeServices
     //新增履歷結束
 
     //修改履歷開始
-    public function editBasicDataById_ser($re)
+    public function editBasicDataById_ser($request,$file)
     {
+
+        $re = $request->all();
         $token = JWTAuth::getToken();
         $user = JWTAuth::toUser($token);
         $id = $user->id;
         $stuBas = stuBasicEloquent::where('sid', $id)->first();
+
+        if($file){
+            $extension = $file->getClientOriginalExtension();
+            $file_name = strval(time()).str_random(5).'.'.$extension;
+
+            if ($request->hasFile('profilePic')) {
+                if($stuBas->profilePic!=null){
+
+                    $file_path = 'public/user-upload/'.$stuBas->profilePic;
+                    $file=Storage::exists('public/user-upload/'.$stuBas->profilePic);
+
+                    Log::error(Storage::exists('public/user-upload/'.$stuBas->profilePic));
+
+                    if($file){
+                        Storage::delete($file_path);
+                    }else{
+                        return 'failed';
+                    }
+                }
+                $path = $request->file('profilePic')->storeAs(
+                    'public/user-upload/', $file_name
+                );
+                //<img src='storage/user-upload/1501257619SWUxK.png' >
+                $stuBas->profilePic=$file_name;
+            } else {
+                return "檔案上傳失敗";
+            }
+        }
+
         $stuBas->chiName = $re['chiName'];
         $stuBas->engName = $re['engName'];
         $stuBas->bornedPlace = $re['bornedPlace'];
