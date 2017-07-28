@@ -20,6 +20,7 @@ class JobopeningServices
         $token = JWTAuth::getToken();
         $user = JWTAuth::toUser($token);
         $jobOpen->c_account = $user->account;
+        $jobOpen->c_name = $user->u_name;
         $jobOpen->jtypes = $re['jtypes'];
         $jobOpen->jduties = $re['jduties'];
         $jobOpen->jdetails = $re['jdetails'];

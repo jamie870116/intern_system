@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Services\JobopeningServices;
+use App\Transformers\JopOpenTransformer;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Job_opening as job_opEloquent;
 
@@ -187,6 +189,9 @@ class Job_openingController extends Controller
         $token = JWTAuth::getToken();
         $user = JWTAuth::toUser($token);
         $jobOp = job_opEloquent::where('c_account', $user->account)->SortByUpdates_DESC()->paginate(12);
+        foreach ($jobOp as $j){
+            $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+        }
         if ($jobOp) {
             return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
         } else {
@@ -263,21 +268,21 @@ class Job_openingController extends Controller
                     return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
                 }
             } elseif ($re['sortBy'] == 2) {
-                $responses = $this->JobopeningServices->sortByTime_DESC($re);
+                $responses = $this->JobopeningServices->sortByTime_ASC($re);
                 if($responses!='取得職缺資料失敗'){
                     return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
                 }else{
                     return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
                 }
             } elseif ($re['sortBy'] == 3) {
-                $responses = $this->JobopeningServices->sortByTime_DESC($re);
+                $responses = $this->JobopeningServices->sortBySalary_DESC($re);
                 if($responses!='取得職缺資料失敗'){
                     return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
                 }else{
                     return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
                 }
             } else {
-                $responses = $this->JobopeningServices->sortByTime_DESC($re);
+                $responses = $this->JobopeningServices->sortBySalary_ASC($re);
                 if($responses!='取得職缺資料失敗'){
                     return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
                 }else{

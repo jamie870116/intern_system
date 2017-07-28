@@ -171,7 +171,7 @@ return [
         Recca0120\LaravelTracy\LaravelTracyServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
-
+        LukeVear\LaravelTransformer\TransformerServiceProvider::class,
         /*
          * Application Service Providers...
          */

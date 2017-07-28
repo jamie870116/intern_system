@@ -16,7 +16,7 @@ class Job_opening extends Model
     public  $timestamps=true;
 
     protected $fillable = [
-        'c_account','jtypes','jduties',
+        'c_account','jtypes','jduties','c_name',
         'jdetails','jsalary_up','jcontact_name','jsalary_low','jaddress','jdeadline','jNOP'
         ,'jcontact_phone','jcontact_email'
         ,'jdelete_reason'
@@ -40,21 +40,21 @@ class Job_opening extends Model
 
     public function scopeSortByUpdates_DESC($query)
     {
-        return $query->orderby('updated_at','desc');
+        return $query->orderby('joid','desc');
     }
 
     public function scopeSortByUpdates_ASC($query)
     {
-        return $query->orderby('updated_at','asc');
+        return $query->orderby('joid','asc');
     }
 
     public function scopeSortBySalary_DESC($query)
     {
-        return $query->orderby('jsalary_up','desc');
+        return $query->orderby('jsalary_low','desc');
     }
     public function scopeSortBySalary_ASC($query)
     {
-        return $query->orderby('jsalary_up','asc');
+        return $query->orderby('jsalary_low','asc');
     }
 
 }

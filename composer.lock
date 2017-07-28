@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "639d75c2b6affbb99aa73f25de1023bb",
+    "content-hash": "c4c61afc53b59d08110971883273ac69",
     "packages": [
         {
             "name": "barryvdh/laravel-ide-helper",
@@ -912,6 +912,43 @@
                 "storage"
             ],
             "time": "2017-04-28T10:15:08+00:00"
+        },
+        {
+            "name": "lukevear/laravel-transformer",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lukevear/laravel-transformer.git",
+                "reference": "cf17ec4e2d1b723d3a89b799863ff781dfa601eb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lukevear/laravel-transformer/zipball/cf17ec4e2d1b723d3a89b799863ff781dfa601eb",
+                "reference": "cf17ec4e2d1b723d3a89b799863ff781dfa601eb",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": ">=5.1.0",
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "LukeVear\\LaravelTransformer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Luke Vear",
+                    "homepage": "https://github.com/lukevear"
+                }
+            ],
+            "description": "A simple transformer for Laravel Eloquent models and collections.",
+            "time": "2017-05-17T01:59:04+00:00"
         },
         {
             "name": "mobiledetect/mobiledetectlib",
