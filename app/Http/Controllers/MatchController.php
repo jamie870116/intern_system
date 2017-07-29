@@ -74,12 +74,10 @@ class MatchController extends Controller
                 $id = $m->sid;
                 $mid = $m->mid;
                 $stuBas = stuBasicEloquent::where('sid', $id)->get();
-                $stuEdu = stuEduEloquent::where('sid', $id)->get();
                 $stuJExp = stuJExpEloquent::where('sid', $id)->get();
                 $stuLic = stulicenceEloquent::where('sid', $id)->get();
-                $stuRel = stuRelativesEloquent::where('sid', $id)->get();
                 $stuWor = stuWorksEloquent::where('sid', $id)->get();
-                $stdRe = array($mid, $stuBas, $stuEdu, $stuJExp, $stuLic, $stuRel, $stuWor);
+                $stdRe = array($mid, $stuBas,  $stuJExp, $stuLic,  $stuWor);
                 $response[] = $stdRe;
             }
 

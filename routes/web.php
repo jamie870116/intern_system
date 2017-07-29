@@ -19,5 +19,5 @@ Route::get('/', function () {
 //});
 //Route::post('Login','AuthController@postLogin');
 Route::get('showForm','testController@showForm');
-Route::post('icon-upload','testController@iconUpload');
+//Route::post('icon-upload','testController@iconUpload');
 //Route::get('send','AuthController@sendmail');

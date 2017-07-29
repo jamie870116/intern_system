@@ -13,6 +13,7 @@ use App\Job_opening;
 use App\Jobs\sendInterviewNoticeMail;
 use App\Match as MatchEloquent;
 use App\MatchLog as MatchLogEloquent;
+use App\Stu_basic as stuBasicEloquent;
 use App\User;
 use Carbon\Carbon;
 use JWTAuth;
@@ -22,25 +23,39 @@ class MatchServices
 {
     public function studentSubmitResume_ser($re)
     {
-        $match = new MatchEloquent();
+
         $token = JWTAuth::getToken();
         $user = JWTAuth::toUser($token);
-        $match->joid=$re['joid'];
-        $com=Job_opening::where('joid',$re['joid'])->first();
-        $match->c_account=$com->c_account;
-        $match->sid=$user->id;
-        $match->save();
-        $log = new MatchLogEloquent();//給企業信件->學生的履歷
-        $log->mstatus = 1;
-        $log->mid = $match->mid;
-        $log->mailDeadline = Carbon::now()->addDays(30);
-        $log->save();
+        $m=MatchEloquent::where('sid',$user->id)->where('joid',$re['joid'])->first();
+        if(!$m){
+            $resume=stuBasicEloquent::where('sid',$user->id)->first();
+            if($resume->eduSystem!=null){
+                $match = new MatchEloquent();
+                $match->joid=$re['joid'];
 
-        if (MatchEloquent::count() != 0 && MatchLogEloquent::count() != 0) {
-            return '學生送出媒合資料成功';
-        } else {
-            return '學生送出媒合資料失敗';
+                $com=Job_opening::where('joid',$re['joid'])->first();
+                $match->c_account=$com->c_account;
+                $match->sid=$user->id;
+                $match->save();
+                $log = new MatchLogEloquent();//給企業信件->學生的履歷
+                $log->mstatus = 1;
+                $log->mid = $match->mid;
+                $log->mailDeadline = Carbon::now()->addDays(30);
+                $log->save();
+
+                if (MatchEloquent::count() != 0 && MatchLogEloquent::count() != 0) {
+                    return '學生送出媒合資料成功';
+                } else {
+                    return '學生送出媒合資料失敗';
+                }
+            }else{
+                return '去填履歷再來吧';
+            }
+
+        }else{
+            return '已經投過履歷囉';
         }
+
     }
 
     public function companyRejectResume_ser($re)

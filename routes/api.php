@@ -33,8 +33,6 @@ Route::group(['middleware' => 'jwt'], function () {
 
     Route::get('getJobOpeningbyAccount', 'Job_openingController@getJobOpeningbyAccount');//廠商帳號取得該廠商所有職缺資料
     Route::get('getJobOpeningbyId', 'Job_openingController@getJobOpeningbyId');//取得某一職缺細項
-//    Route::get('getJobOpeningAll', 'Job_openingController@getJobOpeningAll');//取得所有職缺(截止日期未到期的
-//    Route::get('getJobOpeningAll_ASC', 'Job_openingController@getJobOpeningAll_ASC');//取得所有職缺(截止日期未到期的 時間由舊到新
     Route::get('getJobOpeningBySearch', 'Job_openingController@getJobOpeningBySearch');//職缺條件排序
 
     //媒合相關
@@ -47,6 +45,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::post('studentAcceptInterview', 'MatchController@studentAcceptInterview'); //學生是否接受面試
     Route::post('companyFailedInterview', 'MatchController@companyFailedInterview'); //面試失敗
     Route::post('companyPassInterview', 'MatchController@companyPassInterview'); //面試成功
+
     Route::post('studentAcceptJob', 'MatchController@studentAcceptJob'); //學生是否接受入職
     Route::get('adminGetSuccessMatch', 'MatchController@adminGetSuccessMatch'); //系辦取得已成功的媒合資料
     Route::get('adminGetTeacherData', 'MatchController@adminGetTeacherData'); //系辦取得所有老師資訊
