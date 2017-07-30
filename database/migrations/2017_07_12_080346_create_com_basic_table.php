@@ -16,7 +16,7 @@ class CreateComBasicTable extends Migration
         Schema::create('com_basic', function (Blueprint $table) {
             $table->string('c_account',50)->primary();//廠商帳號
             $table->tinyInteger('ctypes')->default(1);//行業類別
-            $table->string('c_name');//廠商名稱
+            $table->string('c_name',50);//廠商名稱
             $table->string('caddress',300)->nullable();//地址
             $table->string('cfax',50)->nullable();//傳真
             $table->longText('cintroduction')->nullable(); //簡介

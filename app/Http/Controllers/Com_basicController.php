@@ -24,12 +24,14 @@ class Com_basicController extends Controller
 
     	$objValidator = Validator::make($request->all(), array(
     		'ctypes' => 'required|integer',
+    		'c_name' => 'required',
     		'caddress' => 'required',
     		'cfax' => 'required',
             'cintroduction' =>'nullable',
             'cempolyee_num' =>'nullable|integer'
     		), array(
             'ctypes.required' => '請輸入行業類別',
+            'c_name.required' => '請輸入廠商名稱',
             'cfax.required' => '請輸入傳真',
             'caddress.required' => '請輸入公司地址',
     		'integer' => 'int格式錯誤'
