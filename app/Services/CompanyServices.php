@@ -4,14 +4,16 @@ namespace App\Services;
 
 use App\Com_basic as comEloquent;
 use App\User as userEloquent;
+use JWTAuth;
 
 class CompanyServices
 {
 
 	public function createCompany_ser($re){
 		$com = new comEloquent();
-
-        $com->c_account=$re['c_account'];
+        $token = JWTAuth::getToken();
+        $user = JWTAuth::toUser($token);
+        $com->c_account= $user->account;
         $com->c_account=$re['ctypes'];
         $com->c_account=$re['caddress'];
         $com->c_account=$re['cfax'];
@@ -26,7 +28,9 @@ class CompanyServices
 	}
 
 	public function editCompany_ser($re){
-		$com = comEloquent::where('c_account',$re['c_account'])->first();
+        $token = JWTAuth::getToken();
+        $user = JWTAuth::toUser($token);
+		$com = comEloquent::where('c_account',$user->account)->first();
 
         $com->c_account=$re['ctypes'];
         $com->c_account=$re['caddress'];
@@ -41,7 +45,7 @@ class CompanyServices
 		}
 	}
 
-	public function deleteCompany_ser($re){
+	public function adminDeleteCompany_ser($re){
 		$com = comEloquent::where('c_account',$re['c_account'])->first();
 		$user= userEloquent::where('account',$re['c_account'])->first();
 		$com->cdeleteReason=$re['cdeleteReason'];

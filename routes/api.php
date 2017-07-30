@@ -35,6 +35,13 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('getJobOpeningbyId', 'Job_openingController@getJobOpeningbyId');//取得某一職缺細項
     Route::get('getJobOpeningBySearch', 'Job_openingController@getJobOpeningBySearch');//職缺條件排序
 
+
+    //廠商基本資料相關
+    Route::post('createCompany', 'Com_basicController@createCompany');//新增廠商資料
+    Route::put('editCompany', 'Com_basicController@editCompany');//新增廠商資料
+    Route::post('adminDeleteCompany', 'Com_basicController@adminDeleteCompany');//系辦刪除廠商
+    Route::get('getCompanyByAccount', 'Com_basicController@getCompanyByAccount');//依帳號查詢廠商資料
+
     //媒合相關
     Route::post('studentSubmitResume', 'MatchController@studentSubmitResume');//投遞履歷resume
     Route::get('companyGetResumeByAccount', 'MatchController@companyGetResumeByAccount');//廠商取得投遞的履歷

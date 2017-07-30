@@ -13,8 +13,8 @@ class Com_basicController extends Controller
 
 	public function __construct(CompanyServices $CompanyServices)
 	{
-		$this->middleware('company',['except'=>'deleteCompany']);
-		$this->middleware('admin',['only'=>'deleteCompany']);
+		$this->middleware('company',['only'=>'createCompany','editCompany']);
+		$this->middleware('admin',['only'=>'adminDeleteCompany']);
 		$this->CompanyServices = $CompanyServices;
 	}
     //新增廠商資料
@@ -22,7 +22,6 @@ class Com_basicController extends Controller
 		$re = $request->all();
 
 		$objValidator = Validator::make($request->all(), array(
-			'c_account' => 'required',
 			'ctypes' => 'required|integer',
 			'caddress' => 'required',
             'cintroduction' =>'nullable',
@@ -55,13 +54,11 @@ class Com_basicController extends Controller
     	$re = $request->all();
 
     	$objValidator = Validator::make($request->all(), array(
-    		'c_account' => 'required',
     		'ctypes' => 'required|integer',
     		'caddress' => 'required',
             'cintroduction' =>'nullable',
             'cempolyee_num' =>'nullable|integer'
     		), array(
-            'c_account.required' => '請輸入廠商帳號(統一編號)',
             'ctypes.required' => '請輸入行業類別',
             'caddress.required' => '請輸入公司地址',
     		'integer' => 'int格式錯誤'
@@ -84,7 +81,7 @@ class Com_basicController extends Controller
     }
 
     //軟刪除 廠商
-    public function deleteCompany(Request $request){
+    public function adminDeleteCompany(Request $request){
     	$re = $request->all();
 
     	$objValidator = Validator::make($request->all(), array(
@@ -102,7 +99,7 @@ class Com_basicController extends Controller
             }
             return response()->json($error,400);//422
         } else {
-        	$responses=$this->CompanyServices->deleteCompany_ser($re);
+        	$responses=$this->CompanyServices->adminDeleteCompany_ser($re);
         	if ($responses == '刪除廠商成功') {
         		return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
         	} else {
