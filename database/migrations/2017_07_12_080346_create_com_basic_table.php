@@ -15,10 +15,10 @@ class CreateComBasicTable extends Migration
     {
         Schema::create('com_basic', function (Blueprint $table) {
             $table->string('c_account',50)->primary();//廠商帳號
-            $table->tinyInteger('ctypes');//行業類別
-            $table->string('caddress',300);//地址
+            $table->tinyInteger('ctypes')->default(1);//行業類別
+            $table->string('caddress',300)->nullable();//地址
             $table->string('cfax',50)->nullable();//傳真
-            $table->longText('cintroduction'); //簡介
+            $table->longText('cintroduction')->nullable(); //簡介
             $table->integer('cempolyee_num')->nullable(); //員工人數
             $table->longText('cdeleteReason')->nullable();//刪除理由
             $table->timestamps();//時間戳

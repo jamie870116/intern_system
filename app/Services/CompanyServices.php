@@ -9,32 +9,15 @@ use JWTAuth;
 class CompanyServices
 {
 
-	public function createCompany_ser($re){
-		$com = new comEloquent();
-        $token = JWTAuth::getToken();
-        $user = JWTAuth::toUser($token);
-        $com->c_account= $user->account;
-        $com->c_account=$re['ctypes'];
-        $com->c_account=$re['caddress'];
-        $com->c_account=$re['cfax'];
-        $com->cintroduction=$re['cintroduction'];
-        $com->cempolyee_num=$re['cempolyee_num'];
-		$com->save();
-		if (comEloquent::count() != 0) {
-			return '新增廠商資料成功';
-		} else {
-			return '新增廠商資料失敗';
-		}
-	}
 
-	public function editCompany_ser($re){
+	public function editCompanyDetails_ser($re){
         $token = JWTAuth::getToken();
         $user = JWTAuth::toUser($token);
 		$com = comEloquent::where('c_account',$user->account)->first();
 
-        $com->c_account=$re['ctypes'];
-        $com->c_account=$re['caddress'];
-        $com->c_account=$re['cfax'];
+        $com->ctypes=$re['ctypes'];
+        $com->caddress=$re['caddress'];
+        $com->cfax=$re['cfax'];
         $com->cintroduction=$re['cintroduction'];
         $com->cempolyee_num=$re['cempolyee_num'];
 		$com->save();

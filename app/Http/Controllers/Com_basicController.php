@@ -13,53 +13,24 @@ class Com_basicController extends Controller
 
 	public function __construct(CompanyServices $CompanyServices)
 	{
-		$this->middleware('company',['only'=>'createCompany','editCompany']);
+		$this->middleware('company',['only'=>'editCompany']);
 		$this->middleware('admin',['only'=>'adminDeleteCompany']);
 		$this->CompanyServices = $CompanyServices;
 	}
-    //新增廠商資料
-	public function createCompany(Request $request){
-		$re = $request->all();
-
-		$objValidator = Validator::make($request->all(), array(
-			'ctypes' => 'required|integer',
-			'caddress' => 'required',
-            'cintroduction' =>'nullable',
-            'cempolyee_num' =>'nullable|integer'
-			), array(
-			'c_account.required' => '請輸入廠商帳號(統一編號)',
-            'ctypes.required' => '請輸入行業類別',
-            'caddress.required' => '請輸入公司地址',
-			'integer' => 'int格式錯誤'
-			));
-		if ($objValidator->fails()) {
-            $errors = $objValidator->errors();
-            $error=array();
-            foreach ($errors->all() as $message) {
-                $error[]=$message;
-            }
-            return response()->json($error,400);//422
-        } else {
-        	$responses=$this->CompanyServices->createCompany_ser($re);
-        	if ($responses == '新增廠商資料成功') {
-        		return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
-        	} else {
-        		return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
-        	}
-        }
-    }
 
     //修改廠商資料
-    public function editCompany(Request $request){
+    public function editCompanyDetails(Request $request){
     	$re = $request->all();
 
     	$objValidator = Validator::make($request->all(), array(
     		'ctypes' => 'required|integer',
     		'caddress' => 'required',
+    		'cfax' => 'required',
             'cintroduction' =>'nullable',
             'cempolyee_num' =>'nullable|integer'
     		), array(
             'ctypes.required' => '請輸入行業類別',
+            'cfax.required' => '請輸入傳真',
             'caddress.required' => '請輸入公司地址',
     		'integer' => 'int格式錯誤'
     		));
@@ -71,7 +42,7 @@ class Com_basicController extends Controller
             }
             return response()->json($error,400);//422
         } else {
-        	$responses=$this->CompanyServices->editCompany_ser($re);
+        	$responses=$this->CompanyServices->editCompanyDetails_ser($re);
         	if ($responses == '修改廠商資料成功') {
         		return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
         	} else {

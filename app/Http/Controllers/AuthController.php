@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Cookie;
 use Illuminate\Http\Request;
 use App\User as UserEloquent;
-
+use App\Com_basic as comEloquent;
 use App\Services\registerService;
 use App\Stu_basic as stuBasicEloquent;
 
@@ -202,6 +202,10 @@ class AuthController extends Controller
                     $stu_basic->contact=$user->u_tel;
                     $stu_basic->email=$user->email;
                     $stu_basic->save();
+                }elseif($user->u_status==2){
+                    $com = new comEloquent();
+                    $com->c_account= $user->account;
+                    $com->save();
                 }
                 return response()->json("帳號開通囉",200,$headers, JSON_UNESCAPED_UNICODE);
             }else{
