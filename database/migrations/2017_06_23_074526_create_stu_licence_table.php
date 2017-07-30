@@ -19,6 +19,7 @@ class CreateStuLicenceTable extends Migration
             $table->string('agency',200);//發證單位
             $table->string('lname',100);//證照名稱
             $table->date('ldate');//發證日期
+
          });
     }
 
