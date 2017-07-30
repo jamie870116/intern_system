@@ -61,8 +61,8 @@ class CompanyServices
 		}
 	}
 
-	//
-	public function getCompanyByAccount_ser($re){
+	//依帳號查詢廠商資料
+	public function getCompanyDetailsByAccount_ser($re){
 		$com = comEloquent::where('c_account',$re['c_account'])->first();
 
 		if ($com) {

@@ -109,7 +109,7 @@ class Com_basicController extends Controller
     }
 
     // 依帳號查詢廠商資料
-    public function getCompanyByAccount(Request $request){
+    public function getCompanyDetailsByAccount(Request $request){
     	$re = $request->all();
 
     	$objValidator = Validator::make($request->all(), array(
@@ -125,7 +125,7 @@ class Com_basicController extends Controller
             }
             return response()->json($error,400);//422
         } else {
-        	$responses=$this->CompanyServices->getCompanyByAccount_ser($re);
+        	$responses=$this->CompanyServices->getCompanyDetailsByAccount_ser($re);
         	if ($responses == '取得廠商失敗') {
         		return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
         	} else {

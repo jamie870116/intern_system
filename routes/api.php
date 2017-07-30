@@ -40,7 +40,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::post('createCompany', 'Com_basicController@createCompany');//新增廠商資料
     Route::put('editCompany', 'Com_basicController@editCompany');//新增廠商資料
     Route::post('adminDeleteCompany', 'Com_basicController@adminDeleteCompany');//系辦刪除廠商
-    Route::get('getCompanyByAccount', 'Com_basicController@getCompanyByAccount');//依帳號查詢廠商資料
+    Route::get('getCompanyDetailsByAccount', 'Com_basicController@getCompanyDetailsByAccount');//依帳號查詢廠商資料
 
     //媒合相關
     Route::post('studentSubmitResume', 'MatchController@studentSubmitResume');//投遞履歷resume
