@@ -205,6 +205,7 @@ class AuthController extends Controller
                 }elseif($user->u_status==2){
                     $com = new comEloquent();
                     $com->c_account= $user->account;
+                    $com->c_name= $user->u_name;
                     $com->save();
                 }
                 return response()->json("帳號開通囉",200,$headers, JSON_UNESCAPED_UNICODE);

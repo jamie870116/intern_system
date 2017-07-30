@@ -14,7 +14,7 @@ class Com_basic extends Model
     public  $timestamps=true;
 
     protected $fillable = [
-        'c_account','ctypes','caddress',
+        'c_account','ctypes','caddress','c_name',
         'cfax','cdeleteReason','cintroduction','cempolyee_num'
     ];
 }
