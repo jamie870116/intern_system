@@ -27,7 +27,8 @@ class userSeeder extends Seeder
     		'account'=>'teacher123',
     		'u_status'=>1,
     		'email'=>'teacher123@nutc.edu.tw',
-    		'password'=>bcrypt('test')
+    		'password'=>bcrypt('test'),
+             'started'=>1
     		]);
           $user2=UserEloquent::create([
     		'u_name'=>'企業',
@@ -35,7 +36,17 @@ class userSeeder extends Seeder
     		'account'=>'12345678',
     		'u_status'=>2,
     		'email'=>'jamie870116@gmail.com',
-    		'password'=>bcrypt('test')
+    		'password'=>bcrypt('test'),
+              'started'=>1
     		]);
+        $user3=UserEloquent::create([
+            'u_name'=>'系辦',
+            'u_tel'=>'0422115588',
+            'account'=>'admin123',
+            'u_status'=>3,
+            'email'=>'admin@mail.com',
+            'password'=>bcrypt('test'),
+            'started'=>1
+        ]);
     }
 }

@@ -18,7 +18,7 @@ class CreateCourseTable extends Migration
             $table->increments('courseId');//AI
             $table->string('courseName',100);//課程名稱
             $table->integer('courseJournal');//週誌數量
-            $table->longText('courseDetail');//課程內容
+            $table->longText('courseDetail')->nullable();//課程內容
             $table->dateTime('courseStart');//課程開始日期
             $table->dateTime('courseEnd');//課程結束日期
             $table->timestamps();

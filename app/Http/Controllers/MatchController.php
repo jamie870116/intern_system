@@ -9,10 +9,7 @@ use Illuminate\Http\Request;
 
 use App\Match as MatchEloquent;
 use App\Stu_basic as stuBasicEloquent;
-use App\Stu_edu as stuEduEloquent;
 use App\Stu_jExp as stuJExpEloquent;
-use App\Stu_licence as stulicenceEloquent;
-use App\Stu_relatives as stuRelativesEloquent;
 use App\Stu_works as stuWorksEloquent;
 use App\User as UserElopuent;
 use JWTAuth;
@@ -75,9 +72,8 @@ class MatchController extends Controller
                 $mid = $m->mid;
                 $stuBas = stuBasicEloquent::where('sid', $id)->get();
                 $stuJExp = stuJExpEloquent::where('sid', $id)->get();
-                $stuLic = stulicenceEloquent::where('sid', $id)->get();
                 $stuWor = stuWorksEloquent::where('sid', $id)->get();
-                $stdRe = array($mid, $stuBas,  $stuJExp, $stuLic,  $stuWor);
+                $stdRe = array($mid, $stuBas,  $stuJExp,  $stuWor);
                 $response[] = $stdRe;
             }
 
@@ -339,57 +335,6 @@ class MatchController extends Controller
     }
 
 
-    //系辦取得已成功的媒合資料
-    public function adminGetSuccessMatch()
-    {
-        $match = MatchEloquent::where('mstatus', 9)->SortByUpdates_DESC()->paginate(4);
-        if ($match) {
-            return response()->json($match, 200, [], JSON_UNESCAPED_UNICODE);
-        } else {
-            return response()->json('取得資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
-        }
-    }
 
-    //系辦取得所有老師資訊
-    public function adminGetTeacherData()
-    {
-        $user = UserElopuent::where('u_status', 1)->get();
-        if ($user) {
-            return response()->json($user, 200, [], JSON_UNESCAPED_UNICODE);
-        } else {
-            return response()->json('取得資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
-        }
-    }
-
-    //系辦選擇實習老師
-    public function adminFillInTeacher(Request $request)
-    {
-        $re = $request->all();
-
-        $objValidator = Validator::make($request->all(), array(
-            'mid' => 'required',
-            'id' => 'required|integer',
-
-        ), array(
-            'mid.required' => '請輸入媒合ID',
-            'id.required' => '請回傳老師ID', //傳入1==去面試，其他是拒絕
-            'integer' => 'int格式錯誤',
-        ));
-        if ($objValidator->fails()) {
-            $errors = $objValidator->errors();
-            $error = array();
-            foreach ($errors->all() as $message) {
-                $error[] = $message;
-            }
-            return response()->json($error, 400);//422
-        } else {
-            $responses = $this->MatchServices->adminFillInTeacher_ser($re);
-            if ($responses == '選擇實習老師成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
-            } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
-            }
-        }
-    }
 
 }

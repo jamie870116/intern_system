@@ -53,23 +53,31 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::post('companyPassInterview', 'MatchController@companyPassInterview'); //面試成功
 
     Route::post('studentAcceptJob', 'MatchController@studentAcceptJob'); //學生是否接受入職
-    Route::get('adminGetSuccessMatch', 'MatchController@adminGetSuccessMatch'); //系辦取得已成功的媒合資料
-    Route::get('adminGetTeacherData', 'MatchController@adminGetTeacherData'); //系辦取得所有老師資訊
-    Route::post('adminFillInTeacher', 'MatchController@adminFillInTeacher'); //系辦選擇實習老師
 
     //履歷新增相關
     Route::post('createJobExperienceById', 'Stu_resumeController@createJobExperienceById');
-    Route::post('createLicenseById', 'Stu_resumeController@createLicenseById');
     Route::post('createWorksDataById', 'Stu_resumeController@createWorksDataById');
+    Route::post('createAbilityById', 'Stu_resumeController@createAbilityById');
 
     //修改履歷相關
     Route::post('editBasicDataById', 'Stu_resumeController@editBasicDataById');
     Route::put('editJobExperienceById', 'Stu_resumeController@editJobExperienceById');
-    Route::put('editLicenseById', 'Stu_resumeController@editLicenseById');
     Route::put('editWorksDataById', 'Stu_resumeController@editWorksDataById');
+    Route::put('editAbilityById', 'Stu_resumeController@editAbilityById');
 
     //取得履歷資料
     Route::get('findResumeDataById', 'Stu_resumeController@findResumeDataById');
+
+    //課程相關
+    Route::post('adminCreateCourse', 'CourseController@adminCreateCourse');
+    Route::put('adminEditCourseByCourseID', 'CourseController@adminEditCourseByCourseID');
+    Route::post('adminDeleteCourse', 'CourseController@adminDeleteCourse');
+    Route::get('adminGetSuccessMatch', 'CourseController@adminGetSuccessMatch'); //系辦取得已成功的媒合資料
+    Route::get('adminGetTeacherData', 'CourseController@adminGetTeacherData'); //系辦取得所有老師資訊
+    Route::get('adminGetCourse', 'CourseController@adminGetCourse'); //系辦取得課程資料
+    Route::post('adminAddStudentToCourse', 'CourseController@adminAddStudentToCourse'); //系辦將學生加入課程並給予實習老師
+    Route::post('adminGetStudentByCourseId', 'CourseController@adminGetStudentByCourseId'); //取得某課程中的學生
+    Route::post('adminDeleteStudentFromCourse', 'CourseController@adminDeleteStudentFromCourse'); //系辦將學生從課程中刪除
 
     //站內信相關
     Route::get('getMailTitleBySid', 'MailController@getMailTitleBySid');//取得學生信件
