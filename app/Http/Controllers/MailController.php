@@ -31,7 +31,6 @@ class MailController extends Controller
     public function getMailTitleBySid()
     {
 
-
             $token = JWTAuth::getToken();
             $users = JWTAuth::toUser($token);
             $match = MatchEloquent::where('sid', $users->id)->get();

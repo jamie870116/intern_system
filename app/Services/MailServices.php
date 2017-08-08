@@ -11,6 +11,7 @@ use App\Job_opening;
 use App\Match;
 use App\MatchLog as MatchLogEloquent;
 use App\User;
+use JWTAuth;
 
 class MailServices
 {
@@ -28,8 +29,16 @@ class MailServices
                 $com=User::where('account',$match->c_account)->first();
                 $job=Job_opening::where('joid',$match->joid)->first();
                 if($stu && $com && $job){
-                    $response=array($stu->u_name,$com->u_name,$ml,$job);
-                    return $response;
+                    $token = JWTAuth::getToken();
+                    $users = JWTAuth::toUser($token);
+                    if($users->u_status==0){
+                        $response=array($stu->u_name,$com->u_name,$ml,$job);
+                        return $response;
+                    }else{
+                        $response=array($com->u_name,$stu->u_name,$ml,$job);
+                        return $response;
+                    }
+
                 }else{
                     return '查無此信件資料';
                 }
