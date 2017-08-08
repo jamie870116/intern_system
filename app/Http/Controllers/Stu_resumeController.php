@@ -303,4 +303,7 @@ class Stu_resumeController extends Controller
         }
     }
     //修改履歷結束
+
+    //取得自己已投遞的履歷狀態
+
 }
