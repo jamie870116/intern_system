@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Stu_basic as stuBasicEloquent;
 use App\Stu_jExp as stuJExpEloquent;
-use App\Stu_licence as stulicenceEloquent;
+
 use App\Stu_works as stuWorksEloquent;
 use App\Stu_ability as stuAbilityEloquent;
 use App\Services\ResumeServices as ResumeServices;
@@ -54,35 +54,6 @@ class Stu_resumeController extends Controller
         }
     }
 
-    public function createLicenseById(Request $request)
-    {
-        $re = $request->all();
-        $objValidator = Validator::make($request->all(), array(
-            'agency' => 'required',
-            'lname' => 'required',
-            'ldate' => 'required|date'
-        ), array(
-            'ldate.required' => '請輸入發證日期',
-            'agency.required' => '請輸入發照單位',
-            'lname.required' => '請輸入證照名稱',
-            'date' => '日期格式錯誤'
-        ));
-        if ($objValidator->fails()) {
-            $errors = $objValidator->errors();
-            $error = array();
-            foreach ($errors->all() as $message) {
-                $error[] = $message;
-            }
-            return response()->json($error, 400);//422
-        } else {
-            $responses = $this->ResumeServices->newLicenseById($re);
-            if ($responses == '新增證照資料成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
-            } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
-            }
-        }
-    }
 
     public function createWorksDataById(Request $request)
     {
@@ -151,10 +122,9 @@ class Stu_resumeController extends Controller
         $id = $user->id;
         $stuBas = stuBasicEloquent::where('sid', $id)->get();
         $stuJExp = stuJExpEloquent::where('sid', $id)->get();
-        $stuLic = stulicenceEloquent::where('sid', $id)->get();
         $stuWor = stuWorksEloquent::where('sid', $id)->get();
         $stuA=stuAbilityEloquent::where('sid', $id)->get();
-        $stdRe = array($stuBas, $stuJExp, $stuLic, $stuWor,$stuA);
+        $stdRe = array($stuBas, $stuJExp, $stuWor,$stuA);
         return response()->json($stdRe, 200, [], JSON_UNESCAPED_UNICODE);
     }
     //取得自己的履歷結束
@@ -189,6 +159,7 @@ class Stu_resumeController extends Controller
             'department' => 'nullable',//系
             'section' => 'nullable',//科(高中高職等的科)
             'profilePic'=>'nullable|image',
+            'licenceFile'=>'nullable|mimes:pdf,docx'
         ), array(
             'chiName.required' => '請輸入中文姓名',
             'engName.required' => '請輸入英文姓名',
@@ -209,7 +180,8 @@ class Stu_resumeController extends Controller
             'date' => '日期格式錯誤',
             'integer' => '請輸入數字',
             'email' => '信箱格式錯誤',
-            'image'=>'圖檔格式錯誤(副檔名須為jpg ,jpeg, png, bmp, gif, or svg)'
+            'image'=>'圖檔格式錯誤(副檔名須為jpg ,jpeg, png, bmp, gif, or svg)',
+            'mimes'=>'檔案格式錯誤(副檔名須為pdf或docx)'
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
@@ -220,11 +192,14 @@ class Stu_resumeController extends Controller
             return response()->json($error, 400);//422
         } else {
             $file=$request->file('profilePic');
-            $responses = $this->ResumeServices->editBasicDataById_ser($request,$file);
+            $l_file=$request->file('licenceFile');
+            $responses = $this->ResumeServices->editBasicDataById_ser($request,$file,$l_file);
             if ($responses == '修改基本資料成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                $r=array($responses);
+                return response()->json($r, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                $r=array($responses);
+                return response()->json($r, 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
 
@@ -255,39 +230,6 @@ class Stu_resumeController extends Controller
         } else {
             $responses = $this->ResumeServices->editJobExperienceById_ser($re);
             if ($responses == '修改工作資料成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
-            } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
-            }
-        }
-    }
-
-    public function editLicenseById(Request $request)
-    {
-        $re = $request->all();
-
-        $objValidator = Validator::make($request->all(), array(
-            'lid' => 'required',
-            'agency' => 'required',
-            'lname' => 'required',
-            'ldate' => 'required|date'
-        ), array(
-            'ldate.required' => '請輸入發證日期',
-            'lid.required' => '請輸入lid',
-            'agency.required' => '請輸入發照單位',
-            'lname.required' => '請輸入證照名稱',
-            'date' => '日期格式錯誤'
-        ));
-        if ($objValidator->fails()) {
-            $errors = $objValidator->errors();
-            $error = array();
-            foreach ($errors->all() as $message) {
-                $error[] = $message;
-            }
-            return response()->json($error, 400);//422
-        } else {
-            $responses = $this->ResumeServices->editLicenseById_ser($re);
-            if ($responses == '修改證照資料成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);

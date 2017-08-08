@@ -48,6 +48,8 @@ class CreateStuBasicTable extends Migration
 
             $table->string('profilePic',100)->nullable();//頭貼
 
+            $table->string('licenceFile',100)->nullable();//證照檔案
+
 
         });
     }

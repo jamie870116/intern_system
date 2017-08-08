@@ -10,7 +10,6 @@ namespace App\Services;
 
 use App\Stu_basic as stuBasicEloquent;
 use App\Stu_jExp as stuJExpEloquent;
-use App\Stu_licence as stulicenceEloquent;
 use App\Stu_works as stuWorksEloquent;
 use App\Stu_ability as stuAbilityEloquent;
 use File;
@@ -40,24 +39,6 @@ class ResumeServices
             return '新增工作資料失敗';
         }
 
-    }
-
-    public function newLicenseById($re)
-    {
-
-        $token = JWTAuth::getToken();
-        $user = JWTAuth::toUser($token);
-        $id = $user->id;
-
-        $stulic = new stulicenceEloquent($re);
-        $stulic->sid = $id;
-
-        $stulic->save();
-        if (stulicenceEloquent::count() != 0) { //rowcount
-            return '新增證照資料成功';
-        } else {
-            return '新增證照資料失敗';
-        }
     }
 
     public function newWorksDataById($re)
@@ -98,7 +79,7 @@ class ResumeServices
     //新增履歷結束
 
     //修改履歷開始
-    public function editBasicDataById_ser($request,$file)
+    public function editBasicDataById_ser($request,$file,$l_file)
     {
 
         $re = $request->all();
@@ -108,33 +89,59 @@ class ResumeServices
         $stuBas = stuBasicEloquent::where('sid', $id)->first();
 
         if($file){
-            $extension = $file->getClientOriginalExtension();
-            $file_name = strval(time()).str_random(5).'.'.$extension;
+        $extension = $file->getClientOriginalExtension();
+        $file_name = strval(time()).str_random(5).'_pro.'.$extension;
 
-            if ($request->hasFile('profilePic')) {
+        if ($request->hasFile('profilePic')) {
+            if($stuBas->profilePic!=null){
+
+                $file_path = 'public/user-upload/'.$stuBas->profilePic;
+                $file=Storage::exists('public/user-upload/'.$stuBas->profilePic);
+
+                Log::error(Storage::exists('public/user-upload/'.$stuBas->profilePic));
+
+                if($file){
+                    Storage::delete($file_path);
+                }else{
+                    return 'failed';
+                }
+            }
+            $path = $request->file('profilePic')->storeAs(
+                'public/user-upload/', $file_name
+            );
+            //<img src='storage/user-upload/1501257619SWUxK.png' >
+            $stuBas->profilePic=$file_name;
+        } else {
+            return "頭貼上傳失敗";
+        }
+    }
+        if($l_file){
+            $extension = $l_file->getClientOriginalExtension();
+            $file_name = strval(time()).str_random(5).'_lic.'.$extension;
+
+            if ($request->hasFile('licenceFile')) {
                 if($stuBas->profilePic!=null){
 
-                    $file_path = 'public/user-upload/'.$stuBas->profilePic;
-                    $file=Storage::exists('public/user-upload/'.$stuBas->profilePic);
+                    $file_path = 'public/user-upload/licences/'.$stuBas->licenceFile;
+                    $l_file=Storage::exists('public/user-upload/licences/'.$stuBas->licenceFile);
 
-                    Log::error(Storage::exists('public/user-upload/'.$stuBas->profilePic));
+                    Log::error(Storage::exists('public/user-upload/licences/'.$stuBas->licenceFile));
 
-                    if($file){
+                    if($l_file){
                         Storage::delete($file_path);
                     }else{
                         return 'failed';
                     }
                 }
-                $path = $request->file('profilePic')->storeAs(
-                    'public/user-upload/', $file_name
+                $path = $request->file('licenceFile')->storeAs(
+                    'public/user-upload/licences/', $file_name
                 );
-                //<img src='storage/user-upload/1501257619SWUxK.png' >
-                $stuBas->profilePic=$file_name;
+                //<img src='storage/user-upload/licences/1501257619SWUxK.png' >
+                $stuBas->licenceFile=$file_name;
             } else {
-                return "檔案上傳失敗";
+                return "證照檔案上傳失敗";
             }
         }
-
         $stuBas->chiName = $re['chiName'];
         $stuBas->engName = $re['engName'];
         $stuBas->bornedPlace = $re['bornedPlace'];
@@ -183,24 +190,6 @@ class ResumeServices
             return '修改工作資料成功';
         } else {
             return '修改工作資料失敗';
-        }
-    }
-
-    public function editLicenseById_ser($re)
-    {
-        $stulic = stulicenceEloquent::where('lid', $re['lid'])->first();
-        $agency = $re['agency'];
-        $lname = $re['lname'];
-        $ldate = $re['ldate'];
-
-        $stulic->agency = $agency;
-        $stulic->lname = $lname;
-        $stulic->ldate = $ldate;
-        $stulic->save();
-        if (stulicenceEloquent::count() != 0) {
-            return '修改證照資料成功';
-        } else {
-            return '修改證照資料失敗';
         }
     }
 

@@ -12,7 +12,7 @@ class Stu_basic extends Model
     protected $fillable = [
         'sid','chiName','engName','bornedPlace','nativePlace','birthday','gender','address','email','contact',
         'ES','ER','EW','TOEIC','TOEFL','autobiography','Oname','OS','OR','OW','eduSystem','graduateYear',
-        'graduatedSchool','department','section','profilePic'
+        'graduatedSchool','department','section','profilePic','licenceFile'
     ];
 
 
