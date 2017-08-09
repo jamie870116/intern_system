@@ -174,11 +174,15 @@ class CourseController extends Controller
             'mid' => 'required',
             'tid' => 'required|integer',
             'courseId' => 'required|integer',
+            'firstDay' => 'required|date',
+
         ), array(
             'mid.required' => '請輸入媒合ID',
             'tid.required' => '請回傳老師ID',
             'courseId.required' => '請回傳課程ID',
+            'firstDay.required' => '請輸入開始實習的日期',
             'integer' => 'int格式錯誤',
+            'date' => '請輸入日期格式',
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();

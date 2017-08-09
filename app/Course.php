@@ -25,4 +25,5 @@ class Course extends Model
         $now=Carbon::now();
         return $query->where('courseEnd','>',$now)->where('courseStart','<',$now);
     }
+
 }

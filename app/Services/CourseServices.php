@@ -1,10 +1,14 @@
 <?php
 namespace App\Services;
 use App\Course as courseEloquent;
+use App\Course;
 use App\Job_opening;
+use App\Journal;
 use App\Match as MatchEloquent;
 use App\MatchLog as MatchLogEloquent;
 use App\Stu_course as StuCourseEloquent;
+use Carbon\Carbon;
+
 class CourseServices
 {
     public function adminCreateCourse_ser($re)
@@ -83,6 +87,47 @@ class CourseServices
                     $stu_c->tid=$re['tid'];
                     $stu_c->courseId=$re['courseId'];
                     $stu_c->save();
+                    $course=Course::where('courseId',$re['courseId'])->first();
+                    if($course){
+                        $first=$re['firstDay'];
+                        for($i=0;$i<$course->courseJournal;$i++){
+                            $type=StuCourseEloquent::GetTypeOfIntern($match->sid,$match->tid,$match->c_account);
+
+                            if($type==0){  //暑期
+                                $journal=new Journal();
+                                $journal->SCid=$re['SCid'];
+                                $journal->journalOrder=$i;
+                                if($i=0){
+                                    $journal->journalStart=Carbon::parse($first);
+                                    $journal->journalEnd=Carbon::parse($first)->addWeeks(1)->subDay();
+
+                                }else{
+                                    $journal->journalStart=Carbon::parse($first)->addWeeks($i);
+                                    $journal->journalEnd=Carbon::parse($first)->addWeeks($i+1)->subDay();
+                                }
+                                $journal->save();
+
+                            }elseif ($type==1){ //學期
+                                $journal=new Journal();
+                                $journal->SCid=$re['SCid'];
+                                $journal->journalOrder=$i;
+                                if($i=0){
+                                    $journal->journalStart=Carbon::parse($first);
+                                    $journal->journalEnd=Carbon::parse($first)->addWeeks(2)->subDay();
+
+                                }else{
+                                    $journal->journalStart=Carbon::parse($first)->addWeeks($i+2);
+                                    $journal->journalEnd=Carbon::parse($first)->addWeeks($i+4)->subDay();
+                                }
+                                $journal->save();
+                            }else{
+                                exit;
+                            }
+
+                        }
+                    }else{
+                        return '查不到課程';
+                    }
                     if (MatchEloquent::count() != 0 && MatchLogEloquent::count() != 0 && StuCourseEloquent::count()!=0) {
                         return '加入學生成功';
                     } else {
@@ -94,6 +139,47 @@ class CourseServices
                     $c->tid=$re['tid'];
                     $c->courseId=$re['courseId'];
                     $c->save();
+                    $course=Course::where('courseId',$re['courseId'])->first();
+                    if($course){
+                        $first=$re['firstDay'];
+                        for($i=0;$i<$course->courseJournal;$i++){
+                            $type=StuCourseEloquent::GetTypeOfIntern($match->sid,$match->tid,$match->c_account);
+
+                            if($type==0){  //暑期
+                                $journal=new Journal();
+                                $journal->SCid=$re['SCid'];
+                                $journal->journalOrder=$i;
+                                if($i=0){
+                                    $journal->journalStart=Carbon::parse($first);
+                                    $journal->journalEnd=Carbon::parse($first)->addWeeks(1)->subDay();
+
+                                }else{
+                                    $journal->journalStart=Carbon::parse($first)->addWeeks($i);
+                                    $journal->journalEnd=Carbon::parse($first)->addWeeks($i+1)->subDay();
+                                }
+                                $journal->save();
+
+                            }elseif ($type==1){ //學期
+                                $journal=new Journal();
+                                $journal->SCid=$re['SCid'];
+                                $journal->journalOrder=$i;
+                                if($i=0){
+                                    $journal->journalStart=Carbon::parse($first);
+                                    $journal->journalEnd=Carbon::parse($first)->addWeeks(2)->subDay();
+
+                                }else{
+                                    $journal->journalStart=Carbon::parse($first)->addWeeks($i+2);
+                                    $journal->journalEnd=Carbon::parse($first)->addWeeks($i+4)->subDay();
+                                }
+                                $journal->save();
+                            }else{
+                                exit;
+                            }
+
+                        }
+                    }else{
+                        return '查不到課程';
+                    }
                     if (MatchEloquent::count() != 0 && MatchLogEloquent::count() != 0 && StuCourseEloquent::count()!=0) {
                         return '加入學生成功';
                     } else {
@@ -113,7 +199,11 @@ class CourseServices
     public function adminDeleteStudentFromCourse_ser($SCId){
         $stu_c = StuCourseEloquent::where('courseId',$SCId)->first();
         if($stu_c){
+            $match = MatchEloquent::where('sid',$stu_c->sid)->where('tid',$stu_c->tid)->where('c_account',$stu_c->c_account)->first();
+            $match->mstatus=9;
+            $match->save();
             $stu_c->delete();
+
             if (StuCourseEloquent::count() != 0) {
                 return '刪除課程資料成功';
             } else {
