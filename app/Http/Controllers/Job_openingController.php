@@ -30,7 +30,7 @@ class Job_openingController extends Controller
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
-            'jtypes' => 'required|integer',//1，正職 2，工讀 3，暑期實習 4，學期實習
+            'jtypes' => 'required|integer',//3，正職 2，工讀 0，暑期實習 1，學期實習
             'jduties' => 'required',
             'jdetails' => 'required',
             'jcontact_name' => 'required',
@@ -80,7 +80,7 @@ class Job_openingController extends Controller
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
-            'jtypes' => 'required|integer',//1，正職 2，工讀 3，暑期實習 4，學期實習
+            'jtypes' => 'required|integer',//3，正職 2，工讀 0，暑期實習 1，學期實習
             'jduties' => 'required',
             'jdetails' => 'required',
             'jcontact_name' => 'required',

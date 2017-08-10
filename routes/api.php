@@ -35,7 +35,6 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('getJobOpeningbyId', 'Job_openingController@getJobOpeningbyId');//取得某一職缺細項
     Route::get('getJobOpeningBySearch', 'Job_openingController@getJobOpeningBySearch');//職缺條件排序
 
-
     //廠商基本資料相關
     Route::put('editCompanyDetails', 'Com_basicController@editCompanyDetails');//修改廠商資料
 //    Route::post('adminDeleteCompany', 'Com_basicController@adminDeleteCompany');//系辦刪除廠商

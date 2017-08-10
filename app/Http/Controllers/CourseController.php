@@ -171,7 +171,7 @@ class CourseController extends Controller
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
-            'mid' => 'required',
+            'mid' => 'required|integer',
             'tid' => 'required|integer',
             'courseId' => 'required|integer',
             'firstDay' => 'required|date',

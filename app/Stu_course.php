@@ -15,10 +15,10 @@ class Stu_course extends Model
     protected $fillable = [
         'c_account','sid','tid','courseId'
     ];
-    public function scopeGetTypeOfIntern($sid,$tid,$c_account)
-    {
-        $match = MatchEloquent::where('sid',$sid)->where('tid',$tid)->where('c_account',$c_account)->first();
-        $jOp=Job_opening::where('joid',$match->joid)->first();
-        return $jOp->jtypes;
-    }
+//    public function scopeGetTypeOfIntern($sid,$tid,$c_account)
+//    {
+//        $match = MatchEloquent::where('sid',$sid)->where('tid',$tid)->where('c_account',$c_account)->first();
+//        $jOp=Job_opening::where('joid',$match->joid)->first();
+//        return $jOp->jtypes;
+//    }
 }
