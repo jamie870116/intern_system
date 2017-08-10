@@ -66,6 +66,8 @@ Route::group(['middleware' => 'jwt'], function () {
 
     //取得履歷資料
     Route::get('findResumeDataById', 'Stu_resumeController@findResumeDataById');
+    //下載證照範例檔
+    Route::get('downloadLicenseFile','Stu_resumeController@downloadLicenseFile');
 
     //課程相關
     Route::post('adminCreateCourse', 'CourseController@adminCreateCourse');
@@ -77,6 +79,13 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::post('adminAddStudentToCourse', 'CourseController@adminAddStudentToCourse'); //系辦將學生加入課程並給予實習老師
     Route::get('adminGetStudentByCourseId', 'CourseController@adminGetStudentByCourseId'); //取得某課程中的學生
     Route::post('adminDeleteStudentFromCourse', 'CourseController@adminDeleteStudentFromCourse'); //系辦將學生從課程中刪除
+
+    //週誌相關
+    Route::get('studentGetInternList','JournalController@studentGetInternList');  //該學生實習列表
+    Route::get('studentGetJournalList','JournalController@studentGetJournalList');//該學生週誌列表
+    Route::get('defaultJournalBeforeInput','JournalController@defaultJournalBeforeInput');//在學生輸入週誌之前的顯示
+    Route::put('studentEditJournal','JournalController@studentEditJournal');//學生輸入週誌內容
+
 
     //站內信相關
     Route::get('getMailTitleBySid', 'MailController@getMailTitleBySid');//取得學生信件

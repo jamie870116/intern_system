@@ -12,6 +12,7 @@ use App\Stu_ability as stuAbilityEloquent;
 use App\Services\ResumeServices as ResumeServices;
 
 use JWTAuth;
+use Storage;
 use Validator;
 
 
@@ -304,6 +305,21 @@ class Stu_resumeController extends Controller
     }
     //修改履歷結束
 
+    //下載證照範例檔
+    public function downloadLicenseFile(){
+        $path = storage_path().'/'.'app/'.'public/user-upload/licences/example.docx';
+//        $file_path = 'public/user-upload/licences/example.docx';
+        $l_file=Storage::exists($path);
+
+        if(file_exists($path)){
+            $files = Storage::files('public/user-upload/licences');
+            return response()->download($path);
+//            return response()->json($files, 200, [], JSON_UNESCAPED_UNICODE);
+        }else{
+            return response()->json(array('下載失敗'), 400, [], JSON_UNESCAPED_UNICODE);
+        }
+
+    }
     //取得自己已投遞的履歷狀態
 
 }
