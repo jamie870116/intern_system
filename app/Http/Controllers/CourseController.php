@@ -210,7 +210,7 @@ class CourseController extends Controller
         $objValidator = Validator::make($request->all(), array(
             'courseId' => 'required|integer',
         ), array(
-            'mid.required' => '請輸入媒合ID',
+            'courseId.required' => '請輸入課程ID',
             'integer' => 'int格式錯誤',
         ));
         if ($objValidator->fails()) {
