@@ -211,30 +211,6 @@ class Job_openingController extends Controller
         }
     }
 
-    //取得所有職缺(截止日期未到期的
-//    public function getJobOpeningAll()
-//    {
-//        $jobOp = job_opEloquent::GetAll()->SortByUpdates_DESC()->paginate(12);
-//
-//        if ($jobOp) {
-//            return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
-//        } else {
-//            return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
-//        }
-//    }
-//
-//    //取得所有職缺(截止日期未到期的 時間由小到大
-//    public function getJobOpeningAll_ASC()
-//    {
-//        $jobOp = job_opEloquent::GetAll()->SortByUpdates_ASC()->paginate(12);
-//
-//        if ($jobOp) {
-//            return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
-//        } else {
-//            return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
-//        }
-//    }
-
 
     //條件排序
     public function getJobOpeningBySearch(Request $request)
