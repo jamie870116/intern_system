@@ -184,14 +184,14 @@ class CourseController extends Controller
             'integer' => 'int格式錯誤',
             'date' => '請輸入日期格式',
         ));
-        if ($objValidator->fails()) {
-            $errors = $objValidator->errors();
-            $error = array();
-            foreach ($errors->all() as $message) {
-                $error[] = $message;
-            }
-            return response()->json($error, 400);//422
-        } else {
+            if ($objValidator->fails()) {
+                $errors = $objValidator->errors();
+                $error = array();
+                foreach ($errors->all() as $message) {
+                    $error[] = $message;
+                }
+                return response()->json($error, 400);//422
+            } else {
             $responses = $this->CourseServices->adminAddStudentToCourse_ser($re);
             $r=array($responses);
             if ($responses == '加入學生成功') {

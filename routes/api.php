@@ -86,6 +86,10 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('defaultJournalBeforeInput','JournalController@defaultJournalBeforeInput');//在學生輸入週誌之前的顯示
     Route::put('studentEditJournal','JournalController@studentEditJournal');//學生輸入週誌內容
 
+    //成績管理相關
+    Route::get('teacherGetStudentList','GradeController@teacherGetStudentList');//老師取得學生列表
+    Route::get('teacherGetStudentCourseList','GradeController@teacherGetStudentCourseList');//老師取得特定學生之課程列表
+    Route::get('teacherGetStudentJournalList','GradeController@teacherGetStudentJournalList');//老師取得特定學生的某一課程之週誌列表
 
     //站內信相關
     Route::get('getMailTitleBySid', 'MailController@getMailTitleBySid');//取得學生信件
