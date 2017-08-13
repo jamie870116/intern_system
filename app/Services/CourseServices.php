@@ -89,14 +89,13 @@ class CourseServices
                     $stu_c->c_account = $match->c_account;
                     $stu_c->sid = $match->sid;
                     $stu_c->tid = $re['tid'];
+                    $stu_c->mid = $re['mid'];
                     $stu_c->courseId = $re['courseId'];
                     $stu_c->save();
                     $course = Course::where('courseId', $re['courseId'])->first();
                     if ($course) {
                         $first = $re['firstDay'];
-                        $i = 0;
                         for ($i = 0; $i < $course->courseJournal; $i++) {
-                            Log::error($i);
                             $type=$jobOp->jtypes;
                             if ($type == 0) {  //暑期
                                 $journal = new Journal();
@@ -210,7 +209,7 @@ class CourseServices
     {
         $stu_c = StuCourseEloquent::where('courseId', $SCId)->first();
         if ($stu_c) {
-            $match = MatchEloquent::where('sid', $stu_c->sid)->where('tid', $stu_c->tid)->where('c_account', $stu_c->c_account)->first();
+            $match = MatchEloquent::where('mid', $stu_c->mid)->first();
             $match->mstatus = 9;
             $match->save();
             $stu_c->delete();

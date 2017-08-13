@@ -11,7 +11,7 @@ class Stu_course extends Model
     public  $timestamps=true;
 
     protected $fillable = [
-        'c_account','sid','tid','courseId'
+        'c_account','sid','tid','courseId','mid'
     ];
 
     //取得課程資料
@@ -24,5 +24,11 @@ class Stu_course extends Model
     public function journals()
     {
         return $this->hasMany('App\Journal','SCid','SCid');
+    }
+
+    //取得課程資料
+    public function match()
+    {
+        return $this->belongsTo('App\Match','mid','mid');
     }
 }

@@ -19,6 +19,7 @@ class CreateStuCourseCourseTable extends Migration
             $table->string('c_account',100);//企業統編
             $table->integer('sid');//學生編號
             $table->integer('tid');//老師編號
+            $table->integer('mid');//媒合編號
             $table->integer('courseId');//課程編號
             $table->timestamps();
         });

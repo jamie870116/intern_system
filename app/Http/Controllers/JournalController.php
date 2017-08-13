@@ -78,7 +78,6 @@ class JournalController extends Controller
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
-
             'journalDetail_1' => 'required',
             'journalID' => 'required',
             'journalDetail_2' => 'required',

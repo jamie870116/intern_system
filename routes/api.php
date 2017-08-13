@@ -90,6 +90,11 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('teacherGetStudentList','GradeController@teacherGetStudentList');//老師取得學生列表
     Route::get('teacherGetStudentCourseList','GradeController@teacherGetStudentCourseList');//老師取得特定學生之課程列表
     Route::get('teacherGetStudentJournalList','GradeController@teacherGetStudentJournalList');//老師取得特定學生的某一課程之週誌列表
+    Route::post('teacherScoreStudentJournal','GradeController@teacherScoreStudentJournal');//老師批改學生週誌
+    Route::get('companyGetStudentListByJoId','GradeController@companyGetStudentListByJoId');//廠商取得學生列表透過joid
+    Route::get('companyGetStudentJournalListBySCid','GradeController@companyGetStudentJournalListBySCid');//廠商取得特定學生的某一課程之週誌列表
+    Route::post('companyScoreStudentJournal','GradeController@companyScoreStudentJournal');//廠商批改學生週誌
+    Route::get('getStudentJournalDetailByJournalID','GradeController@getStudentJournalDetailByJournalID');//取得特定週誌
 
     //站內信相關
     Route::get('getMailTitleBySid', 'MailController@getMailTitleBySid');//取得學生信件

@@ -254,7 +254,7 @@ class MatchServices
                     return '接受面試失敗';
                 }
             } else {
-                return $match;
+                return '流程錯誤';
             }
 
         } else {
