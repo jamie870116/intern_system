@@ -34,6 +34,8 @@ class MatchServices
                 $match->joid=$re['joid'];
 
                 $com=Job_opening::where('joid',$re['joid'])->first();
+                $com->jResume_num+=1;
+                $com->save();
                 $match->c_account=$com->c_account;
                 $match->sid=$user->id;
                 $match->save();

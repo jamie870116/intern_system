@@ -6,6 +6,7 @@ namespace App\Services;
 use App\Job_opening as job_opEloquent;
 use App\Jobs\sendResultmail;
 use App\Jobs\sendResultmail_faild;
+use App\Match;
 use App\User as userEloquent;
 use Carbon\Carbon;
 use JWTAuth;
@@ -129,6 +130,7 @@ class JobopeningServices
                 if ($jobOp) {
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                        $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
                     return $jobOp;
                 } else {
@@ -140,6 +142,7 @@ class JobopeningServices
                 if ($jobOp) {
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                        $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
                     return $jobOp;
                 } else {
@@ -152,6 +155,7 @@ class JobopeningServices
                 if ($jobOp) {
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                        $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
                     return $jobOp;
                 } else {
@@ -162,6 +166,7 @@ class JobopeningServices
                 if ($jobOp) {
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                        $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
                     return $jobOp;
                 } else {
@@ -186,6 +191,7 @@ class JobopeningServices
                 if ($jobOp) {
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                        $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
                     return $jobOp;
                 } else {
@@ -197,6 +203,7 @@ class JobopeningServices
                 if ($jobOp) {
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                        $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
                     return $jobOp;
                 } else {
@@ -209,6 +216,7 @@ class JobopeningServices
                 if ($jobOp) {
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                        $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
                     return $jobOp;
                 } else {
@@ -219,6 +227,7 @@ class JobopeningServices
                 if ($jobOp) {
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                        $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
                     return $jobOp;
                 } else {
@@ -243,6 +252,7 @@ class JobopeningServices
                 if ($jobOp) {
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                        $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
                     return $jobOp;
                 } else {
@@ -254,6 +264,7 @@ class JobopeningServices
                 if ($jobOp) {
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                        $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
                     return $jobOp;
                 } else {
@@ -266,6 +277,7 @@ class JobopeningServices
                 if ($jobOp) {
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                        $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
                     return $jobOp;
                 } else {
@@ -276,6 +288,7 @@ class JobopeningServices
                 if ($jobOp) {
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                        $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
                     return $jobOp;
                 } else {
@@ -300,6 +313,7 @@ class JobopeningServices
                 if ($jobOp) {
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                        $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
                     return $jobOp;
                 } else {
@@ -311,6 +325,7 @@ class JobopeningServices
                 if ($jobOp) {
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                        $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
                     return $jobOp;
                 } else {
@@ -323,6 +338,7 @@ class JobopeningServices
                 if ($jobOp) {
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                        $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
                     return $jobOp;
                 } else {
@@ -333,6 +349,7 @@ class JobopeningServices
                 if ($jobOp) {
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                        $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
                     return $jobOp;
                 } else {

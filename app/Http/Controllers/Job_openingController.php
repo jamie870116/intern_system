@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Match;
 use App\Services\JobopeningServices;
 use App\Transformers\JopOpenTransformer;
 use Carbon\Carbon;
@@ -191,6 +192,7 @@ class Job_openingController extends Controller
         $jobOp = job_opEloquent::where('c_account', $user->account)->SortByUpdates_DESC()->paginate(12);
         foreach ($jobOp as $j){
             $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+            $j->jResume_num=Match::where('joid',$j->joid)->count();
         }
         if ($jobOp) {
             return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
@@ -204,6 +206,7 @@ class Job_openingController extends Controller
     {
         $re = $request->all();
         $jobOp = job_opEloquent::where('joid', $re['joid'])->first();
+        $jobOp->jResume_num=Match::where('joid',$jobOp->joid)->count();
         if ($jobOp) {
             return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
         } else {
