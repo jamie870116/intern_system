@@ -86,7 +86,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('defaultJournalBeforeInput','JournalController@defaultJournalBeforeInput');//在學生輸入週誌之前的顯示
     Route::put('studentEditJournal','JournalController@studentEditJournal');//學生輸入週誌內容
 
-    //成績管理相關
+    //週誌成績管理相關
     Route::get('teacherGetStudentList','GradeController@teacherGetStudentList');//老師取得學生列表
     Route::get('teacherGetStudentCourseList','GradeController@teacherGetStudentCourseList');//老師取得特定學生之課程列表
     Route::get('teacherGetStudentJournalList','GradeController@teacherGetStudentJournalList');//老師取得特定學生的某一課程之週誌列表
@@ -95,6 +95,13 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('companyGetStudentJournalListBySCid','GradeController@companyGetStudentJournalListBySCid');//廠商取得特定學生的某一課程之週誌列表
     Route::post('companyScoreStudentJournal','GradeController@companyScoreStudentJournal');//廠商批改學生週誌
     Route::get('getStudentJournalDetailByJournalID','GradeController@getStudentJournalDetailByJournalID');//取得特定週誌
+
+    //週誌心得管理
+    Route::post('createReview','ReviewsController@createReview');//新增實習心得
+    Route::put('editReview','ReviewsController@editReview');//修改實習心得
+    Route::get('getReviewByReId','ReviewsController@getReviewByReId');//顯示實習心得ByReId
+    Route::get('getReviewBySCid','ReviewsController@getReviewBySCid');//顯示實習心得BySCid
+
 
     //站內信相關
     Route::get('getMailTitleBySid', 'MailController@getMailTitleBySid');//取得學生信件

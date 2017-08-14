@@ -11,6 +11,7 @@ class Reviews extends Model
     public  $timestamps=true;
 
     protected $fillable = [
-        'SCid'
+        'SCid','reContent'
     ];
+
 }

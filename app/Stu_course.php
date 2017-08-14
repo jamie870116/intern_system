@@ -31,4 +31,10 @@ class Stu_course extends Model
     {
         return $this->belongsTo('App\Match','mid','mid');
     }
+
+    //取得實習心得
+    public function reviews()
+    {
+        return $this->hasOne('App\Reviews','','SCid');
+    }
 }
