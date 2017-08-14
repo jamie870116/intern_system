@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInterviewStuQuestionsTable extends Migration
+class CreateInterviewComQuestionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateInterviewStuQuestionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('interview_stu_questions', function (Blueprint $table) {
+        Schema::create('interview_com_questions', function (Blueprint $table) {
 
-            $table->increments('insQId');//AI
-            $table->longText('insQuestion');//題目名稱
-            $table->tinyInteger('insQuestionVer');//題目版本
+            $table->increments('insCQId');//AI
+            $table->longText('insCQuestion');//題目名稱
+            $table->tinyInteger('insCQuestionVer');//題目版本
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateInterviewStuQuestionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('interview_stu_questions');
+        Schema::dropIfExists('interview_com_questions');
     }
 }
