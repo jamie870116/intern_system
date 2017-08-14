@@ -41,6 +41,7 @@ class Job_openingController extends Controller
             'jsalary_low' => 'required|integer',
             'jaddress' => 'required',
             'jdeadline' => 'required|date',
+            'jDutyTime' => 'required',
             'jNOP' => 'required|integer|min:0',
         ), array(
             'jtypes.required' => '請選擇職缺類型',
@@ -53,6 +54,7 @@ class Job_openingController extends Controller
             'jaddress.required' => '請輸入工作地點',
             'jdeadline.required' => '請輸入截止日期',
             'jNOP.required' => '請輸入需求人數',
+            'jDutyTime.required' => '請輸入工作時間',
             'integer' => 'int格式錯誤',
             'min' => '不得輸入低於0的數字',
             'date' => '日期格式錯誤',
@@ -90,6 +92,7 @@ class Job_openingController extends Controller
             'jsalary_up' => 'nullable|integer|min:0',
             'jsalary_low' => 'required|integer',
             'jaddress' => 'required',
+            'jDutyTime' => 'required',
             'jdeadline' => 'nullable|date',
             'jNOP' => 'required|integer|min:0',
             'joid' => 'required'
@@ -104,6 +107,7 @@ class Job_openingController extends Controller
             'jaddress.required' => '請輸入工作地點',
             'jdeadline.required' => '請輸入截止日期',
             'jNOP.required' => '請輸入需求人數',
+            'jDutyTime.required' => '請輸入需求人數',
             'c_account.required' => '請輸入廠商帳號',
             'integer' => 'int格式錯誤',
             'min' => '不得輸入低於0的數字',
