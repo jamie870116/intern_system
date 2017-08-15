@@ -102,7 +102,6 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('getReviewByReId','ReviewsController@getReviewByReId');//顯示實習心得ByReId
     Route::get('getReviewBySCid','ReviewsController@getReviewBySCid');//顯示實習心得BySCid
 
-
     //站內信相關
     Route::get('getMailTitleBySid', 'MailController@getMailTitleBySid');//取得學生信件
     Route::get('getMailTitleByC_account', 'MailController@getMailTitleByC_account');//取得企業信件
