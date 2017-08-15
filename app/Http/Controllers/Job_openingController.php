@@ -211,6 +211,16 @@ class Job_openingController extends Controller
         $re = $request->all();
         $jobOp = job_opEloquent::where('joid', $re['joid'])->first();
         $jobOp->jResume_num=Match::where('joid',$jobOp->joid)->count();
+        $token = JWTAuth::getToken();
+        $user = JWTAuth::toUser($token);
+        if($user->u_status==0){
+            $match=Match::where('joid',$re['joid'])->where('sid',$user->id)->first();
+            if($match){
+                $jobOp->jResume_submitted=true;
+            }else{
+                $jobOp->jResume_submitted=false;
+            }
+        }
         if ($jobOp) {
             return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
         } else {

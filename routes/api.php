@@ -28,8 +28,8 @@ Route::group(['middleware' => 'jwt'], function () {
     //職缺相關
     Route::post('createJobOpening', 'Job_openingController@createJobOpening');//新增職缺
     Route::put('editJobOpening', 'Job_openingController@editJobOpening');//修改職缺
-    Route::put('deleteJobOpeningByAdmin', 'Job_openingController@deleteJobOpeningByAdmin');//刪除職缺 系辦
-    Route::put('deleteJobOpeningByCom', 'Job_openingController@deleteJobOpeningByCom');//刪除職缺 廠商
+    Route::delete('deleteJobOpeningByAdmin', 'Job_openingController@deleteJobOpeningByAdmin');//刪除職缺 系辦
+    Route::delete('deleteJobOpeningByCom', 'Job_openingController@deleteJobOpeningByCom');//刪除職缺 廠商
 
     Route::get('getJobOpeningbyAccount', 'Job_openingController@getJobOpeningbyAccount');//廠商帳號取得該廠商所有職缺資料
     Route::get('getJobOpeningbyId', 'Job_openingController@getJobOpeningbyId');//取得某一職缺細項
@@ -72,13 +72,13 @@ Route::group(['middleware' => 'jwt'], function () {
     //課程相關
     Route::post('adminCreateCourse', 'CourseController@adminCreateCourse');
     Route::put('adminEditCourseByCourseID', 'CourseController@adminEditCourseByCourseID');
-    Route::post('adminDeleteCourse', 'CourseController@adminDeleteCourse');
+    Route::delete('adminDeleteCourse', 'CourseController@adminDeleteCourse');
     Route::get('adminGetSuccessMatch', 'CourseController@adminGetSuccessMatch'); //系辦取得已成功的媒合資料
     Route::get('adminGetTeacherData', 'CourseController@adminGetTeacherData'); //系辦取得所有老師資訊
     Route::get('adminGetCourse', 'CourseController@adminGetCourse'); //系辦取得課程資料
     Route::post('adminAddStudentToCourse', 'CourseController@adminAddStudentToCourse'); //系辦將學生加入課程並給予實習老師
     Route::get('adminGetStudentByCourseId', 'CourseController@adminGetStudentByCourseId'); //取得某課程中的學生
-    Route::post('adminDeleteStudentFromCourse', 'CourseController@adminDeleteStudentFromCourse'); //系辦將學生從課程中刪除
+    Route::delete('adminDeleteStudentFromCourse', 'CourseController@adminDeleteStudentFromCourse'); //系辦將學生從課程中刪除
 
     //週誌相關
     Route::get('studentGetInternList','JournalController@studentGetInternList');  //該學生實習列表
@@ -101,6 +101,14 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::put('editReview','ReviewsController@editReview');//修改實習心得
     Route::get('getReviewByReId','ReviewsController@getReviewByReId');//顯示實習心得ByReId
     Route::get('getReviewBySCid','ReviewsController@getReviewBySCid');//顯示實習心得BySCid
+
+    //訪談紀錄之問題管理
+    Route::get('getInterviewsStuQuestions','InterviewQuestionsController@getInterviewsStuQuestions');//取得最新版本之學生訪談題目
+    Route::get('getInterviewsStuQuestionsByVer','InterviewQuestionsController@getInterviewsStuQuestionsByVer');//取得某版本之學生訪談題目
+    Route::get('getInterviewsComQuestions','InterviewQuestionsController@getInterviewsComQuestions');//取得最新版本之廠商訪談題目
+    Route::get('getInterviewsComQuestionsByVer','InterviewQuestionsController@getInterviewsComQuestionsByVer');//取得某版本之廠商訪談題目
+    Route::post('createNewStuQuestion','InterviewQuestionsController@createNewStuQuestion');//新增學生訪談題目
+    Route::post('createNewComQuestion','InterviewQuestionsController@createNewComQuestion');//新增學生訪談題目
 
     //站內信相關
     Route::get('getMailTitleBySid', 'MailController@getMailTitleBySid');//取得學生信件

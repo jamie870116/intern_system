@@ -13,4 +13,14 @@ class Interviews_com_questions extends Model
     protected $fillable = [
         'insCQuestion','insCQuestionVer'
     ];
+
+    public function scopeGetLatestVersion($query){
+        $ver = $query->orderBy('insCQuestionVer','desc')->pluck('insCQuestionVer');
+
+        return $query->where('insCQuestionVer',$ver[0]);
+    }
+
+    public function scopeGetVersion($query,$ver){
+        return $query->where('insCQuestionVer',$ver);
+    }
 }
