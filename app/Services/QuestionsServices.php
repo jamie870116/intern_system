@@ -78,4 +78,63 @@ class QuestionsServices
         }
     }
 
+    //editNewStuQuestion_ser
+    public function editNewStuQuestion_ser($re){
+        $in = Interviews_stu_questions::GetLatestVersion()->first();
+        $inSQ = Interviews_stu_questions::GetLatestVersion()->get();
+        if ($in && $inSQ) {
+            $ver=$in->insQuestionVer+1;
+            foreach ($inSQ as $i){
+                if($i->insQId==$re['insQId']){
+                    $newQ=new Interviews_stu_questions();
+                    $newQ->insQuestion=$re['insQuestion'];
+                    $newQ->insQuestionVer=$ver;
+                    $newQ->save();
+                }else{
+                    $newQ=new Interviews_stu_questions();
+                    $newQ->insQuestion=$i->insQuestion;
+                    $newQ->insQuestionVer=$ver;
+                    $newQ->save();
+                }
+            }
+
+            if(Interviews_stu_questions::count()!=0){
+                return '學生訪談題目修改成功';
+            }else{
+                return '學生訪談題目修改失敗';
+            }
+        } else {
+            return array('找不到題目');
+        }
+    }
+
+    public function editNewComQuestion_ser($re){
+        $in = Interviews_com_questions::GetLatestVersion()->first();
+        $inSQ = Interviews_com_questions::GetLatestVersion()->get();
+        if ($in && $inSQ) {
+            $ver=$in->insCQuestionVer+1;
+            foreach ($inSQ as $i){
+                if($i->insCQId==$re['insCQId']){
+                    $newQ=new Interviews_com_questions();
+                    $newQ->insCQuestion=$re['insCQuestion'];
+                    $newQ->insCQuestionVer=$ver;
+                    $newQ->save();
+                }else{
+                    $newQ=new Interviews_com_questions();
+                    $newQ->insCQuestion=$i->insCQuestion;
+                    $newQ->insCQuestionVer=$ver;
+                    $newQ->save();
+                }
+            }
+
+            if(Interviews_com_questions::count()!=0){
+                return '企業訪談題目修改成功';
+            }else{
+                return '企業訪談題目修改失敗';
+            }
+        } else {
+            return array('找不到題目');
+        }
+    }
+
 }

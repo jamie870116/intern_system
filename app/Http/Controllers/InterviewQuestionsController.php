@@ -120,9 +120,9 @@ class InterviewQuestionsController extends Controller
         } else {
             $responses = $this->QuestionsServices->createNewStuQuestion_ser($re['insQuestion']);
             if ($responses == '學生訪談題目新增成功') {
-                return response()->json(array($responses), 400, [], JSON_UNESCAPED_UNICODE);
-            } else {
                 return response()->json(array($responses), 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json(array($responses), 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -148,9 +148,69 @@ class InterviewQuestionsController extends Controller
         } else {
             $responses = $this->QuestionsServices->createNewComQuestion_ser($re['insCQuestion']);
             if ($responses == '企業訪談題目新增成功') {
-                return response()->json(array($responses), 400, [], JSON_UNESCAPED_UNICODE);
-            } else {
                 return response()->json(array($responses), 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json(array($responses), 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
+
+    //修改學生訪談題目
+    public function editNewStuQuestion(Request $request)
+    {
+        $re = $request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'insQuestion' => 'required',
+            'insQId' => 'required',
+        ), array(
+            'insQuestion.required' => '請輸入學生訪談題目',
+            'insQId.required' => '請輸入學生訪談題目ID',
+
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $responses = $this->QuestionsServices->editNewStuQuestion_ser($re);
+            if ($responses == '學生訪談題目修改成功') {
+                return response()->json(array($responses), 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json(array($responses), 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
+
+    //修改企業訪談題目
+    public function editNewComQuestion(Request $request)
+    {
+        $re = $request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'insCQuestion' => 'required',
+            'insCQId' => 'required',
+        ), array(
+            'insCQuestion.required' => '請輸入企業訪談題目',
+            'insCQId.required' => '請輸入企業訪談題目ID',
+
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $responses = $this->QuestionsServices->editNewComQuestion_ser($re);
+            if ($responses == '企業訪談題目修改成功') {
+                return response()->json(array($responses), 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json(array($responses), 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
