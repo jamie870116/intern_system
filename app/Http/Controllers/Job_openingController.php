@@ -69,10 +69,10 @@ class Job_openingController extends Controller
             return response()->json($error, 400);//422
         } else {
             $responses = $this->JobopeningServices->createJobOpening_ser($re);
-            if ($responses == '新增職缺資料成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
-            } else {
+            if ($responses == '新增職缺資料失敗') {
                 return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }

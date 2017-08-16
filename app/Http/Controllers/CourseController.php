@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Course;
+use App\Job_opening;
 use App\Match as MatchEloquent;
 use App\User as UserEloquent;
 use App\Stu_course as StuCourseEloquent;
 
 use App\Services\CourseServices;
+use App\User;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -134,6 +136,11 @@ class CourseController extends Controller
     {
         $match = MatchEloquent::where('mstatus', 9)->SortByUpdates_DESC()->paginate(4);
         if ($match) {
+            foreach ($match as $m){
+                $m->stu_name=User::where('id',$m->sid)->first()->u_name;
+                $m->com_name=User::where('account',$m->c_account)->first()->u_name;
+                $m->job_name=Job_opening::where('joid',$m->joid)->first()->jduties;
+            }
             return response()->json($match, 200, [], JSON_UNESCAPED_UNICODE);
         } else {
             $r=array('取得資料失敗');

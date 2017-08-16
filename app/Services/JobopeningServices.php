@@ -37,7 +37,7 @@ class JobopeningServices
 //        $jobOpen->jdeadline =Carbon::parse($re['jdeadline'])->format('Y/m/d');
         $jobOpen->save();
         if (job_opEloquent::count() != 0) {
-            return '新增職缺資料成功';
+            return $jobOpen->joid;
         } else {
             return '新增職缺資料失敗';
         }
@@ -134,16 +134,6 @@ class JobopeningServices
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
-                    $token = JWTAuth::getToken();
-                    $user = JWTAuth::toUser($token);
-                    if($user->u_status==0){
-                        $match=Match::where('joid',$re['joid'])->where('sid',$user->id)->first();
-                        if($match){
-                            $jobOp->jResume_submitted=true;
-                        }else{
-                            $jobOp->jResume_submitted=false;
-                        }
-                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -155,16 +145,6 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
-                    }
-                    $token = JWTAuth::getToken();
-                    $user = JWTAuth::toUser($token);
-                    if($user->u_status==0){
-                        $match=Match::where('joid',$re['joid'])->where('sid',$user->id)->first();
-                        if($match){
-                            $jobOp->jResume_submitted=true;
-                        }else{
-                            $jobOp->jResume_submitted=false;
-                        }
                     }
                     return $jobOp;
                 } else {
@@ -179,16 +159,6 @@ class JobopeningServices
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
-                    $token = JWTAuth::getToken();
-                    $user = JWTAuth::toUser($token);
-                    if($user->u_status==0){
-                        $match=Match::where('joid',$re['joid'])->where('sid',$user->id)->first();
-                        if($match){
-                            $jobOp->jResume_submitted=true;
-                        }else{
-                            $jobOp->jResume_submitted=false;
-                        }
-                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -199,16 +169,6 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
-                    }
-                    $token = JWTAuth::getToken();
-                    $user = JWTAuth::toUser($token);
-                    if($user->u_status==0){
-                        $match=Match::where('joid',$re['joid'])->where('sid',$user->id)->first();
-                        if($match){
-                            $jobOp->jResume_submitted=true;
-                        }else{
-                            $jobOp->jResume_submitted=false;
-                        }
                     }
                     return $jobOp;
                 } else {
@@ -235,16 +195,6 @@ class JobopeningServices
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
-                    $token = JWTAuth::getToken();
-                    $user = JWTAuth::toUser($token);
-                    if($user->u_status==0){
-                        $match=Match::where('joid',$re['joid'])->where('sid',$user->id)->first();
-                        if($match){
-                            $jobOp->jResume_submitted=true;
-                        }else{
-                            $jobOp->jResume_submitted=false;
-                        }
-                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -256,16 +206,6 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
-                    }
-                    $token = JWTAuth::getToken();
-                    $user = JWTAuth::toUser($token);
-                    if($user->u_status==0){
-                        $match=Match::where('joid',$re['joid'])->where('sid',$user->id)->first();
-                        if($match){
-                            $jobOp->jResume_submitted=true;
-                        }else{
-                            $jobOp->jResume_submitted=false;
-                        }
                     }
                     return $jobOp;
                 } else {
@@ -280,16 +220,6 @@ class JobopeningServices
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
-                    $token = JWTAuth::getToken();
-                    $user = JWTAuth::toUser($token);
-                    if($user->u_status==0){
-                        $match=Match::where('joid',$re['joid'])->where('sid',$user->id)->first();
-                        if($match){
-                            $jobOp->jResume_submitted=true;
-                        }else{
-                            $jobOp->jResume_submitted=false;
-                        }
-                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -300,16 +230,6 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
-                    }
-                    $token = JWTAuth::getToken();
-                    $user = JWTAuth::toUser($token);
-                    if($user->u_status==0){
-                        $match=Match::where('joid',$re['joid'])->where('sid',$user->id)->first();
-                        if($match){
-                            $jobOp->jResume_submitted=true;
-                        }else{
-                            $jobOp->jResume_submitted=false;
-                        }
                     }
                     return $jobOp;
                 } else {
@@ -336,16 +256,6 @@ class JobopeningServices
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
-                    $token = JWTAuth::getToken();
-                    $user = JWTAuth::toUser($token);
-                    if($user->u_status==0){
-                        $match=Match::where('joid',$re['joid'])->where('sid',$user->id)->first();
-                        if($match){
-                            $jobOp->jResume_submitted=true;
-                        }else{
-                            $jobOp->jResume_submitted=false;
-                        }
-                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -357,16 +267,6 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
-                    }
-                    $token = JWTAuth::getToken();
-                    $user = JWTAuth::toUser($token);
-                    if($user->u_status==0){
-                        $match=Match::where('joid',$re['joid'])->where('sid',$user->id)->first();
-                        if($match){
-                            $jobOp->jResume_submitted=true;
-                        }else{
-                            $jobOp->jResume_submitted=false;
-                        }
                     }
                     return $jobOp;
                 } else {
@@ -381,16 +281,6 @@ class JobopeningServices
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
-                    $token = JWTAuth::getToken();
-                    $user = JWTAuth::toUser($token);
-                    if($user->u_status==0){
-                        $match=Match::where('joid',$re['joid'])->where('sid',$user->id)->first();
-                        if($match){
-                            $jobOp->jResume_submitted=true;
-                        }else{
-                            $jobOp->jResume_submitted=false;
-                        }
-                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -401,16 +291,6 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
-                    }
-                    $token = JWTAuth::getToken();
-                    $user = JWTAuth::toUser($token);
-                    if($user->u_status==0){
-                        $match=Match::where('joid',$re['joid'])->where('sid',$user->id)->first();
-                        if($match){
-                            $jobOp->jResume_submitted=true;
-                        }else{
-                            $jobOp->jResume_submitted=false;
-                        }
                     }
                     return $jobOp;
                 } else {
@@ -437,16 +317,6 @@ class JobopeningServices
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
-                    $token = JWTAuth::getToken();
-                    $user = JWTAuth::toUser($token);
-                    if($user->u_status==0){
-                        $match=Match::where('joid',$re['joid'])->where('sid',$user->id)->first();
-                        if($match){
-                            $jobOp->jResume_submitted=true;
-                        }else{
-                            $jobOp->jResume_submitted=false;
-                        }
-                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -458,16 +328,6 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
-                    }
-                    $token = JWTAuth::getToken();
-                    $user = JWTAuth::toUser($token);
-                    if($user->u_status==0){
-                        $match=Match::where('joid',$re['joid'])->where('sid',$user->id)->first();
-                        if($match){
-                            $jobOp->jResume_submitted=true;
-                        }else{
-                            $jobOp->jResume_submitted=false;
-                        }
                     }
                     return $jobOp;
                 } else {
@@ -482,16 +342,6 @@ class JobopeningServices
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
                     }
-                    $token = JWTAuth::getToken();
-                    $user = JWTAuth::toUser($token);
-                    if($user->u_status==0){
-                        $match=Match::where('joid',$re['joid'])->where('sid',$user->id)->first();
-                        if($match){
-                            $jobOp->jResume_submitted=true;
-                        }else{
-                            $jobOp->jResume_submitted=false;
-                        }
-                    }
                     return $jobOp;
                 } else {
                     return '取得職缺資料失敗';
@@ -502,16 +352,6 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
-                    }
-                    $token = JWTAuth::getToken();
-                    $user = JWTAuth::toUser($token);
-                    if($user->u_status==0){
-                        $match=Match::where('joid',$re['joid'])->where('sid',$user->id)->first();
-                        if($match){
-                            $jobOp->jResume_submitted=true;
-                        }else{
-                            $jobOp->jResume_submitted=false;
-                        }
                     }
                     return $jobOp;
                 } else {
