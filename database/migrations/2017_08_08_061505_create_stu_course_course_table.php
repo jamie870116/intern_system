@@ -21,6 +21,7 @@ class CreateStuCourseCourseTable extends Migration
             $table->integer('tid');//老師編號
             $table->integer('mid');//媒合編號
             $table->integer('courseId');//課程編號
+            $table->tinyInteger('assessmentStatus')->default(0);//考核狀況0.不允許考核1.企業可以開始考核2.企業已考核3.老師已考核
             $table->timestamps();
         });
     }

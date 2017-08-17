@@ -11,7 +11,7 @@ class Stu_course extends Model
     public  $timestamps=true;
 
     protected $fillable = [
-        'c_account','sid','tid','courseId','mid'
+        'c_account','sid','tid','courseId','mid','assessmentStatus'
     ];
 
     //取得課程資料
@@ -36,5 +36,29 @@ class Stu_course extends Model
     public function reviews()
     {
         return $this->hasOne('App\Reviews','','SCid');
+    }
+
+    //取得學生使用者資料
+    public function user_stu()
+    {
+        return $this->hasOne('App\User','id','sid');
+    }
+
+    //取得企業使用者資料
+    public function user_com()
+    {
+        return $this->hasOne('App\User','account','c_account');
+    }
+
+    //取得老師使用者資料
+    public function user_tea()
+    {
+        return $this->hasOne('App\User','id','tid');
+    }
+
+    //取得履歷資料
+    public function stu_basic()
+    {
+        return $this->hasOne('App\Stu_basic','sid','sid');
     }
 }
