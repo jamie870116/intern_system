@@ -153,7 +153,7 @@ class GradeController extends Controller
                     if($m->joid==$re['joid']){
                         Log::error($m);
                         $studentName=UserEloquent::where('id',$stu_cour->sid)->first();
-                        $list = array($studentName->u_name,$studentName->id,$stu_cour->SCid);
+                        $list = array('studentName'=>$studentName->u_name,'studentId'=>$studentName->id,'SCid'=>$stu_cour->SCid);
                         $student_list[] = $list;
                     }
                 }

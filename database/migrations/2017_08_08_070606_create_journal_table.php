@@ -17,7 +17,7 @@ class CreateJournalTable extends Migration
 
             $table->increments('journalID');//AI
             $table->integer('SCid');//課程老師學生廠商連結
-            $table->integer('journalOrder');//日誌結束日期
+            $table->integer('journalOrder');//日誌編號
             $table->longText('journalDetail_1')->nullable();//重要事件紀錄與觀察
             $table->longText('journalDetail_2')->nullable();//觀察心得與個人看法
             $table->dateTime('journalStart')->nullable();//日誌開始日期

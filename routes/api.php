@@ -109,6 +109,8 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('getInterviewsComQuestionsByVer','InterviewQuestionsController@getInterviewsComQuestionsByVer');//取得某版本之廠商訪談題目
     Route::post('createNewStuQuestion','InterviewQuestionsController@createNewStuQuestion');//新增學生訪談題目
     Route::post('createNewComQuestion','InterviewQuestionsController@createNewComQuestion');//新增學生訪談題目
+    Route::put('editNewStuQuestion','InterviewQuestionsController@editNewStuQuestion');//修改學生訪談題目
+    Route::put('editNewComQuestion','InterviewQuestionsController@editNewComQuestion');//修改企業訪談題目
 
     //站內信相關
     Route::get('getMailTitleBySid', 'MailController@getMailTitleBySid');//取得學生信件
