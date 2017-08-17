@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\JournalServices;
+use App\Stu_course;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use JWTAuth;
@@ -33,8 +34,14 @@ class JournalController extends Controller
         $intern_list = array();
         foreach ($stu_course as $stu_cour) {
             $journalCom = UserEloquent::where('account', $stu_cour->c_account)->first();
-            $journalCour = CourseEloquent::where('courseId', $stu_cour->courseId)->first();
-            $list = array($stu_cour->SCid, $journalCom->u_name, $journalCour->courseName);
+            $course=Stu_course::find($stu_cour->SCid)->course()->first();
+            $now = Carbon::now();
+            if($now < $course->courseEnd){
+               $passDeadLine=false;
+            }else{
+                $passDeadLine=true;
+            }
+            $list = array('SCid'=>$stu_cour->SCid,'u_name'=> $journalCom->u_name, 'courseName'=>$course->courseName,'passDeadLine'=>$passDeadLine);
             $intern_list[] = $list;
         }
         return response()->json($intern_list, 200, [], JSON_UNESCAPED_UNICODE);
@@ -45,12 +52,20 @@ class JournalController extends Controller
     {
         $re = $request->all();
         $journal=JournalEloquent::where('SCid',$re['SCid'])->get();
+        $course=Stu_course::find($re['SCid'])->course()->first();
+        $now = Carbon::now();
+        if($now < $course->courseEnd){
+            $passDeadLine=false;
+        }else{
+            $passDeadLine=true;
+        }
         if(!$journal){
             return response()->json(array('找不到週誌列表'), 400, [], JSON_UNESCAPED_UNICODE);
         }else {
             foreach ($journal as $j){
                 $j->journalStart=Carbon::parse($j->journalStart)->format('Y/m/d');
                 $j->journalEnd=Carbon::parse($j->journalEnd)->format('Y/m/d');
+                $j->passDeadLine=$passDeadLine;
             }
             return response()->json($journal, 200, [], JSON_UNESCAPED_UNICODE);
         }
@@ -61,12 +76,20 @@ class JournalController extends Controller
     {
         $re = $request->all();
         $journal=JournalEloquent::where('journalID',$re['journalID'])->first();
+        $course=Stu_course::find($journal->SCid)->course()->first();
+        $now = Carbon::now();
+        if($now < $course->courseEnd){
+            $passDeadLine=false;
+        }else{
+            $passDeadLine=true;
+        }
         if(!$journal){
             return response()->json(array('找不到週誌列表'), 400, [], JSON_UNESCAPED_UNICODE);
         }else {
 
             $journal->journalStart=Carbon::parse($journal->journalStart)->format('Y/m/d');
             $journal->journalEnd=Carbon::parse($journal->journalEnd)->format('Y/m/d');
+            $journal->passDeadLine=$passDeadLine;
 
             return response()->json($journal, 200, [], JSON_UNESCAPED_UNICODE);
         }

@@ -15,4 +15,12 @@ class Journal extends Model
         'journalStart','journalEnd','journalInstructor','journalComments_ins',
         'journalComments_teacher','grade_ins','grade_teacher'
     ];
+    //
+    public function scopeSortByDESC($query){
+        return $query->orderBy('journalStart','desc');
+    }
+
+    public function scopeSortByASC($query){
+        return $query->orderBy('journalStart','asc');
+    }
 }
