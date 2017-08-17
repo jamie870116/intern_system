@@ -38,7 +38,9 @@ class Job_openingController extends Controller
             'jcontact_phone' => 'required',
             'jcontact_email' => 'required|email',
             'jsalary_up' => 'nullable|integer|min:0',
-            'jsalary_low' => 'required|integer',
+            'jsalary_low' => 'nullable|integer',
+            'jEndDutyTime' => 'nullable|date',
+            'jStartDutyTime' => 'nullable|date',
             'jaddress' => 'required',
             'jdeadline' => 'required|date',
             'jDutyTime' => 'required',
@@ -57,7 +59,7 @@ class Job_openingController extends Controller
             'jDutyTime.required' => '請輸入工作時間',
             'integer' => 'int格式錯誤',
             'min' => '不得輸入低於0的數字',
-            'date' => '日期格式錯誤',
+            'date' => '日期時間格式錯誤',
             'email' => 'email格式錯誤'
         ));
         if ($objValidator->fails()) {
@@ -92,7 +94,8 @@ class Job_openingController extends Controller
             'jsalary_up' => 'nullable|integer|min:0',
             'jsalary_low' => 'required|integer',
             'jaddress' => 'required',
-            'jDutyTime' => 'required',
+            'jEndDutyTime' => 'nullable|date',
+            'jStartDutyTime' => 'nullable|date',
             'jdeadline' => 'nullable|date',
             'jNOP' => 'required|integer|min:0',
             'joid' => 'required'
@@ -107,7 +110,6 @@ class Job_openingController extends Controller
             'jaddress.required' => '請輸入工作地點',
             'jdeadline.required' => '請輸入截止日期',
             'jNOP.required' => '請輸入需求人數',
-            'jDutyTime.required' => '請輸入需求人數',
             'c_account.required' => '請輸入廠商帳號',
             'integer' => 'int格式錯誤',
             'min' => '不得輸入低於0的數字',

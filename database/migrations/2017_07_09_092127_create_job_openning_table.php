@@ -26,7 +26,8 @@ class CreateJobOpenningTable extends Migration
             $table->string('jcontact_phone',50);//聯絡人電話
             $table->string('jcontact_email',150);//聯絡人信箱
             $table->string('jaddress',150);//工作地點
-            $table->string('jDutyTime',150);//工作地點
+            $table->time('jStartDutyTime');//工作開始時間
+            $table->time('jEndDutyTime');//工作結束時間
             $table->dateTime('jdeadline');//截止日期
             $table->integer('jNOP');//剩餘人數
             $table->longText('jdelete_reason')->nullable();//刪除理由

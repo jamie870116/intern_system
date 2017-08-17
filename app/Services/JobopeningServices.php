@@ -30,7 +30,8 @@ class JobopeningServices
         $jobOpen->jaddress = $re['jaddress'];
         $jobOpen->jdeadline = $re['jdeadline'];
         $jobOpen->jNOP = $re['jNOP'];
-        $jobOpen->jDutyTime = $re['jDutyTime'];
+        $jobOpen->jStartDutyTime = $re['jStartDutyTime'];
+        $jobOpen->jEndDutyTime = $re['jEndDutyTime'];
         $jobOpen->jcontact_name = $re['jcontact_name'];
         $jobOpen->jcontact_phone = $re['jcontact_phone'];
         $jobOpen->jcontact_email = $re['jcontact_email'];
@@ -54,7 +55,8 @@ class JobopeningServices
         $jobOpen->jaddress = $re['jaddress'];
         $jobOpen->jdeadline = $re['jdeadline'];
         $jobOpen->jNOP = $re['jNOP'];
-        $jobOpen->jDutyTime = $re['jDutyTime'];
+        $jobOpen->jStartDutyTime = $re['jStartDutyTime'];
+        $jobOpen->jEndDutyTime = $re['jEndDutyTime'];
         $jobOpen->jcontact_name = $re['jcontact_name'];
         $jobOpen->jcontact_phone = $re['jcontact_phone'];
         $jobOpen->jcontact_email = $re['jcontact_email'];
