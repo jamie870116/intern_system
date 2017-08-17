@@ -47,10 +47,10 @@ class Stu_resumeController extends Controller
             return response()->json($error, 400);//422
         } else {
             $responses = $this->ResumeServices->newJobExperienceById($re);
-            if ($responses == '新增工作資料成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+            if ($responses != '新增工作資料失敗') {
+                return response()->json(['jid'=>$responses], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -76,10 +76,10 @@ class Stu_resumeController extends Controller
             return response()->json($error, 400);//422
         } else {
             $responses = $this->ResumeServices->newWorksDataById($re);
-            if ($responses == '新增作品資料成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+            if ($responses != '新增作品資料失敗') {
+                return response()->json(['wid'=>$responses], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -94,7 +94,7 @@ class Stu_resumeController extends Controller
         ), array(
             'abiType.required' => '請選擇能力種類',
             'abiName.required' => '請描述該能力',
-            'integer' => '請輸入職位名稱'
+            'integer' => '請輸入integer'
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
@@ -105,10 +105,10 @@ class Stu_resumeController extends Controller
             return response()->json($error, 400);//422
         } else {
             $responses = $this->ResumeServices->newAbilityById($re);
-            if ($responses == '新增能力資料成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+            if ($responses != '新增能力資料失敗') {
+                return response()->json(['abiid'=>$responses], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -125,7 +125,7 @@ class Stu_resumeController extends Controller
         $stuJExp = stuJExpEloquent::where('sid', $id)->get();
         $stuWor = stuWorksEloquent::where('sid', $id)->get();
         $stuA=stuAbilityEloquent::where('sid', $id)->get();
-        $stdRe = array($stuBas, $stuJExp, $stuWor,$stuA);
+        $stdRe = array('stu_basic'=>$stuBas,'stu_jobExperience'=> $stuJExp,'stu_works'=> $stuWor,'stu_ability'=>$stuA);
         return response()->json($stdRe, 200, [], JSON_UNESCAPED_UNICODE);
     }
     //取得自己的履歷結束
@@ -208,18 +208,16 @@ class Stu_resumeController extends Controller
     }
 
 
-    public function editJobExperienceById(Request $request)
+    public function deleteJobExperienceById(Request $request)
     {
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
-            'jid' => 'required',
-            'semester' => 'required',
-            'jobTitle' => 'required'
+            'jid' => 'required|integer',
         ), array(
             'jid.required' => '請輸入jid',
-            'semester.required' => '請輸入學期',
-            'jobTitle.required' => '請輸入職位名稱'
+            'integer' => '請輸入職位名稱'
+
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
@@ -229,62 +227,23 @@ class Stu_resumeController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
-            $responses = $this->ResumeServices->editJobExperienceById_ser($re);
+            $responses = $this->ResumeServices->deleteJobExperienceById_ser($re);
             if ($responses == '修改工作資料成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
 
 
-    public function editWorksDataById(Request $request)
+    public function deleteWorksDataById(Request $request)
     {
         $re = $request->all();
         $objValidator = Validator::make($request->all(), array(
-            'wid' => 'required',
-            'wName' => 'required',
-            'wCreatedDate' => 'nullable|date',
-            'wLink' => 'nullable|date',
-
+            'wid' => 'required|integer',
         ), array(
-            'wName.required' => '請輸入作品名稱',
             'wid.required' => '請輸入wid',
-            'wLink.required' => '請輸入作品網址',
-            'wCreatedDate.required' => '請輸入作品完成日期',
-            'date' => '日期格式錯誤'
-        ));
-        if ($objValidator->fails()) {
-            $errors = $objValidator->errors();
-            $error = array();
-            foreach ($errors->all() as $message) {
-                $error[] = $message;
-            }
-            return response()->json($error, 400);//422
-        } else {
-            $responses = $this->ResumeServices->editWorksDataById_ser($re);
-            if ($responses == '修改作品資料成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
-            } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
-            }
-        }
-    }
-
-
-    public function editAbilityById(Request $request)
-    {
-        $re = $request->all();
-
-        $objValidator = Validator::make($request->all(), array(
-            'abiType' => 'required|integer',
-            'abiid' => 'required|integer',
-            'abiName' => 'required'
-        ), array(
-            'abiType.required' => '請選擇能力種類',
-            'abiid.required' => '請回傳能力ID',
-            'abiName.required' => '請描述該能力',
             'integer' => '請輸入職位名稱'
         ));
         if ($objValidator->fails()) {
@@ -295,11 +254,39 @@ class Stu_resumeController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
-            $responses = $this->ResumeServices->editAbilityById_ser($re);
-            if ($responses == '修改能力資料成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+            $responses = $this->ResumeServices->deleteWorksDataById_ser($re);
+            if ($responses == '修改作品資料成功') {
+                return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
+
+
+    public function deleteAbilityById(Request $request)
+    {
+        $re = $request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'abiid' => 'required|integer',
+        ), array(
+            'abiid.required' => '請回傳能力ID',
+            'integer' => '請輸入職位名稱'
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $responses = $this->ResumeServices->deleteAbilityById_ser($re);
+            if ($responses == '修改能力資料成功') {
+                return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -314,7 +301,6 @@ class Stu_resumeController extends Controller
         if(file_exists($path)){
             $files = Storage::files('public/user-upload/licences');
             return response()->download($path);
-//            return response()->json($files, 200, [], JSON_UNESCAPED_UNICODE);
         }else{
             return response()->json(array('下載失敗'), 400, [], JSON_UNESCAPED_UNICODE);
         }

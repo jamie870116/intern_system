@@ -11,7 +11,7 @@ class JournalServices{
     {
 
         $journal=JournalEloquent::where('journalID',$re['journalID'])->first();
-        $course=Stu_course::find($journal->SCid)->course()->first();
+        $course=Stu_course::find($journal->SCid)->courses()->first();
         $now = Carbon::now();
         if($now < $course->courseEnd){
             $passDeadLine=false;

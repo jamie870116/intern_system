@@ -46,9 +46,9 @@ class Com_basicController extends Controller
         } else {
         	$responses=$this->CompanyServices->editCompanyDetails_ser($re);
         	if ($responses == '修改廠商資料成功') {
-        		return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+        		return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
         	} else {
-        		return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+        		return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
         	}
         }
     }
@@ -74,9 +74,9 @@ class Com_basicController extends Controller
         } else {
         	$responses=$this->CompanyServices->adminDeleteCompany_ser($re);
         	if ($responses == '刪除廠商成功') {
-        		return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+        		return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
         	} else {
-        		return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+        		return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
         	}
         }
     }
@@ -100,7 +100,7 @@ class Com_basicController extends Controller
         } else {
         	$responses=$this->CompanyServices->getCompanyDetailsByAccount_ser($re);
         	if ($responses == '取得廠商失敗') {
-        		return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+        		return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
         	} else {
         		return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
         	}

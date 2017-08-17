@@ -34,7 +34,7 @@ class ResumeServices
 
         $stuJExp->save();
         if (stuJExpEloquent::count() != 0) {
-            return '新增工作資料成功';
+            return $stuJExp->jid;
         } else {
             return '新增工作資料失敗';
         }
@@ -53,7 +53,7 @@ class ResumeServices
         $stuWor->save();
 
         if (stuWorksEloquent::count() != 0) { //rowcount
-            return '新增作品資料成功';
+            return $stuWor->wid;
         } else {
             return '新增作品資料失敗';
         }
@@ -70,7 +70,7 @@ class ResumeServices
         $stuA->save();
 
         if (stuAbilityEloquent::count() != 0) { //rowcount
-            return '新增能力資料成功';
+            return $stuA->abiid;
         } else {
             return '新增能力資料失敗';
         }
@@ -177,52 +177,36 @@ class ResumeServices
 
 
 
-    public function editJobExperienceById_ser($re)
+    public function deleteJobExperienceById_ser($re)
     {
         $stuJExp = stuJExpEloquent::where('jid', $re['jid'])->first();
-        $semester = $re['semester'];
-        $jobTitle = $re['jobTitle'];
-
-        $stuJExp->semester = $semester;
-        $stuJExp->jobTitle = $jobTitle;
-        $stuJExp->save();
+        $stuJExp->delete();
         if (stuJExpEloquent::count() != 0) {
-            return '修改工作資料成功';
+            return '刪除工作資料成功';
         } else {
-            return '修改工作資料失敗';
+            return '刪除工作資料失敗';
         }
     }
 
 
-    public function editWorksDataById_ser($re)
+    public function deleteWorksDataById_ser($re)
     {
         $stuWor = stuWorksEloquent::where('wid', $re['wid'])->first();
-        $wName = $re['wName'];
-        $wLink = $re['wLink'];
-        $wCreatedDate = $re['wCreatedDate'];
-
-        $stuWor->wName = $wName;
-        $stuWor->wLink = $wLink;
-        $stuWor->wCreatedDate = $wCreatedDate;
-        $stuWor->save();
+        $stuWor->delete();
         if (stuWorksEloquent::count() != 0) {
-            return '修改作品資料成功';
+            return '刪除作品資料成功';
         } else {
-            return '修改作品資料失敗';
+            return '刪除作品資料失敗';
         }
     }
 
-    public function editAbilityById_ser($re){
+    public function deleteAbilityById_ser($re){
         $stuA = stuAbilityEloquent::where('abiid', $re['abiid'])->first();
-
-        $stuA->abiType = $re['abiType'];
-        $stuA->abiName = $re['abiName'];
-
-        $stuA->save();
+        $stuA->delete();
         if (stuAbilityEloquent::count() != 0) {
-            return '修改能力資料成功';
+            return '刪除能力資料成功';
         } else {
-            return '修改能力資料失敗';
+            return '刪除能力資料失敗';
         }
     }
     //修改履歷結束

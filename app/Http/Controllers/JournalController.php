@@ -7,6 +7,7 @@ use App\Stu_course;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use JWTAuth;
+use Log;
 use Validator;
 
 use App\Stu_course as Stu_courseEloquent;
@@ -34,15 +35,18 @@ class JournalController extends Controller
         $intern_list = array();
         foreach ($stu_course as $stu_cour) {
             $journalCom = UserEloquent::where('account', $stu_cour->c_account)->first();
-            $course=Stu_course::find($stu_cour->SCid)->course()->first();
+            $course=Stu_course::find($stu_cour->SCid)->courses()->first();
             $now = Carbon::now();
+            Log::error($course);
             if($now < $course->courseEnd){
                $passDeadLine=false;
             }else{
                 $passDeadLine=true;
             }
-            $list = array('SCid'=>$stu_cour->SCid,'u_name'=> $journalCom->u_name, 'courseName'=>$course->courseName,'passDeadLine'=>$passDeadLine);
+            $list = array('SCid'=>$stu_cour->SCid,'com_name'=> $journalCom->u_name, 'courseName'=>$course->courseName,'passDeadLine'=>$passDeadLine);
+
             $intern_list[] = $list;
+
         }
         return response()->json($intern_list, 200, [], JSON_UNESCAPED_UNICODE);
     }
@@ -52,7 +56,7 @@ class JournalController extends Controller
     {
         $re = $request->all();
         $journal=JournalEloquent::where('SCid',$re['SCid'])->get();
-        $course=Stu_course::find($re['SCid'])->course()->first();
+        $course=Stu_course::find($re['SCid'])->courses()->first();
         $now = Carbon::now();
         if($now < $course->courseEnd){
             $passDeadLine=false;
@@ -76,7 +80,7 @@ class JournalController extends Controller
     {
         $re = $request->all();
         $journal=JournalEloquent::where('journalID',$re['journalID'])->first();
-        $course=Stu_course::find($journal->SCid)->course()->first();
+        $course=Stu_course::find($journal->SCid)->courses()->first();
         $now = Carbon::now();
         if($now < $course->courseEnd){
             $passDeadLine=false;

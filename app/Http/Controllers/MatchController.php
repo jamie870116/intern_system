@@ -49,9 +49,9 @@ class MatchController extends Controller
         } else {
             $responses = $this->MatchServices->studentSubmitResume_ser($re);
             if ($responses == '學生送出媒合資料成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
 
@@ -73,13 +73,13 @@ class MatchController extends Controller
                 $stuBas = stuBasicEloquent::where('sid', $id)->get();
                 $stuJExp = stuJExpEloquent::where('sid', $id)->get();
                 $stuWor = stuWorksEloquent::where('sid', $id)->get();
-                $stdRe = array($mid, $stuBas,  $stuJExp,  $stuWor);
+                $stdRe = array('mid'=>$mid, 'stuBasic'=>$stuBas, 'stuJobExperience'=> $stuJExp, 'stuWorks'=> $stuWor);
                 $response[] = $stdRe;
             }
-
+//[$responses]
             return response()->json($response, 200, [], JSON_UNESCAPED_UNICODE);
         } else {
-            return response()->json('取得資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['取得資料失敗'], 400, [], JSON_UNESCAPED_UNICODE);
         }
     }
 

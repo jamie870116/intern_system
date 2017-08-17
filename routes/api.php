@@ -58,11 +58,11 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::post('createWorksDataById', 'Stu_resumeController@createWorksDataById');
     Route::post('createAbilityById', 'Stu_resumeController@createAbilityById');
 
-    //修改履歷相關
+    //修改、刪除履歷相關
     Route::post('editBasicDataById', 'Stu_resumeController@editBasicDataById');
-    Route::put('editJobExperienceById', 'Stu_resumeController@editJobExperienceById');
-    Route::put('editWorksDataById', 'Stu_resumeController@editWorksDataById');
-    Route::put('editAbilityById', 'Stu_resumeController@editAbilityById');
+    Route::put('deleteJobExperienceById', 'Stu_resumeController@deleteJobExperienceById');
+    Route::put('deleteWorksDataById', 'Stu_resumeController@deleteWorksDataById');
+    Route::put('deleteAbilityById', 'Stu_resumeController@deleteAbilityById');
 
     //取得履歷資料
     Route::get('findResumeDataById', 'Stu_resumeController@findResumeDataById');

@@ -70,7 +70,7 @@ class Job_openingController extends Controller
         } else {
             $responses = $this->JobopeningServices->createJobOpening_ser($re);
             if ($responses == '新增職缺資料失敗') {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             }
@@ -124,9 +124,9 @@ class Job_openingController extends Controller
         } else {
             $responses = $this->JobopeningServices->editJobOpening_ser($re);
             if ($responses == '修改職缺資料成功，職缺將撤下待重新審核') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -153,9 +153,9 @@ class Job_openingController extends Controller
         } else {
             $responses = $this->JobopeningServices->deleteJobOpeningByAdmin_ser($re);
             if ($responses == '職缺已刪除') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -180,9 +180,9 @@ class Job_openingController extends Controller
         } else {
             $responses = $this->JobopeningServices->deleteJobOpeningByCom_ser($re);
             if ($responses == '職缺已刪除') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -201,7 +201,7 @@ class Job_openingController extends Controller
         if ($jobOp) {
             return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
         } else {
-            return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['取得職缺資料失敗'], 400, [], JSON_UNESCAPED_UNICODE);
         }
     }
 
@@ -224,7 +224,7 @@ class Job_openingController extends Controller
         if ($jobOp) {
             return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
         } else {
-            return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['取得職缺資料失敗'], 400, [], JSON_UNESCAPED_UNICODE);
         }
     }
 
@@ -258,28 +258,28 @@ class Job_openingController extends Controller
                 if($responses!='取得職缺資料失敗'){
                     return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
                 }else{
-                    return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                    return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
                 }
             } elseif ($re['sortBy'] == 2) {
                 $responses = $this->JobopeningServices->sortByTime_ASC($re);
                 if($responses!='取得職缺資料失敗'){
                     return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
                 }else{
-                    return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                    return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
                 }
             } elseif ($re['sortBy'] == 3) {
                 $responses = $this->JobopeningServices->sortBySalary_DESC($re);
                 if($responses!='取得職缺資料失敗'){
                     return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
                 }else{
-                    return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                    return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
                 }
             } else {
                 $responses = $this->JobopeningServices->sortBySalary_ASC($re);
                 if($responses!='取得職缺資料失敗'){
                     return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
                 }else{
-                    return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                    return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
                 }
             }
 

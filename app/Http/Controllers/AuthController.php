@@ -89,9 +89,9 @@ class AuthController extends Controller
         $token = JWTAuth::getToken();
         if($token){
             JWTAuth::invalidate($token);
-            return response()->json('已登出',200);
+            return response()->json(['已登出'],200);
         }else{
-            return response()->json('已登出',200);
+            return response()->json(['已登出'],200);
         }
 
 //        $newToken	=	JWTAuth::parseToken()->refresh();
@@ -156,7 +156,7 @@ class AuthController extends Controller
             ]);
             $m=$this->registerService->sendmail($email,$key);
             Log::error($m);
-            return response()->json('去收驗證信s',200,$headers, JSON_UNESCAPED_UNICODE);
+            return response()->json(['去收驗證信s'],200,$headers, JSON_UNESCAPED_UNICODE);
         }else if($status==1){//teacher
             $email=$account.'@nutc.edu.tw';
             userEloquent::create([
@@ -169,7 +169,7 @@ class AuthController extends Controller
                 'check_code'=>$key
             ]);
             $this->registerService->sendmail($email,$key);
-            return response()->json('去收驗證信t',200,$headers, JSON_UNESCAPED_UNICODE);
+            return response()->json(['去收驗證信t'],200,$headers, JSON_UNESCAPED_UNICODE);
         }else if($status==2){//company
             $email=$re['email'];
             userEloquent::create([
@@ -182,7 +182,7 @@ class AuthController extends Controller
                 'check_code'=>$key
             ]);
             $this->registerService->sendmail($email,$key);
-            return response()->json('去收驗證信c',200,$headers, JSON_UNESCAPED_UNICODE);
+            return response()->json(['去收驗證信c'],200,$headers, JSON_UNESCAPED_UNICODE);
         }
 
     }
@@ -208,12 +208,12 @@ class AuthController extends Controller
                     $com->c_name= $user->u_name;
                     $com->save();
                 }
-                return response()->json("帳號開通囉",200,$headers, JSON_UNESCAPED_UNICODE);
+                return response()->json(["帳號開通囉"],200,$headers, JSON_UNESCAPED_UNICODE);
             }else{
-                return response()->json("帳號已開通",200,$headers, JSON_UNESCAPED_UNICODE);
+                return response()->json(["帳號已開通"],200,$headers, JSON_UNESCAPED_UNICODE);
             }
         }else{
-            return response()->json("用戶不存在",400,$headers, JSON_UNESCAPED_UNICODE);
+            return response()->json(["用戶不存在"],400,$headers, JSON_UNESCAPED_UNICODE);
         }
 
     }
@@ -226,7 +226,7 @@ class AuthController extends Controller
             $ex_time=Carbon::now()->addHour(5)->timestamp;
             return response()->json($user, 200)->cookie('token',$token,$ex_time);
         } else {
-            return response()->json('使用者不存在', 400);
+            return response()->json(['使用者不存在'], 400);
         }
 
     }
