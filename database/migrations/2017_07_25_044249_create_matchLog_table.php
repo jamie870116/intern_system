@@ -15,7 +15,7 @@ class CreateMatchLogTable extends Migration
     {
         Schema::create('matchLog', function (Blueprint $table) {
             $table->increments('logid');//AI
-            $table->tinyInteger('mstatus');//信件種類
+            $table->tinyInteger('mstatus')->default(0);//信件種類
             $table->integer('mid');//媒合編號
             $table->date('mailDeadline')->nullable();//過期時間
             $table->boolean('read')->default(false);//是否已讀

@@ -17,7 +17,7 @@ class CreateStuAbilityTable extends Migration
 
             $table->increments('abiid');//AI
             $table->integer('sid');//
-            $table->tinyInteger('abiType');//能力類型
+            $table->tinyInteger('abiType')->default(0);//能力類型
             $table->string('abiName',100)->nullable();//能力名稱
 
         });

@@ -22,9 +22,9 @@ class CreateInterviewComTable extends Migration
             $table->string('insComName',30);//實習員姓名
             $table->string('insComTel',100);//電話
             $table->string('insAddress',200);//實習地址
-            $table->tinyInteger('insCVisitWay');//訪視方法
+            $table->tinyInteger('insCVisitWay')->default(0);//訪視方法
             $table->string('insCAns',500);//訪視答案，以逗點隔開
-            $table->tinyInteger('insCQuestionVer');//題目版本
+            $table->tinyInteger('insCQuestionVer')->default(1);//題目版本
             $table->string('insCComments',500);//評語
             $table->timestamps();
         });

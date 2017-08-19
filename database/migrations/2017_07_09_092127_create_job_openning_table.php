@@ -17,7 +17,7 @@ class CreateJobOpenningTable extends Migration
             $table->increments('joid');//AI
             $table->string('c_account',50);//廠商帳號
             $table->string('c_name',50);//廠商名稱
-            $table->tinyInteger('jtypes');//職缺類型/0暑期實習 /1學期實習
+            $table->tinyInteger('jtypes')->default(0);//職缺類型
             $table->string('jduties',300);//職務
             $table->longText('jdetails');//職務詳細 /薪水 必備條件 工作內容 特殊要求
             $table->integer('jsalary_up')->nullable();//薪水上限

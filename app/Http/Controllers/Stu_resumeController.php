@@ -62,7 +62,8 @@ class Stu_resumeController extends Controller
 
         $objValidator = Validator::make($request->all(), array(
             'wName' => 'required',
-            'wCreatedDate' => 'nullable|date'
+            'wCreatedDate' => 'nullable|date',
+            'wLink' => 'nullable'
         ), array(
             'wName.required' => '請輸入作品名稱',
             'date' => '日期格式錯誤'

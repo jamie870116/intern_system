@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->integer('u_status');//權限
             $table->string('u_tel',20);//電話
             $table->string('account',50);//帳號
-            $table->string('started',50)->default('0');//是否開通 //0，未開通；1，開通；2，廠商待審核；3，帳號停用
+            $table->tinyInteger('started')->default(0);//是否開通 //0，未開通；1，開通；2，廠商待審核；3，帳號停用
             $table->string('check_code',50)->nullable();//驗證碼
         });
     }
