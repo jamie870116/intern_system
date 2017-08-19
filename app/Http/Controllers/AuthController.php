@@ -64,7 +64,6 @@ class AuthController extends Controller
                     } else {
                         $token = JWTAuth::attempt($user_data);
                     }
-
                     try {
                         if (!$token) {
                             return response()->json(['error' => 'invalid_credentials'], 401);
@@ -275,7 +274,6 @@ class AuthController extends Controller
             } else {
                 return response()->json(['查無此帳號'], 400, [], JSON_UNESCAPED_UNICODE);
             }
-
         }
     }
 
@@ -315,7 +313,6 @@ class AuthController extends Controller
             } else {
                 return response()->json(['查無此帳號'], 400, [], JSON_UNESCAPED_UNICODE);
             }
-
         }
     }
 
