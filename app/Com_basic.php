@@ -17,4 +17,8 @@ class Com_basic extends Model
         'c_account','ctypes','caddress','c_name',
         'cfax','cdeleteReason','cintroduction','cempolyee_num'
     ];
+
+    public function user(){
+        return $this->belongsTo('App\User','c_account','account');
+    }
 }

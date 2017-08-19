@@ -27,4 +27,8 @@ class User extends Authenticatable
     protected $hidden = [
     'password'
     ];
+
+    public function company(){
+        return $this->hasOne('App\Com_basic','c_account','account');
+    }
 }

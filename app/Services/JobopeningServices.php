@@ -96,29 +96,6 @@ class JobopeningServices
         }
     }
 
-    public function reviewJobOpening_ser($re)
-    {
-        $jobOpen = job_opEloquent::where('joid', $re['joid'])->first();
-        $jobOpen->jstatus = $re['jstatus'];
-        $jobOpen->save();
-
-        $company = userEloquent::where('account', $jobOpen->c_account)->first();
-        $mail = $company->email;
-        $joid = $re['joid'];
-        $data = ['mail' => $mail, 'contents' => $joid];
-        if (job_opEloquent::count() != 0) {
-            if ($re['jstatus'] == 1) {
-                dispatch(new sendResultmail($data));
-                return '職缺審核通過';
-            } else {
-                dispatch(new sendResultmail_faild($data));
-                return '職缺審核未通過';
-            }
-        } else {
-            return '職缺未審核';
-        }
-    }
-
     public function sortByTime_DESC($re)
     {
 

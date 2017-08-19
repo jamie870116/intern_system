@@ -50,7 +50,6 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::post('studentAcceptInterview', 'MatchController@studentAcceptInterview'); //學生是否接受面試
     Route::post('companyFailedInterview', 'MatchController@companyFailedInterview'); //面試失敗
     Route::post('companyPassInterview', 'MatchController@companyPassInterview'); //面試成功
-
     Route::post('studentAcceptJob', 'MatchController@studentAcceptJob'); //學生是否接受入職
 
     //履歷新增相關
@@ -118,5 +117,19 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('getMailDetails', 'MailController@getMailDetails');//已讀信件
     Route::post('mailDeleted', 'MailController@mailDeleted');//刪除信件
     Route::post('favouriteMail', 'MailController@favouriteMail');//加到最愛信件
+
+    //系辦帳號管理相關
+    Route::get('getAllUserList','AccountController@getAllUserList');//取得所有使用者資料
+    Route::get('getAllStudentList','AccountController@getAllStudentList');//取得所有學生資料
+    Route::get('getAllTeacherList','AccountController@getAllTeacherList');//取得所有老師資料
+    Route::get('getAllCompanyList','AccountController@getAllCompanyList');//取得所有廠商資料
+    Route::get('getNoReviewedCompanyList','AccountController@getNoReviewedCompanyList');//取得已通過驗證未審核的廠商資料
+    Route::get('adminGetStudentResumeById','AccountController@adminGetStudentResumeById');//取得某學生履歷
+    Route::get('adminGetCompanyDetailsById','AccountController@adminGetCompanyDetailsById');//取得某廠商基本資料
+    Route::get('getDisabledUsersList','AccountController@getDisabledUsersList');//取得停用中的帳號
+    Route::post('adminReviewCompanyById','AccountController@adminReviewCompanyById');//系辦審核廠商
+    Route::post('adminDisableUserById','AccountController@adminDisableUserById');//系辦停用帳號
+    Route::post('adminReEnableUserById','AccountController@adminReEnableUserById');//系辦重新啟用用帳號
+
 
 });

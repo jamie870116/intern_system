@@ -70,8 +70,14 @@ class AuthController extends Controller
                     }
                     $cookie_token='Bearer '.$token;
                     return response()->json($token)->cookie('authorization', $cookie_token,300);
-                }else{
+                }elseif($auth->started==0){
                     $error[]='帳號未開通';
+                    return response()->json($error,400,$headers, JSON_UNESCAPED_UNICODE);
+                }elseif($auth->started==2){
+                    $error[]='帳號待系辦審核';
+                    return response()->json($error,400,$headers, JSON_UNESCAPED_UNICODE);
+                }else{
+                    $error[]='帳號遭停用中';
                     return response()->json($error,400,$headers, JSON_UNESCAPED_UNICODE);
                 }
             }else{
