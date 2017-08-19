@@ -20,7 +20,6 @@ class CreateStuBasicTable extends Migration
             $table->string('chiName',20);//chinese name
             $table->string('engName',50)->nullable();//english name
             $table->string('bornedPlace',20)->nullable();//出生地
-            $table->string('nativePlace',20)->nullable();//籍貫
             $table->date('birthday')->nullable();//生日
             $table->tinyInteger('gender')->nullable();//性別
             $table->string('address',100)->nullable();//戶籍地址

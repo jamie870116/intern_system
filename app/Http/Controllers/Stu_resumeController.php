@@ -121,7 +121,7 @@ class Stu_resumeController extends Controller
         $token = JWTAuth::getToken();
         $user = JWTAuth::toUser($token);
         $id = $user->id;
-        $stuBas = stuBasicEloquent::where('sid', $id)->get();
+        $stuBas = stuBasicEloquent::where('sid', $id)->first();
         $stuJExp = stuJExpEloquent::where('sid', $id)->get();
         $stuWor = stuWorksEloquent::where('sid', $id)->get();
         $stuA=stuAbilityEloquent::where('sid', $id)->get();
@@ -138,7 +138,6 @@ class Stu_resumeController extends Controller
             'chiName' => 'required',
             'engName' => 'required',
             'bornedPlace' => 'required',
-            'nativePlace' => 'required',
             'birthday' => 'required|date',
             'gender' => 'required|integer',//1，男生 2，女生
             'address' => 'required',
@@ -165,7 +164,6 @@ class Stu_resumeController extends Controller
             'chiName.required' => '請輸入中文姓名',
             'engName.required' => '請輸入英文姓名',
             'bornedPlace.required' => '請輸入出生地',
-            'nativePlace.required' => '請輸入籍貫',
             'birthday.required' => '請輸入生日日期',
             'gender.required' => '請選擇性別',
             'email.required' => '請輸入電子信箱',

@@ -55,48 +55,82 @@ class JournalController extends Controller
     public function studentGetJournalList(Request $request)
     {
         $re = $request->all();
-        $journal=JournalEloquent::where('SCid',$re['SCid'])->get();
-        $course=Stu_course::find($re['SCid'])->courses()->first();
-        $now = Carbon::now();
-        if($now < $course->courseEnd){
-            $passDeadLine=false;
-        }else{
-            $passDeadLine=true;
-        }
-        if(!$journal){
-            return response()->json(array('找不到週誌列表'), 400, [], JSON_UNESCAPED_UNICODE);
-        }else {
-            foreach ($journal as $j){
-                $j->journalStart=Carbon::parse($j->journalStart)->format('Y/m/d');
-                $j->journalEnd=Carbon::parse($j->journalEnd)->format('Y/m/d');
-                $j->passDeadLine=$passDeadLine;
+        $objValidator = Validator::make($request->all(), array(
+            'SCid' => 'required|integer',
+        ), array(
+            'SCid.required' => '請輸入SCid',
+            'integer' => '請輸入int',
+
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
             }
-            return response()->json($journal, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json($error, 400);//422
+        } else {
+            $journal=JournalEloquent::where('SCid',$re['SCid'])->get();
+            $course=Stu_course::find($re['SCid'])->courses()->first();
+            $now = Carbon::now();
+            if($now < $course->courseEnd){
+                $passDeadLine=false;
+            }else{
+                $passDeadLine=true;
+            }
+            if(!$journal){
+                return response()->json(array('找不到週誌列表'), 400, [], JSON_UNESCAPED_UNICODE);
+            }else {
+                foreach ($journal as $j){
+                    $j->journalStart=Carbon::parse($j->journalStart)->format('Y/m/d');
+                    $j->journalEnd=Carbon::parse($j->journalEnd)->format('Y/m/d');
+                    $j->passDeadLine=$passDeadLine;
+                }
+                return response()->json($journal, 200, [], JSON_UNESCAPED_UNICODE);
+            }
         }
+
     }
 
     //在學生輸入週誌之前的顯示
     public function defaultJournalBeforeInput(Request $request)
     {
         $re = $request->all();
-        $journal=JournalEloquent::where('journalID',$re['journalID'])->first();
-        $course=Stu_course::find($journal->SCid)->courses()->first();
-        $now = Carbon::now();
-        if($now < $course->courseEnd){
-            $passDeadLine=false;
-        }else{
-            $passDeadLine=true;
-        }
-        if(!$journal){
-            return response()->json(array('找不到週誌列表'), 400, [], JSON_UNESCAPED_UNICODE);
-        }else {
+        $objValidator = Validator::make($request->all(), array(
+            'journalID' => 'required|integer',
+        ), array(
+            'journalID.required' => '請輸入週誌ID',
+            'integer' => '請輸入int',
 
-            $journal->journalStart=Carbon::parse($journal->journalStart)->format('Y/m/d');
-            $journal->journalEnd=Carbon::parse($journal->journalEnd)->format('Y/m/d');
-            $journal->passDeadLine=$passDeadLine;
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $journal=JournalEloquent::where('journalID',$re['journalID'])->first();
+            $course=Stu_course::find($journal->SCid)->courses()->first();
+            $now = Carbon::now();
+            if($now < $course->courseEnd){
+                $passDeadLine=false;
+            }else{
+                $passDeadLine=true;
+            }
+            if(!$journal){
+                return response()->json(array('找不到週誌列表'), 400, [], JSON_UNESCAPED_UNICODE);
+            }else {
 
-            return response()->json($journal, 200, [], JSON_UNESCAPED_UNICODE);
+                $journal->journalStart=Carbon::parse($journal->journalStart)->format('Y/m/d');
+                $journal->journalEnd=Carbon::parse($journal->journalEnd)->format('Y/m/d');
+                $journal->passDeadLine=$passDeadLine;
+
+                return response()->json($journal, 200, [], JSON_UNESCAPED_UNICODE);
+            }
         }
+
     }
 
     //學生輸入週誌內容

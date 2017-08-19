@@ -203,6 +203,8 @@ class AuthController extends Controller
                     $stu_basic->email=$user->email;
                     $stu_basic->save();
                 }elseif($user->u_status==2){
+                    $user->started=2;//等待系辦審核
+                    $user->save();
                     $com = new comEloquent();
                     $com->c_account= $user->account;
                     $com->c_name= $user->u_name;
