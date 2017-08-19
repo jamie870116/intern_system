@@ -145,7 +145,6 @@ class ResumeServices
         $stuBas->chiName = $re['chiName'];
         $stuBas->engName = $re['engName'];
         $stuBas->bornedPlace = $re['bornedPlace'];
-        $stuBas->nativePlace = $re['nativePlace'];
         $stuBas->birthday = $re['birthday'];
         $stuBas->gender = $re['gender'];
         $stuBas->address = $re['address'];
