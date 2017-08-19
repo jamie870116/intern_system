@@ -9,13 +9,16 @@
 namespace App\Services;
 
 
+use App\Jobs\SendAccountDisabledMail;
+use App\Jobs\sendResultmail;
+use App\Jobs\sendResultmail_faild;
 use App\User;
 use App\Stu_basic as stuBasicEloquent;
 use App\Stu_jExp as stuJExpEloquent;
 
 use App\Stu_works as stuWorksEloquent;
 use App\Stu_ability as stuAbilityEloquent;
-use App\Com_basic as comEloquent;
+
 use Log;
 
 class AccountServices
@@ -55,10 +58,14 @@ class AccountServices
                     if($re['result']==1){
                         $com->starded=1;
                         $com->save();
+                        $data = ['mail'=>$com->email, 'u_name'=>$com->u_name];
+                        dispatch(new sendResultmail($data));
                         return '審核通過成功';
                     }else{
                         $com->starded=3;
                         $com->save();
+                        $data = ['mail'=>$com->email, 'u_name'=>$com->u_name];
+                        dispatch(new sendResultmail_faild($data));
                         return '審核不通過成功';
                     }
                 }elseif($com->starded==1){
@@ -82,6 +89,10 @@ class AccountServices
                 if($user->started!=3){
                     $user->started=3;
                     $user->save();
+
+                    $data = ['mail'=>$user->email, 'u_name'=>$user->u_name];
+                    dispatch(new SendAccountDisabledMail($data));
+
                     return '停用成功';
                 }else{
                     return '此id已遭停用';

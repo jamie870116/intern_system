@@ -34,7 +34,7 @@ class sendResultmail implements ShouldQueue
         $data=$this->data;
         Mail::send('mail.CheckSuccess', $data, function($message) use($data)
         {
-            $message->to($data['mail'], $data['content'])->subject('職缺審核結果通知');
+            $message->to($data['mail'], $data['content'])->subject('帳號審核結果通知');
         });
     }
 }

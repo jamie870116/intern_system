@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Mail;
 
-class sendResultmail_faild implements ShouldQueue
+class SendAccountDisabledMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     protected $data;
@@ -20,7 +20,7 @@ class sendResultmail_faild implements ShouldQueue
      */
     public function __construct($data)
     {
-        $this->data = $data;
+        $this->data=$data;
     }
 
     /**
@@ -31,9 +31,9 @@ class sendResultmail_faild implements ShouldQueue
     public function handle()
     {
         $data=$this->data;
-        Mail::send('mail.CheckFailed', $data, function($message) use($data)
+        Mail::send('mail.AccountDisabledMail', $data, function($message) use($data)
         {
-            $message->to($data['mail'], $data['content'])->subject('帳號審核結果通知');
+            $message->to($data['mail'], $data['u_name'])->subject('帳號遭停用通知信件');
         });
     }
 }
