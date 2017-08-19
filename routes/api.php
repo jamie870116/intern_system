@@ -20,10 +20,13 @@ Route::post('Login', 'AuthController@postLogin');//登入
 Route::post('Register', 'AuthController@register');//註冊
 Route::post('Logout', 'AuthController@getLogout');//登出
 Route::get('Check_code', 'AuthController@check_code');//驗證信
+Route::post('forgetPassword', 'AuthController@forgetPassword');//忘記密碼(重置密碼信)
 
 Route::group(['middleware' => 'jwt'], function () {
     //取得使用者資料
     Route::get('findUserDetailsByToken', 'AuthController@findUserDetailsByToken');
+
+    Route::post('resetPassword', 'AuthController@resetPassword');//重設密碼
 
     //職缺相關
     Route::post('createJobOpening', 'Job_openingController@createJobOpening');//新增職缺

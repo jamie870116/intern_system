@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\resetPasswordMail;
 use Carbon\Carbon;
 use Cookie;
 use Illuminate\Http\Request;
@@ -22,42 +23,45 @@ class AuthController extends Controller
 {
 
     protected $registerService;
-    public function __construct(registerService $registerService){
+
+    public function __construct(registerService $registerService)
+    {
         $this->registerService = $registerService;
-        $this->middleware('guest',['except'=>['getLogout','findUserDetailsByToken']]);
-        $this->middleware('jwt',['only'=>['findUserDetailsByToken','getLogout']]);
+        $this->middleware('guest', ['except' => ['getLogout', 'findUserDetailsByToken', 'resetPassword']]);
+        $this->middleware('jwt', ['only' => ['findUserDetailsByToken', 'getLogout', 'resetPassword']]);
     }
 
-    public function postLogin(Request $request){
+    public function postLogin(Request $request)
+    {
 
         $headers = array('Content-Type' => 'application/json; <a href="http://superlevin.ifengyuan.tw/tag/charset/">charset</a>=utf-8');
-        $user_data=$request->only(['account','password']);
-        $account=$request->only(['account']);
-        $password=$request->only(['password']);
-        $error=array();
+        $user_data = $request->only(['account', 'password']);
+        $account = $request->only(['account']);
+        $password = $request->only(['password']);
+        $error = array();
 
-        $ex_time=Carbon::now()->addHour(5)->timestamp;
-        $auth=UserEloquent::where('account',$account)->first();
-        if($account['account']==""&&$password['password']==""){
+        $ex_time = Carbon::now()->addHour(5)->timestamp;
+        $auth = UserEloquent::where('account', $account)->first();
+        if ($account['account'] == "" && $password['password'] == "") {
 
-            $error[]='請輸入帳號';
-            $error[]='請輸入密碼';
-            return response()->json($error,400,$headers, JSON_UNESCAPED_UNICODE);
-        }else if($password['password']==""){
-            $error[]='請輸入密碼';
-            return response()->json($error,400,$headers, JSON_UNESCAPED_UNICODE);
-        }else if($account['account']==""){
-            $error[]='請輸入帳號';
-            return response()->json($error,400,$headers, JSON_UNESCAPED_UNICODE);
+            $error[] = '請輸入帳號';
+            $error[] = '請輸入密碼';
+            return response()->json($error, 400, $headers, JSON_UNESCAPED_UNICODE);
+        } else if ($password['password'] == "") {
+            $error[] = '請輸入密碼';
+            return response()->json($error, 400, $headers, JSON_UNESCAPED_UNICODE);
+        } else if ($account['account'] == "") {
+            $error[] = '請輸入帳號';
+            return response()->json($error, 400, $headers, JSON_UNESCAPED_UNICODE);
         }
-        if($auth){
-            if(password_verify($password['password'],$auth->password)){
-                if($auth->started==1){//登入成功
+        if ($auth) {
+            if (password_verify($password['password'], $auth->password)) {
+                if ($auth->started == 1) {//登入成功
                     $agent = new Agent();
-                    if($agent->isDesktop()){
+                    if ($agent->isDesktop()) {
 
-                        $token = JWTAuth::attempt($user_data,['exp'=>$ex_time]);
-                    }else{
+                        $token = JWTAuth::attempt($user_data, ['exp' => $ex_time]);
+                    } else {
                         $token = JWTAuth::attempt($user_data);
                     }
 
@@ -68,36 +72,37 @@ class AuthController extends Controller
                     } catch (JWTException $e) {
                         return response()->json(['error' => 'could_not_create_token'], 500);
                     }
-                    $cookie_token='Bearer '.$token;
-                    return response()->json($token)->cookie('authorization', $cookie_token,300);
-                }elseif($auth->started==0){
-                    $error[]='帳號未開通';
-                    return response()->json($error,400,$headers, JSON_UNESCAPED_UNICODE);
-                }elseif($auth->started==2){
-                    $error[]='帳號待系辦審核';
-                    return response()->json($error,400,$headers, JSON_UNESCAPED_UNICODE);
-                }else{
-                    $error[]='帳號遭停用中';
-                    return response()->json($error,400,$headers, JSON_UNESCAPED_UNICODE);
+                    $cookie_token = 'Bearer ' . $token;
+                    return response()->json($token)->cookie('authorization', $cookie_token, 300);
+                } elseif ($auth->started == 0) {
+                    $error[] = '帳號未開通';
+                    return response()->json($error, 400, $headers, JSON_UNESCAPED_UNICODE);
+                } elseif ($auth->started == 2) {
+                    $error[] = '帳號待系辦審核';
+                    return response()->json($error, 400, $headers, JSON_UNESCAPED_UNICODE);
+                } else {
+                    $error[] = '帳號遭停用中';
+                    return response()->json($error, 400, $headers, JSON_UNESCAPED_UNICODE);
                 }
-            }else{
-                $error[]='密碼錯誤';
-                return response()->json($error,400,$headers, JSON_UNESCAPED_UNICODE);
+            } else {
+                $error[] = '密碼錯誤';
+                return response()->json($error, 400, $headers, JSON_UNESCAPED_UNICODE);
             }
-        }else{
-            $error[]='帳號不存在';
-            return response()->json($error,400,$headers, JSON_UNESCAPED_UNICODE);
+        } else {
+            $error[] = '帳號不存在';
+            return response()->json($error, 400, $headers, JSON_UNESCAPED_UNICODE);
         }
 
     }
 
-    public function getLogout(){
+    public function getLogout()
+    {
         $token = JWTAuth::getToken();
-        if($token){
+        if ($token) {
             JWTAuth::invalidate($token);
-            return response()->json(['已登出'],200);
-        }else{
-            return response()->json(['已登出'],200);
+            return response()->json(['已登出'], 200);
+        } else {
+            return response()->json(['已登出'], 200);
         }
 
 //        $newToken	=	JWTAuth::parseToken()->refresh();
@@ -105,123 +110,125 @@ class AuthController extends Controller
 
     }
 
-    public function register(Request $request){
-        $error=array();
-        $length=10;
-        $key=$this->registerService->randomkeys($length);
+    public function register(Request $request)
+    {
+        $error = array();
+        $length = 10;
+        $key = $this->registerService->randomkeys($length);
         $headers = array('Content-Type' => 'application/json; <a href="http://superlevin.ifengyuan.tw/tag/charset/">charset</a>=utf-8');
-        $re=$request->all();
-        $status=$re['u_status'];
-        $account=$re['account'];
-        $u_tel=$re['u_tel'];
-        $u_name=$re['u_name'];
-        $password=$re['password'];
+        $re = $request->all();
+        $status = $re['u_status'];
+        $account = $re['account'];
+        $u_tel = $re['u_tel'];
+        $u_name = $re['u_name'];
+        $password = $re['password'];
 
-        $conf_pass=$re['conf_pass'];
+        $conf_pass = $re['conf_pass'];
 
         $objValidator = Validator::make($request->all(), array(
-            'u_name'=>'required',
-            'u_tel'=>'required',
-            'account'=>'required|unique:users',
+            'u_name' => 'required',
+            'u_tel' => 'required',
+            'account' => 'required|unique:users',
             'password' => 'required|max:20|min:6',
-            'conf_pass'=>'required',
-            'email'=>'email',
-            'u_status'=>'required'
-        ),array(
-            'u_name.required'=>'請輸入姓名',
-            'u_status.required'=>'請選擇要註冊的身分',
-            'u_tel.required'=>'請輸入電話',
-            'account.required'=>'請輸入帳號',
-            'password.required'=>'請輸入密碼',
-            'conf_pass.required'=>'請再次輸入密碼',
-            'max'=>'字數請介於6~20位元',
-            'min'=>'字數請介於6~20位元',
+            'conf_pass' => 'required',
+            'email' => 'email',
+            'u_status' => 'required'
+        ), array(
+            'u_name.required' => '請輸入姓名',
+            'u_status.required' => '請選擇要註冊的身分',
+            'u_tel.required' => '請輸入電話',
+            'account.required' => '請輸入帳號',
+            'password.required' => '請輸入密碼',
+            'conf_pass.required' => '請再次輸入密碼',
+            'max' => '字數請介於6~20位元',
+            'min' => '字數請介於6~20位元',
             'unique' => '帳號已存在',
-            'email'=>'信箱格式錯誤'
+            'email' => '信箱格式錯誤'
         ));
-        if($objValidator->fails()){
+        if ($objValidator->fails()) {
             $errors = $objValidator->errors();
 
             foreach ($errors->all() as $message) {
-                $error[]=$message;
+                $error[] = $message;
             }
-            return response()->json($error,400);//422
-        }else if($conf_pass!=$password){
-            $error[]='兩次密碼不一致';
-            return response()->json($error,400,$headers, JSON_UNESCAPED_UNICODE);
-        }else if($status==0){ //學生
-            $email=$account.'@nutc.edu.tw';
+            return response()->json($error, 400);//422
+        } else if ($conf_pass != $password) {
+            $error[] = '兩次密碼不一致';
+            return response()->json($error, 400, $headers, JSON_UNESCAPED_UNICODE);
+        } else if ($status == 0) { //學生
+            $email = $account . '@nutc.edu.tw';
             userEloquent::create([
-                'u_name'=>$u_name,
-                'email'=>$email,
-                'u_status'=>$status,
-                'u_tel'=>$u_tel,
-                'account'=>$account,
+                'u_name' => $u_name,
+                'email' => $email,
+                'u_status' => $status,
+                'u_tel' => $u_tel,
+                'account' => $account,
                 'password' => bcrypt($password),
-                'check_code'=>$key
+                'check_code' => $key
             ]);
-            $m=$this->registerService->sendmail($email,$key);
+            $m = $this->registerService->sendmail($email, $key);
             Log::error($m);
-            return response()->json(['去收驗證信s'],200,$headers, JSON_UNESCAPED_UNICODE);
-        }else if($status==1){//teacher
-            $email=$account.'@nutc.edu.tw';
+            return response()->json(['去收驗證信s'], 200, $headers, JSON_UNESCAPED_UNICODE);
+        } else if ($status == 1) {//teacher
+            $email = $account . '@nutc.edu.tw';
             userEloquent::create([
-                'u_name'=>$u_name,
-                'email'=>$email,
-                'u_status'=>$status,
-                'u_tel'=>$u_tel,
-                'account'=>$account,
+                'u_name' => $u_name,
+                'email' => $email,
+                'u_status' => $status,
+                'u_tel' => $u_tel,
+                'account' => $account,
                 'password' => bcrypt($password),
-                'check_code'=>$key
+                'check_code' => $key
             ]);
-            $this->registerService->sendmail($email,$key);
-            return response()->json(['去收驗證信t'],200,$headers, JSON_UNESCAPED_UNICODE);
-        }else if($status==2){//company
-            $email=$re['email'];
+            $this->registerService->sendmail($email, $key);
+            return response()->json(['去收驗證信t'], 200, $headers, JSON_UNESCAPED_UNICODE);
+        } else if ($status == 2) {//company
+            $email = $re['email'];
             userEloquent::create([
-                'u_name'=>$u_name,
-                'email'=>$email,
-                'u_status'=>$status,
-                'u_tel'=>$u_tel,
-                'account'=>$account,
+                'u_name' => $u_name,
+                'email' => $email,
+                'u_status' => $status,
+                'u_tel' => $u_tel,
+                'account' => $account,
                 'password' => bcrypt($password),
-                'check_code'=>$key
+                'check_code' => $key
             ]);
-            $this->registerService->sendmail($email,$key);
-            return response()->json(['去收驗證信c'],200,$headers, JSON_UNESCAPED_UNICODE);
+            $this->registerService->sendmail($email, $key);
+            return response()->json(['去收驗證信c'], 200, $headers, JSON_UNESCAPED_UNICODE);
         }
 
     }
 
-    public function check_code(Request $request){
-        $c_code=$request['code'];
+    public function check_code(Request $request)
+    {
+        $c_code = $request['code'];
         $headers = array('Content-Type' => 'application/json; <a href="http://superlevin.ifengyuan.tw/tag/charset/">charset</a>=utf-8');
-        $user=userEloquent::where('check_code',$c_code)->first();
-        if($user){
-            if($user->started==0){
-                $user->started=1;
+        $user = userEloquent::where('check_code', $c_code)->first();
+        if ($user) {
+            if ($user->started == 0) {
+                $user->started = 1;
                 $user->save();
-                if($user->u_status==0){
-                    $stu_basic=new stuBasicEloquent();
-                    $stu_basic->sid=$user->id;
-                    $stu_basic->chiName=$user->u_name;
-                    $stu_basic->contact=$user->u_tel;
-                    $stu_basic->email=$user->email;
+                if ($user->u_status == 0) {
+                    $stu_basic = new stuBasicEloquent();
+                    $stu_basic->sid = $user->id;
+                    $stu_basic->chiName = $user->u_name;
+                    $stu_basic->contact = $user->u_tel;
+                    $stu_basic->email = $user->email;
                     $stu_basic->save();
-                }elseif($user->u_status==2){
-                    $user->started=2;//等待系辦審核
+                } elseif ($user->u_status == 2) {
+                    $user->started = 2;//等待系辦審核
                     $user->save();
                     $com = new comEloquent();
-                    $com->c_account= $user->account;
-                    $com->c_name= $user->u_name;
+                    $com->c_account = $user->account;
+                    $com->c_name = $user->u_name;
                     $com->save();
                 }
-                return response()->json(["帳號開通囉"],200,$headers, JSON_UNESCAPED_UNICODE);
-            }else{
-                return response()->json(["帳號已開通"],200,$headers, JSON_UNESCAPED_UNICODE);
+                return response()->json(["帳號開通囉"], 200, $headers, JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json(["帳號已開通"], 200, $headers, JSON_UNESCAPED_UNICODE);
             }
-        }else{
-            return response()->json(["用戶不存在"],400,$headers, JSON_UNESCAPED_UNICODE);
+        } else {
+            return response()->json(["用戶不存在"], 400, $headers, JSON_UNESCAPED_UNICODE);
         }
 
     }
@@ -231,12 +238,85 @@ class AuthController extends Controller
         $token = JWTAuth::getToken();
         $user = JWTAuth::toUser($token);
         if ($user) {
-            $ex_time=Carbon::now()->addHour(5)->timestamp;
-            return response()->json($user, 200)->cookie('token',$token,$ex_time);
+            $ex_time = Carbon::now()->addHour(5)->timestamp;
+            return response()->json($user, 200)->cookie('token', $token, $ex_time);
         } else {
             return response()->json(['使用者不存在'], 400);
         }
 
+    }
+
+    //忘記密碼(重置密碼信)
+    public function forgetPassword(Request $request)
+    {
+        $re = $request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'account' => 'required'
+        ), array(
+            'account.required' => '請輸入帳號'
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $user = UserEloquent::where('account', $re['account'])->first();
+            if ($user) {
+                $password = '888888';
+                $user->password = bcrypt($password);
+                $data = ['mail' => $user->email, 'pw' => $password];
+                dispatch(new resetPasswordMail($data));
+                $user->save();
+                return response()->json(['已寄出重置密碼郵件'], 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json(['查無此帳號'], 400, [], JSON_UNESCAPED_UNICODE);
+            }
+
+        }
+    }
+
+    //重設密碼
+    public function resetPassword(Request $request)
+    {
+        $re = $request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'password' => 'required|max:20|min:6',
+            'conf_pass' => 'required'
+        ), array(
+            'password.required' => '請輸入密碼',
+            'conf_pass.required' => '請再次輸入密碼',
+            'max' => '字數請介於6~20位元',
+            'min' => '字數請介於6~20位元',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else if ($re['password'] != $re['conf_pass']) {
+            return response()->json(['兩次密碼不一致'], 400, [], JSON_UNESCAPED_UNICODE);
+        } else {
+            $token = JWTAuth::getToken();
+            $user = JWTAuth::toUser($token);
+            if ($user) {
+                $user->password = bcrypt($re['password']);
+                $user->save();
+                if (UserEloquent::count() != 0)
+                    return response()->json(['密碼重設成功'], 200, [], JSON_UNESCAPED_UNICODE);
+                else
+                    return response()->json(['密碼重設失敗'], 400, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json(['查無此帳號'], 400, [], JSON_UNESCAPED_UNICODE);
+            }
+
+        }
     }
 
 }
