@@ -54,9 +54,9 @@ class AccountServices
         $com=User::where('id',$re['id'])->first();
         if($com){
             if($com->u_status==2){
-                if($com->starded==2){
+                if($com->started=='2'){
                     if($re['result']==1){
-                        $com->starded=1;
+                        $com->started=1;
                         $com->save();
                         $data = ['mail'=>$com->email, 'u_name'=>$com->u_name];
                         dispatch(new sendResultmail($data));
@@ -68,10 +68,12 @@ class AccountServices
                         dispatch(new sendResultmail_faild($data));
                         return '審核不通過成功';
                     }
-                }elseif($com->starded==1){
+                }elseif($com->started==1){
                     return '此id已啟用';
-                }else{
+                }elseif($com->started==3){
                     return '此id已遭停用';
+                }else{
+                    return 'error';
                 }
             }else{
                 return '此id不是廠商';

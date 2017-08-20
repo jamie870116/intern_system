@@ -10,6 +10,6 @@ class Stu_jExp extends Model
     protected $primaryKey = 'jid';
     public  $timestamps=false;
     protected $fillable = [
-        'sid','semester','jobTitle'
+        'sid','comName','jobTitle'
     ];
 }

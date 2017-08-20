@@ -62,9 +62,9 @@ Route::group(['middleware' => 'jwt'], function () {
 
     //修改、刪除履歷相關
     Route::post('editBasicDataById', 'Stu_resumeController@editBasicDataById');
-    Route::put('deleteJobExperienceById', 'Stu_resumeController@deleteJobExperienceById');
-    Route::put('deleteWorksDataById', 'Stu_resumeController@deleteWorksDataById');
-    Route::put('deleteAbilityById', 'Stu_resumeController@deleteAbilityById');
+    Route::delete('deleteJobExperienceById', 'Stu_resumeController@deleteJobExperienceById');
+    Route::delete('deleteWorksDataById', 'Stu_resumeController@deleteWorksDataById');
+    Route::delete('deleteAbilityById', 'Stu_resumeController@deleteAbilityById');
 
     //取得履歷資料
     Route::get('findResumeDataById', 'Stu_resumeController@findResumeDataById');

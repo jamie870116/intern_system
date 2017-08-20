@@ -26,18 +26,18 @@ class MatchServices
 
         $token = JWTAuth::getToken();
         $user = JWTAuth::toUser($token);
-        $m=MatchEloquent::where('sid',$user->id)->where('joid',$re['joid'])->first();
-        if(!$m){
-            $resume=stuBasicEloquent::where('sid',$user->id)->first();
-            if($resume->eduSystem!=null){
+        $m = MatchEloquent::where('sid', $user->id)->where('joid', $re['joid'])->first();
+        if (!$m) {
+            $resume = stuBasicEloquent::where('sid', $user->id)->first();
+            if ($resume->eduSystem != null) {
                 $match = new MatchEloquent();
-                $match->joid=$re['joid'];
+                $match->joid = $re['joid'];
 
-                $com=Job_opening::where('joid',$re['joid'])->first();
-                $com->jResume_num+=1;
-                $com->save();
-                $match->c_account=$com->c_account;
-                $match->sid=$user->id;
+                $com = Job_opening::where('joid', $re['joid'])->first();
+//                $com->jResume_num+=1;
+//                $com->save();
+                $match->c_account = $com->c_account;
+                $match->sid = $user->id;
                 $match->save();
                 $log = new MatchLogEloquent();//給企業信件->學生的履歷
                 $log->mstatus = 1;
@@ -50,11 +50,11 @@ class MatchServices
                 } else {
                     return '學生送出媒合資料失敗';
                 }
-            }else{
+            } else {
                 return '去填履歷再來吧';
             }
 
-        }else{
+        } else {
             return '已經投過履歷囉';
         }
 
@@ -65,6 +65,7 @@ class MatchServices
         $match = MatchEloquent::where('mid', $re['mid'])->first();
         if ($match) {
             if ($match->mstatus == 1) {
+                if(isset($re['mfailedreason']))
                 $match->mfailedreason = $re['mfailedreason'];
                 $match->mstatus = 2;
                 $match->save();
@@ -181,6 +182,7 @@ class MatchServices
         $match = MatchEloquent::where('mid', $re['mid'])->first();
         if ($match) {
             if ($match->mstatus == 4) {
+                if(isset($re['mfailedreason']))
                 $match->mfailedreason = $re['mfailedreason'];
                 $match->mstatus = 8;
                 $match->save();
@@ -189,7 +191,10 @@ class MatchServices
                 $log->mid = $re['mid'];
                 $log->save();
                 $user = User::where('id', $match->sid)->first();
-                $data = ['mail' => $user->mail, 'mfailedreason' => $re['mfailedreason']];
+                if(isset($re['mfailedreason']))
+                    $data = ['mail' => $user->mail, 'mfailedreason' => $re['mfailedreason']];
+                else
+                    $data = ['mail' => $user->mail, 'mfailedreason' => $re['mfailedreason']];
                 dispatch(new sendInterviewNoticeMail($data));
                 if (MatchEloquent::count() != 0 && MatchLogEloquent::count() != 0) {
                     return '廠商通知學生未綠取成功';
@@ -265,33 +270,33 @@ class MatchServices
     }
 
     //
-    public function adminFillInTeacher_ser($re)
-    {
-        $match = MatchEloquent::where('mid', $re['mid'])->first();
-
-        if ($match) {
-            if ($match->mstatus == 9) {
-                $match->mstatus = 11;
-                $match->tid = $re['id'];
-                $jobOp = Job_opening::where('joid', $match->joid)->first();
-                $jobOp->jNOP -= 1;
-                $jobOp->save();
-                $match->save();
-                $log = new MatchLogEloquent();//給企業信件->none
-                $log->mstatus = 11;
-                $log->mid = $re['mid'];
-                $log->save();
-                if (MatchEloquent::count() != 0 && MatchLogEloquent::count() != 0) {
-                    return '選擇實習老師成功';
-                } else {
-                    return '選擇實習老師失敗';
-                }
-            } else {
-                return '流程錯誤';
-            }
-
-        } else {
-            return '查無此媒合資料';
-        }
-    }
+//    public function adminFillInTeacher_ser($re)
+//    {
+//        $match = MatchEloquent::where('mid', $re['mid'])->first();
+//
+//        if ($match) {
+//            if ($match->mstatus == 9) {
+//                $match->mstatus = 11;
+//                $match->tid = $re['id'];
+//                $jobOp = Job_opening::where('joid', $match->joid)->first();
+//                $jobOp->jNOP -= 1;
+//                $jobOp->save();
+//                $match->save();
+//                $log = new MatchLogEloquent();//給企業信件->none
+//                $log->mstatus = 11;
+//                $log->mid = $re['mid'];
+//                $log->save();
+//                if (MatchEloquent::count() != 0 && MatchLogEloquent::count() != 0) {
+//                    return '選擇實習老師成功';
+//                } else {
+//                    return '選擇實習老師失敗';
+//                }
+//            } else {
+//                return '流程錯誤';
+//            }
+//
+//        } else {
+//            return '查無此媒合資料';
+//        }
+//    }
 }

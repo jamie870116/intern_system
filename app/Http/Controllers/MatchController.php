@@ -70,7 +70,7 @@ class MatchController extends Controller
             foreach ($match as $m) {
                 $id = $m->sid;
                 $mid = $m->mid;
-                $stuBas = stuBasicEloquent::where('sid', $id)->get();
+                $stuBas = stuBasicEloquent::where('sid', $id)->first();
                 $stuJExp = stuJExpEloquent::where('sid', $id)->get();
                 $stuWor = stuWorksEloquent::where('sid', $id)->get();
                 $stdRe = array('mid'=>$mid, 'stuBasic'=>$stuBas, 'stuJobExperience'=> $stuJExp, 'stuWorks'=> $stuWor);
