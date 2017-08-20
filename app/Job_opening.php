@@ -30,7 +30,7 @@ class Job_opening extends Model
 
     public function scopeByTypes($query,$type)
     {
-        if($type==0){
+        if($type==-1){
             return $query;
         }else{
             return $query->where('jtypes',$type);

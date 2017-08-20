@@ -113,6 +113,9 @@ class JournalController extends Controller
         } else {
             $journal=JournalEloquent::where('journalID',$re['journalID'])->first();
             $course=Stu_course::find($journal->SCid)->courses()->first();
+            $stu=Stu_course::find($journal->SCid)->user_stu()->first();
+            $com=Stu_course::find($journal->SCid)->user_com()->first();
+            $tea=Stu_course::find($journal->SCid)->user_tea()->first();
             $now = Carbon::now();
             if($now < $course->courseEnd){
                 $passDeadLine=false;
@@ -122,10 +125,14 @@ class JournalController extends Controller
             if(!$journal){
                 return response()->json(array('找不到週誌列表'), 400, [], JSON_UNESCAPED_UNICODE);
             }else {
-
+                $journal->stuName=$stu->u_name;
+                $journal->stuNum=$stu->account;
+                $journal->comName=$com->u_name;
+                $journal->teaName=$tea->u_name;
                 $journal->journalStart=Carbon::parse($journal->journalStart)->format('Y/m/d');
                 $journal->journalEnd=Carbon::parse($journal->journalEnd)->format('Y/m/d');
                 $journal->passDeadLine=$passDeadLine;
+
 
                 return response()->json($journal, 200, [], JSON_UNESCAPED_UNICODE);
             }

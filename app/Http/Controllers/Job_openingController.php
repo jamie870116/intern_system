@@ -43,7 +43,6 @@ class Job_openingController extends Controller
             'jStartDutyTime' => 'nullable',
             'jaddress' => 'required',
             'jdeadline' => 'required|date',
-            'jDutyTime' => 'required',
             'jNOP' => 'required|integer|min:0',
         ), array(
             'jtypes.required' => '請選擇職缺類型',
@@ -84,7 +83,7 @@ class Job_openingController extends Controller
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
-            'jtypes' => 'required|integer',//3，正職 2，工讀 0，暑期實習 1，學期實習
+            'jtypes' => 'required|integer',//3，正職 2，工讀  0，暑期實習 1，學期實習 -1
             'jduties' => 'required',
             'jdetails' => 'required',
             'jcontact_name' => 'required',
@@ -124,7 +123,7 @@ class Job_openingController extends Controller
             return response()->json($error, 400);//422
         } else {
             $responses = $this->JobopeningServices->editJobOpening_ser($re);
-            if ($responses == '修改職缺資料成功，職缺將撤下待重新審核') {
+            if ($responses == '修改職缺資料成功') {
                 return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
@@ -237,7 +236,7 @@ class Job_openingController extends Controller
 
         $objValidator = Validator::make($request->all(), array(
             'keyword' => 'nullable',
-            'jtypes' => 'required', //1，正職 2，工讀 3，暑期實習 4，學期實習 0，全部(預設)
+            'jtypes' => 'required', //3，正職 2，工讀  0，暑期實習 1，學期實習 -1，全部(預設)
             'jsalary_lows' => 'nullable',
             'sortBy' => 'required', //1,時間DESC(預設) 2，時間ASC 3，薪水DESC 4，薪水ASC
         ), array(

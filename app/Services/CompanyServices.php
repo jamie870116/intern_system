@@ -7,17 +7,44 @@ use App\Com_basic as comEloquent;
 use App\User as userEloquent;
 use App\User;
 use JWTAuth;
+use Storage;
 
 class CompanyServices
 {
 
 
-    public function editCompanyDetails_ser($re)
+    public function editCompanyDetails_ser($request,$file)
     {
+        $re = $request->all();
         $token = JWTAuth::getToken();
         $user = JWTAuth::toUser($token);
         $com = comEloquent::where('c_account', $user->account)->first();
+        if ($file) {
+            $extension = $file->getClientOriginalExtension();
+            $file_name = strval(time()) . str_random(5) . '_pro.' . $extension;
+            if ($request->hasFile('profilePic')) {
+                if ($com->profilePic != null) {
+
+                    $file_path = 'public/user-upload/' . $com->profilePic;
+                    $file = Storage::exists('public/user-upload/' . $com->profilePic);
+
+                    if ($file) {
+                        Storage::delete($file_path);
+                    } else {
+                        return 'failed';
+                    }
+                }
+                $path = $request->file('profilePic')->storeAs(
+                    'public/user-upload/', $file_name
+                );
+                //<img src='storage/user-upload/1501257619SWUxK.png' >
+                $com->profilePic = $file_name;
+            } else {
+                return "頭貼上傳失敗";
+            }
+        }
         $user->u_name = $re['c_name'];
+        $user->u_tel = $re['u_tel'];
         $user->save();
         $com->ctypes = $re['ctypes'];
         $com->c_name = $re['c_name'];

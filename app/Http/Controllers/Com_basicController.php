@@ -6,6 +6,7 @@ use App\Services\CompanyServices;
 use App\User;
 use Illuminate\Http\Request;
 use App\Com_basic as comEloquent;
+use JWTAuth;
 use Validator;
 
 class Com_basicController extends Controller
@@ -14,28 +15,46 @@ class Com_basicController extends Controller
 
 	public function __construct(CompanyServices $CompanyServices)
 	{
-		$this->middleware('company',['only'=>'editCompany']);
+		$this->middleware('company',['only'=>'editCompany','getCompanyDetailsByToken']);
 //		$this->middleware('admin',['only'=>'adminDeleteCompany']);
 		$this->CompanyServices = $CompanyServices;
 	}
 
+
+    // 取得廠商自己的簡介
+    public function getCompanyDetailsByToken(){
+        $token = JWTAuth::getToken();
+        $user = JWTAuth::toUser($token);
+        $com = comEloquent::where('c_account', $user->account)->first();
+        if($com){
+            $com->tel=$user->u_tel;
+            return response()->json($com, 200, [], JSON_UNESCAPED_UNICODE);
+        }else{
+            return response()->json(['取得失敗'], 400, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
     //修改廠商資料
     public function editCompanyDetails(Request $request){
-    	$re = $request->all();
+
 
     	$objValidator = Validator::make($request->all(), array(
     		'ctypes' => 'required|integer',
     		'c_name' => 'required',
     		'caddress' => 'required',
     		'cfax' => 'required',
+    		'u_tel' => 'required',
             'cintroduction' =>'nullable',
-            'cempolyee_num' =>'nullable|integer'
+            'cempolyee_num' =>'nullable|integer',
+            'profilePic' =>'nullable|image'
     		), array(
             'ctypes.required' => '請輸入行業類別',
             'c_name.required' => '請輸入廠商名稱',
+            'u_tel.required' => '請輸入廠商電話',
             'cfax.required' => '請輸入傳真',
             'caddress.required' => '請輸入公司地址',
-    		'integer' => 'int格式錯誤'
+    		'integer' => 'int格式錯誤',
+            'image'=>'圖檔格式錯誤(副檔名須為jpg ,jpeg, png, bmp, gif, or svg)',
     		));
     	if ($objValidator->fails()) {
             $errors = $objValidator->errors();
@@ -45,7 +64,8 @@ class Com_basicController extends Controller
             }
             return response()->json($error,400);//422
         } else {
-        	$responses=$this->CompanyServices->editCompanyDetails_ser($re);
+            $file=$request->file('profilePic');
+        	$responses=$this->CompanyServices->editCompanyDetails_ser($request,$file);
         	if ($responses == '修改廠商資料成功') {
         		return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
         	} else {
@@ -92,12 +112,10 @@ class Com_basicController extends Controller
                 $com->tel=$u->u_tel;
                 $company[]=$com;
             }
-            return response()->json($company, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['CompanyList'=>$company], 200, [], JSON_UNESCAPED_UNICODE);
         }else{
             return response()->json(['取得失敗'], 400, [], JSON_UNESCAPED_UNICODE);
         }
-
-
     }
 
     // 依帳號查詢廠商資料
