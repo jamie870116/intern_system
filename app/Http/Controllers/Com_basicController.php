@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\CompanyServices;
+use App\User;
 use Illuminate\Http\Request;
 use App\Com_basic as comEloquent;
 use Validator;
@@ -14,7 +15,7 @@ class Com_basicController extends Controller
 	public function __construct(CompanyServices $CompanyServices)
 	{
 		$this->middleware('company',['only'=>'editCompany']);
-		$this->middleware('admin',['only'=>'adminDeleteCompany']);
+//		$this->middleware('admin',['only'=>'adminDeleteCompany']);
 		$this->CompanyServices = $CompanyServices;
 	}
 
@@ -53,32 +54,50 @@ class Com_basicController extends Controller
         }
     }
 
-    //軟刪除 廠商
-    public function adminDeleteCompany(Request $request){
-    	$re = $request->all();
+//    //軟刪除 廠商
+//    public function adminDeleteCompany(Request $request){
+//    	$re = $request->all();
+//
+//    	$objValidator = Validator::make($request->all(), array(
+//    		'c_account' => 'required',
+//    		'cdeleteReason' => 'required'
+//    		), array(
+//            'c_account.required' => '請輸入廠商帳號',
+//            'cdeleteReason.required' => '請填寫刪除之理由'
+//    		));
+//    	if ($objValidator->fails()) {
+//            $errors = $objValidator->errors();
+//            $error=array();
+//            foreach ($errors->all() as $message) {
+//                $error[]=$message;
+//            }
+//            return response()->json($error,400);//422
+//        } else {
+//        	$responses=$this->CompanyServices->adminDeleteCompany_ser($re);
+//        	if ($responses == '刪除廠商成功') {
+//        		return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
+//        	} else {
+//        		return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
+//        	}
+//        }
+//    }
 
-    	$objValidator = Validator::make($request->all(), array(
-    		'c_account' => 'required',
-    		'cdeleteReason' => 'required'
-    		), array(
-            'c_account.required' => '請輸入廠商帳號',
-            'cdeleteReason.required' => '請填寫刪除之理由'
-    		));
-    	if ($objValidator->fails()) {
-            $errors = $objValidator->errors();
-            $error=array();
-            foreach ($errors->all() as $message) {
-                $error[]=$message;
+    // 取得所有廠商列表
+    public function getCompanyList(){
+        $user=User::where('u_status',2)->where('started',1)->get();
+        if($user){
+            $company=array();
+            foreach ($user as $u){
+                $com=User::find($u->id)->company;
+                $com->tel=$u->u_tel;
+                $company[]=$com;
             }
-            return response()->json($error,400);//422
-        } else {
-        	$responses=$this->CompanyServices->adminDeleteCompany_ser($re);
-        	if ($responses == '刪除廠商成功') {
-        		return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
-        	} else {
-        		return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
-        	}
+            return response()->json($company, 200, [], JSON_UNESCAPED_UNICODE);
+        }else{
+            return response()->json(['取得失敗'], 400, [], JSON_UNESCAPED_UNICODE);
         }
+
+
     }
 
     // 依帳號查詢廠商資料

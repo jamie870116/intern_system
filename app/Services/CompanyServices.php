@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Com_basic as comEloquent;
 use App\User as userEloquent;
+use App\User;
 use JWTAuth;
 
 class CompanyServices
@@ -53,8 +54,9 @@ class CompanyServices
     public function getCompanyDetailsByAccount_ser($re)
     {
         $com = comEloquent::where('c_account', $re['c_account'])->first();
-
-        if ($com) {
+        $u=User::where('account',$re['c_account'])->first();
+        if ($com&&$u) {
+            $com->tel=$u->u_tel;
             return $com;
         } else {
             return '取得廠商失敗';
