@@ -223,10 +223,21 @@ class Job_openingController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
-            $jobOp = job_opEloquent::where('c_account', $re['c_account'])->GetAll()->get();
+            $jobOp = job_opEloquent::where('c_account', $re['c_account'])->GetAll()->paginate(6);
+            $token = JWTAuth::getToken();
+            $user = JWTAuth::toUser($token);
+
             foreach ($jobOp as $j){
                 $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                 $j->jResume_num=Match::where('joid',$j->joid)->count();
+                if($user->u_status==0){
+                    $match=Match::where('joid',$j->joid)->where('sid',$user->id)->first();
+                    if($match){
+                        $j->jResume_submitted=true;
+                    }else{
+                        $j->jResume_submitted=false;
+                    }
+                }
             }
             if ($jobOp) {
                 return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
