@@ -108,7 +108,7 @@ class AnnouncementController extends Controller
 
     //取得公告
     public function getAnnouncement(){
-        $announcement=Announcement::all()->OrderByUpdated_DESC()->paginate(6);
+        $announcement=Announcement::OrderByUpdated_DESC()->paginate(6);
         if($announcement){
             return response()->json($announcement, 200, [], JSON_UNESCAPED_UNICODE);
         }else{

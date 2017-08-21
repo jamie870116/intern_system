@@ -284,7 +284,7 @@ class Job_openingController extends Controller
 
         $objValidator = Validator::make($request->all(), array(
             'keyword' => 'nullable',
-            'jtypes' => 'required', //3，正職 2，工讀  0，暑期實習 1，學期實習 -1，全部(預設)
+            'jtypes' => 'required', //3，正職 2，工讀  0，暑期實習 1，學期實習  -1，全部(預設)
             'jsalary_lows' => 'nullable',
             'sortBy' => 'required', //1,時間DESC(預設) 2，時間ASC 3，薪水DESC 4，薪水ASC
         ), array(

@@ -25,7 +25,7 @@ class AnnouncementServices
                foreach ($request->file('anFile') as $file){
                    $extension = $file->getClientOriginalExtension();
                    $file_name = strval(time()) . str_random(5) . '_an.' . $extension;
-                   $path = $request->file('anFile')->storeAs(
+                   $path = $file->storeAs(
                        'public/announcement/', $file_name
                    );
                    //<img src='storage/user-upload/1501257619SWUxK.png' >
@@ -49,30 +49,33 @@ class AnnouncementServices
 
         $re = $request->all();
 
-        $announcement=Announcement::where('anId',$re['anId']);
+        $announcement=Announcement::where('anId',$re['anId'])->first();
         if($announcement){
             if ($request->file('anFile')) {
                 if ($request->hasFile('anFile')) {
-                    if ($announcement->anFile != null) {
+                    if ($announcement->anFile!=null) {
                         $files=explode(",",$announcement->anFile);
                         foreach ($files as $f){
-                            $file_path = 'public/user-upload/licences/' . $f;
-                            $l_file = Storage::exists('public/announcement/' . $f);
+                            if($f!=null){
+                                $file_path = 'public/announcement/' . $f;
+                                $l_file = Storage::exists('public/announcement/' . $f);
 
-                            Log::error(Storage::exists('public/announcement/' . $f));
+                                Log::error($f);
 
-                            if ($l_file) {
-                                Storage::delete($file_path);
-                            } else {
-                                return 'failed';
+                                if ($l_file) {
+                                    Storage::delete($file_path);
+                                } else {
+                                    return 'failed';
+                                }
                             }
                         }
-
                     }
+                    $announcement->anFile="";
+                    $announcement->save();
                     foreach ($request->file('anFile') as $file){
                         $extension = $file->getClientOriginalExtension();
                         $file_name = strval(time()) . str_random(5) . '_an.' . $extension;
-                        $path = $request->file('anFile')->storeAs(
+                        $path = $file->storeAs(
                             'public/announcement/', $file_name
                         );
                         //<img src='storage/user-upload/1501257619SWUxK.png' >
@@ -98,20 +101,22 @@ class AnnouncementServices
     public function deleteAnnouncement_ser($request){
         $re = $request->all();
 
-        $announcement=Announcement::where('anId',$re['anId']);
+        $announcement=Announcement::where('anId',$re['anId'])->first();
         if($announcement){
             if ($announcement->anFile != null) {
                 $files=explode(",",$announcement->anFile);
                 foreach ($files as $f){
-                    $file_path = 'public/user-upload/licences/' . $f;
-                    $l_file = Storage::exists('public/announcement/' . $f);
+                    if($f!=null){
+                        $file_path = 'public/announcement/' . $f;
+                        $l_file = Storage::exists('public/announcement/' . $f);
 
-                    Log::error(Storage::exists('public/announcement/' . $f));
+                        Log::error($f);
 
-                    if ($l_file) {
-                        Storage::delete($file_path);
-                    } else {
-                        return 'failed';
+                        if ($l_file) {
+                            Storage::delete($file_path);
+                        } else {
+                            return 'failed';
+                        }
                     }
                 }
             }

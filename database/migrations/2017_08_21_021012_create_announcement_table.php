@@ -21,7 +21,7 @@ class CreateAnnouncementTable extends Migration
 //            $table->tinyInteger('showStu')->default(1);//是否顯示給學生 0，否 1，是
 //            $table->tinyInteger('showTea');//是否顯示給學生
 //            $table->tinyInteger('showCom');//是否顯示給學生
-            $table->string('anFile',500);//副檔(多個)
+            $table->string('anFile',500)->nullable();//副檔(多個)
 
             $table->timestamps();
         });

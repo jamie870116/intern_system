@@ -138,7 +138,9 @@ class CourseController extends Controller
         if ($match) {
             foreach ($match as $m){
                 $m->stu_name=User::where('id',$m->sid)->first()->u_name;
+                $m->stu_num=User::where('id',$m->sid)->first()->account;
                 $m->com_name=User::where('account',$m->c_account)->first()->u_name;
+                $m->com_num=$m->c_account;
                 $m->job_name=Job_opening::where('joid',$m->joid)->first()->jduties;
             }
             return response()->json($match, 200, [], JSON_UNESCAPED_UNICODE);
