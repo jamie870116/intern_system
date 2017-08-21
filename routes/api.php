@@ -34,8 +34,9 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::delete('deleteJobOpeningByAdmin', 'Job_openingController@deleteJobOpeningByAdmin');//刪除職缺 系辦
     Route::delete('deleteJobOpeningByCom', 'Job_openingController@deleteJobOpeningByCom');//刪除職缺 廠商
 
-    Route::get('getJobOpeningbyAccount', 'Job_openingController@getJobOpeningbyAccount');//廠商帳號取得該廠商所有職缺資料
-    Route::get('getJobOpeningbyId', 'Job_openingController@getJobOpeningbyId');//取得某一職缺細項
+    Route::get('getJobOpeningByToken', 'Job_openingController@getJobOpeningByToken');//取得自家所有職缺資料
+    Route::get('getJobOpeningByAccount', 'Job_openingController@getJobOpeningByAccount');//取得該廠商所有職缺資料
+    Route::get('getJobOpeningById', 'Job_openingController@getJobOpeningById');//取得某一職缺細項
     Route::get('getJobOpeningBySearch', 'Job_openingController@getJobOpeningBySearch');//職缺條件排序
 
     //廠商基本資料相關

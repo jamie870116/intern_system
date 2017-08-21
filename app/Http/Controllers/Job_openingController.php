@@ -20,7 +20,7 @@ class Job_openingController extends Controller
 
     public function __construct(JobopeningServices $JobopeningServices)
     {
-        $this->middleware('company', ['only' => 'createJobOpening', 'editJobOpening', 'deleteJobOpeningByCom', 'getJobOpeningbyAccount']);
+        $this->middleware('company', ['only' => 'createJobOpening', 'editJobOpening', 'deleteJobOpeningByCom', 'getJobOpeningByToken']);
         $this->middleware('admin', ['only' => 'deleteJobOpeningByAdmin']);
         $this->JobopeningServices = $JobopeningServices;
     }
@@ -188,8 +188,8 @@ class Job_openingController extends Controller
     }
 
 
-    //廠商帳號取得該廠商所有職缺資料
-    public function getJobOpeningbyAccount()
+    //取得自家所有職缺資料
+    public function getJobOpeningByToken()
     {
         $token = JWTAuth::getToken();
         $user = JWTAuth::toUser($token);
@@ -205,27 +205,75 @@ class Job_openingController extends Controller
         }
     }
 
-    //取得某一職缺細項
-    public function getJobOpeningbyId(Request $request)
+    //取得該廠商所有職缺資料
+    public function getJobOpeningByAccount(Request $request)
     {
         $re = $request->all();
-        $jobOp = job_opEloquent::where('joid', $re['joid'])->first();
-        $jobOp->jResume_num=Match::where('joid',$jobOp->joid)->count();
-        $token = JWTAuth::getToken();
-        $user = JWTAuth::toUser($token);
-        if($user->u_status==0){
-            $match=Match::where('joid',$re['joid'])->where('sid',$user->id)->first();
-            if($match){
-                $jobOp->jResume_submitted=true;
-            }else{
-                $jobOp->jResume_submitted=false;
+
+        $objValidator = Validator::make($request->all(), array(
+            'c_account' => 'required'
+        ), array(
+            'c_account.required' => '請輸入廠商帳號'
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $jobOp = job_opEloquent::where('c_account', $re['c_account'])->GetAll()->get();
+            foreach ($jobOp as $j){
+                $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
+                $j->jResume_num=Match::where('joid',$j->joid)->count();
+            }
+            if ($jobOp) {
+                return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json(['取得職缺資料失敗'], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
-        if ($jobOp) {
-            return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
+
+    }
+
+    //取得某一職缺細項
+    public function getJobOpeningById(Request $request)
+    {
+        $re = $request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'joid' => 'required'
+        ), array(
+            'joid.required' => '請輸入職缺ID'
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
         } else {
-            return response()->json(['取得職缺資料失敗'], 400, [], JSON_UNESCAPED_UNICODE);
+            $jobOp = job_opEloquent::where('joid', $re['joid'])->first();
+            $jobOp->jResume_num=Match::where('joid',$jobOp->joid)->count();
+            $token = JWTAuth::getToken();
+            $user = JWTAuth::toUser($token);
+            if($user->u_status==0){
+                $match=Match::where('joid',$re['joid'])->where('sid',$user->id)->first();
+                if($match){
+                    $jobOp->jResume_submitted=true;
+                }else{
+                    $jobOp->jResume_submitted=false;
+                }
+            }
+            if ($jobOp) {
+                return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json(['取得職缺資料失敗'], 400, [], JSON_UNESCAPED_UNICODE);
+            }
         }
+
     }
 
 
