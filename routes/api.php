@@ -136,5 +136,12 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::post('adminDisableUserById','AccountController@adminDisableUserById');//系辦停用帳號
     Route::post('adminReEnableUserById','AccountController@adminReEnableUserById');//系辦重新啟用用帳號
 
+    //公告
+    Route::post('createAnnouncement','AnnouncementController@createAnnouncement');//新增公告
+    Route::post('editAnnouncement','AnnouncementController@editAnnouncement');//修改公告
+    Route::delete('deleteAnnouncement','AnnouncementController@deleteAnnouncement');//刪除公告
+    Route::get('getAnnouncement','AnnouncementController@getAnnouncement');//修改公告
+    Route::get('getAnnouncementByKeywords','AnnouncementController@getAnnouncementByKeywords');//關鍵字搜尋公告
+
 
 });

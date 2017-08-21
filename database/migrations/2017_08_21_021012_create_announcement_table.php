@@ -18,9 +18,9 @@ class CreateAnnouncementTable extends Migration
             $table->increments('anId');//AI
             $table->string('anTittle',100);//公告標題
             $table->longText('anContent');//公告內容
-            $table->tinyInteger('showStu')->default(1);//是否顯示給學生 0，否 1，是
-            $table->tinyInteger('showTea');//是否顯示給學生
-            $table->tinyInteger('showCom');//是否顯示給學生
+//            $table->tinyInteger('showStu')->default(1);//是否顯示給學生 0，否 1，是
+//            $table->tinyInteger('showTea');//是否顯示給學生
+//            $table->tinyInteger('showCom');//是否顯示給學生
             $table->string('anFile',500);//副檔(多個)
 
             $table->timestamps();

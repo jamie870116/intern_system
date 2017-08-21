@@ -11,8 +11,11 @@ class Announcement extends Model
     public  $timestamps=true;
 
     protected $fillable = [
-        'anTittle','anContent','showStu','showTea',
-        'showCom','anFile'
+        'anTittle','anContent','anFile'
     ];
+
+    public function scopeOrderByUpdated_DESC($query){
+        return $query->orderBy('updated_at','desc');
+    }
 
 }
