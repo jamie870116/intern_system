@@ -158,6 +158,7 @@ class ResumeServices
         $stuBas->address = $re['address'];
         $stuBas->email = $re['email'];
         $stuBas->contact = $re['contact'];
+        $stuBas->eTypes = $re['eTypes'];
         $stuBas->ES = $re['ES'];
         $stuBas->ER = $re['ER'];
         $stuBas->EW = $re['EW'];

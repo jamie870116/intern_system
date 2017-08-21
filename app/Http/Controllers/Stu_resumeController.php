@@ -144,6 +144,7 @@ class Stu_resumeController extends Controller
             'address' => 'required',
             'email' => 'required|email',
             'contact' => 'required',
+            'eTypes' => 'required|integer',//0，五專 1，二技 2，四技 3，研究所
             'ES' => 'required|integer',
             'ER' => 'required|integer',
             'EW' => 'required|integer',
@@ -170,6 +171,7 @@ class Stu_resumeController extends Controller
             'email.required' => '請輸入電子信箱',
             'address.required' => '請輸入地址',
             'contact.required' => '請輸入連絡電話',
+            'eTypes.required' => '請選擇目前學制',
             'ES.required' => '請選擇英語會話能力',
             'ER.required' => '請選擇英語閱讀能力',
             'EW.required' => '請選擇英語書寫能力',

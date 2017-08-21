@@ -25,6 +25,7 @@ class CreateStuBasicTable extends Migration
             $table->string('address',100)->nullable();//戶籍地址
             $table->string('email',100)->nullable();//email
             $table->string('contact',200)->nullable();//聯絡方式
+            $table->tinyInteger('eTypes',200)->nullable();//目前學制 0，五專 1，二技 2，四技 3，研究所
             //語言能力
             $table->tinyInteger('ES')->nullable()->default(0);//英說
             $table->tinyInteger('ER')->nullable()->default(0);//英讀
