@@ -121,7 +121,7 @@ class ResumeServices
             $file_name = strval(time()) . str_random(5) . '_lic.' . $extension;
 
             if ($request->hasFile('licenceFile')) {
-                if ($stuBas->profilePic != null) {
+                if ($stuBas->licenceFile != null) {
 
                     $file_path = 'public/user-upload/licences/' . $stuBas->licenceFile;
                     $l_file = Storage::exists('public/user-upload/licences/' . $stuBas->licenceFile);

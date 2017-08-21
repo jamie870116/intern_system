@@ -39,7 +39,7 @@ class Com_basicController extends Controller
 
 
     	$objValidator = Validator::make($request->all(), array(
-    		'ctypes' => 'required|integer',
+    		'ctypes' => 'required',
     		'c_name' => 'required',
     		'caddress' => 'required',
     		'cfax' => 'required',
