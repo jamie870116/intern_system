@@ -146,7 +146,7 @@ class CourseController extends Controller
                 $m->com_num=$m->c_account;
 
             }
-            return response()->json($match, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['SuccessMatchList'=>$match], 200, [], JSON_UNESCAPED_UNICODE);
         } else {
             $r=array('取得資料失敗');
             return response()->json($r, 400, [], JSON_UNESCAPED_UNICODE);
@@ -158,7 +158,7 @@ class CourseController extends Controller
     {
         $course = Course::GetAvailableCourse()->get();
         if ($course) {
-            return response()->json($course, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['courseList'=>$course], 200, [], JSON_UNESCAPED_UNICODE);
         } else {
             $r=array('取得資料失敗');
             return response()->json($r, 400, [], JSON_UNESCAPED_UNICODE);
@@ -170,7 +170,7 @@ class CourseController extends Controller
     {
         $user = UserEloquent::where('u_status', 1)->get();
         if ($user) {
-            return response()->json($user, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['teacherList'=>$user], 200, [], JSON_UNESCAPED_UNICODE);
         } else {
             $r=array('取得資料失敗');
             return response()->json($r, 400, [], JSON_UNESCAPED_UNICODE);

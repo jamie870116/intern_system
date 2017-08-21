@@ -36,7 +36,7 @@ class GradeController extends Controller
             $list = array($studentName->u_name,$studentName->id);
             $student_list[] = $list;
         }
-        return response()->json($student_list, 200, [], JSON_UNESCAPED_UNICODE);
+        return response()->json(['student_list'=>$student_list], 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     //老師取得特定學生之課程列表
@@ -58,7 +58,7 @@ class GradeController extends Controller
         } else {
             $responses = $this->GradeServices->teacherGetStudentCourseList_ser($re);
             if($responses!='取得學生課程列表失敗'){
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json(['studentCoursesList'=>$responses], 200, [], JSON_UNESCAPED_UNICODE);
             }else{
                 return response()->json(array('$responses'), 400, [], JSON_UNESCAPED_UNICODE);
             }
@@ -86,7 +86,7 @@ class GradeController extends Controller
         } else {
             $responses = $this->GradeServices->teacherGetStudentJournalList_ser($re);
             if($responses!='取得週誌列表失敗'){
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json(['studentJournalList'=>$responses], 200, [], JSON_UNESCAPED_UNICODE);
             }else{
                 return response()->json(array('$responses'), 400, [], JSON_UNESCAPED_UNICODE);
             }
@@ -158,7 +158,7 @@ class GradeController extends Controller
                     }
                 }
             }
-            return response()->json($student_list, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['student_list'=>$student_list], 200, [], JSON_UNESCAPED_UNICODE);
         }
     }
 
@@ -182,7 +182,7 @@ class GradeController extends Controller
         } else {
             $responses = $this->GradeServices->companyGetStudentJournalListBySCid_ser($re);
             if($responses!='取得週誌列表失敗'){
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json(['studentJournalList'=>$responses], 200, [], JSON_UNESCAPED_UNICODE);
             }else{
                 return response()->json(array('$responses'), 400, [], JSON_UNESCAPED_UNICODE);
             }

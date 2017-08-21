@@ -24,7 +24,7 @@ class InterviewQuestionsController extends Controller
     {
         $inSQ = Interviews_stu_questions::GetLatestVersion()->get();
         if ($inSQ) {
-            return response()->json($inSQ, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['InterviewsStuQuestionsList'=>$inSQ], 200, [], JSON_UNESCAPED_UNICODE);
         } else {
             return response()->json(array('找不到題目'), 400, [], JSON_UNESCAPED_UNICODE);
         }
@@ -54,7 +54,7 @@ class InterviewQuestionsController extends Controller
             if ($responses == '取得失敗') {
                 return response()->json(array($responses), 400, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json(['InterviewsStuQuestionsList'=>$responses], 200, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -94,7 +94,7 @@ class InterviewQuestionsController extends Controller
             if ($responses == '取得失敗') {
                 return response()->json(array($responses), 400, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json(['InterviewsComQuestionsList'=>$responses], 200, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }

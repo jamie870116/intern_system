@@ -48,7 +48,7 @@ class JournalController extends Controller
             $intern_list[] = $list;
 
         }
-        return response()->json($intern_list, 200, [], JSON_UNESCAPED_UNICODE);
+        return response()->json(['intern_list'=>$intern_list], 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     //該學生週誌列表
@@ -86,7 +86,7 @@ class JournalController extends Controller
                     $j->journalEnd=Carbon::parse($j->journalEnd)->format('Y/m/d');
                     $j->passDeadLine=$passDeadLine;
                 }
-                return response()->json($journal, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json(['journalList'=>$journal], 200, [], JSON_UNESCAPED_UNICODE);
             }
         }
 
@@ -134,7 +134,7 @@ class JournalController extends Controller
                 $journal->passDeadLine=$passDeadLine;
 
 
-                return response()->json($journal, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json(['journalList'=>$journal], 200, [], JSON_UNESCAPED_UNICODE);
             }
         }
 

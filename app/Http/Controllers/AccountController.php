@@ -21,7 +21,7 @@ class AccountController extends Controller
     public function getAllUserList(){
         $users=User::all();
         if($users)
-        return response()->json($users, 200, [], JSON_UNESCAPED_UNICODE);
+        return response()->json(['usersList'=>$users], 200, [], JSON_UNESCAPED_UNICODE);
         else
             return response()->json(['找不到所有使用者資料'], 400, [], JSON_UNESCAPED_UNICODE);
     }
@@ -30,7 +30,7 @@ class AccountController extends Controller
     public function getAllStudentList(){
         $students=User::where('u_status',0)->get();
         if($students)
-            return response()->json($students, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['studentsList'=>$students], 200, [], JSON_UNESCAPED_UNICODE);
         else
             return response()->json(['找不到所有學生資料'], 400, [], JSON_UNESCAPED_UNICODE);
     }
@@ -39,7 +39,7 @@ class AccountController extends Controller
     public function getAllTeacherList(){
         $teachers=User::where('u_status',1)->get();
         if($teachers)
-            return response()->json($teachers, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['teachersList'=>$teachers], 200, [], JSON_UNESCAPED_UNICODE);
         else
             return response()->json(['找不到所有老師資料'], 400, [], JSON_UNESCAPED_UNICODE);
     }
@@ -48,7 +48,7 @@ class AccountController extends Controller
     public function getAllCompanyList(){
         $companies=User::where('u_status',2)->get();
         if($companies)
-            return response()->json($companies, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['companiesList'=>$companies], 200, [], JSON_UNESCAPED_UNICODE);
         else
             return response()->json(['找不到所有廠商資料'], 400, [], JSON_UNESCAPED_UNICODE);
     }
@@ -57,7 +57,7 @@ class AccountController extends Controller
     public function getNoReviewedCompanyList(){
         $companies=User::where('u_status',2)->where('started',2)->get();
         if($companies)
-            return response()->json($companies, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['companiesList'=>$companies], 200, [], JSON_UNESCAPED_UNICODE);
         else
             return response()->json(['找不到已通過驗證未審核的廠商資料'], 400, [], JSON_UNESCAPED_UNICODE);
     }
@@ -83,7 +83,7 @@ class AccountController extends Controller
             if ($responses == '此id不是學生'||$responses == 'Id不存在') {
                 return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json(['ResumeList'=>$responses], 200, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
