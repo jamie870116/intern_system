@@ -87,7 +87,7 @@ Route::group(['middleware' => 'jwt'], function () {
     //週誌相關
     Route::get('studentGetInternList','JournalController@studentGetInternList');  //該學生實習列表
     Route::get('studentGetJournalList','JournalController@studentGetJournalList');//該學生週誌列表
-    Route::get('defaultJournalBeforeInput','JournalController@defaultJournalBeforeInput');//在學生輸入週誌之前的顯示
+    Route::get('getJournalDetailsBeforeInput','JournalController@getJournalDetailsBeforeInput');//在學生輸入週誌之前的顯示
     Route::put('studentEditJournal','JournalController@studentEditJournal');//學生輸入週誌內容
 
     //週誌成績管理相關
@@ -115,6 +115,15 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::post('createNewComQuestion','InterviewQuestionsController@createNewComQuestion');//新增學生訪談題目
     Route::put('editNewStuQuestion','InterviewQuestionsController@editNewStuQuestion');//修改學生訪談題目
     Route::put('editNewComQuestion','InterviewQuestionsController@editNewComQuestion');//修改企業訪談題目
+
+    //訪談紀錄
+    Route::post('teacherCreateComInterview','InterviewAnswerController@teacherCreateComInterview');//老師輸入對企業問卷
+    Route::put('teacherEditComInterview','InterviewAnswerController@teacherEditComInterview');//老師修改對企業問卷
+    Route::post('teacherCreateStuInterview','InterviewAnswerController@teacherCreateStuInterview');//老師輸入對學生問卷
+    Route::put('teacherEditStuInterview','InterviewAnswerController@teacherEditStuInterview');//老師修改對學生問卷
+    Route::get('getInternStudentList','InterviewAnswerController@getInternStudentList');//取得該老師所有指導生列表
+    Route::get('getNullComInterview','InterviewAnswerController@getNullComInterview');//取得填寫訪談紀錄前的預設資料(企業)
+    Route::get('getNullStuInterview','InterviewAnswerController@getNullStuInterview');//取得填寫訪談紀錄前的預設資料(學生)
 
     //站內信相關
     Route::get('getMailTitleBySid', 'MailController@getMailTitleBySid');//取得學生信件

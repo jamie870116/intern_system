@@ -241,7 +241,11 @@ class AuthController extends Controller
         if ($user) {
             if($user->u_status==0){
                 $stu_basic=Stu_basic::where('sid',$user->id)->first();
-                $user->profilePic=$stu_basic->profilePic;
+                if($stu_basic){
+                    $user->profilePic=$stu_basic->profilePic;
+                }else{
+                    $user->profilePic=null;
+                }
             }elseif($user->u_status==2){
                 $com_basic=Com_basic::where('c_account',$user->account)->first();
                 $user->profilePic=$com_basic->profilePic;

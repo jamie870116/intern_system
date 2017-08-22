@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Assessment_Com;
 use App\Stu_course as Stu_courseEloquent;
 use App\Services\Assessment_ComServices;
 use App\Course as CourseEloquent;
@@ -226,6 +227,20 @@ class Assessment_ComController extends Controller
             }
         }
     }
+
+    //顯示廠商所輸入之成績
+    public function getCompanyAssessmentById(Request $request)
+    {
+        $re = $request->all();
+        $Assessment_Com=Assessment_Com::where('asId',$re['asId'])->first();
+        $Assessment_Com->totalGrade_Com=$Assessment_Com->asGrade1+$Assessment_Com->asGrade2+$Assessment_Com->asGrade3+$Assessment_Com->asGrade4+$Assessment_Com->asGrade5;
+        if ($Assessment_Com) {
+            return response()->json($Assessment_Com, 200, [], JSON_UNESCAPED_UNICODE);
+        } else {
+            return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
 }
 
 

@@ -27,6 +27,9 @@ class CreateJournalTable extends Migration
             $table->longText('journalComments_teacher')->nullable();//老師評語
             $table->integer('grade_ins')->nullable();//企業評分
             $table->integer('grade_teacher')->nullable();//老師評分
+            $table->dateTime('scoredTime_tea')->nullable();//老師評分日期
+            $table->dateTime('scoredTime_com')->nullable();//企業評分日期
+
 
             $table->timestamps();
         });

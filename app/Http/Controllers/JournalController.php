@@ -14,7 +14,7 @@ use App\Stu_course as Stu_courseEloquent;
 use App\User as UserEloquent;
 use App\Course as CourseEloquent;
 use App\Journal as JournalEloquent;
-
+use App\Assessment_Com as Assessment_ComEloquent;
 
 class JournalController extends Controller
 {
@@ -78,10 +78,17 @@ class JournalController extends Controller
             }else{
                 $passDeadLine=true;
             }
+            $stu=Stu_course::find($re['SCid'])->user_stu()->first();
+            $com=Stu_course::find($re['SCid'])->user_com()->first();
+            $tea=Stu_course::find($re['SCid'])->user_tea()->first();
             if(!$journal){
                 return response()->json(array('找不到週誌列表'), 400, [], JSON_UNESCAPED_UNICODE);
             }else {
                 foreach ($journal as $j){
+                    $j->stuName=$stu->u_name;
+                    $j->stuNum=$stu->account;
+                    $j->comName=$com->u_name;
+                    $j->teaName=$tea->u_name;
                     $j->journalStart=Carbon::parse($j->journalStart)->format('Y/m/d');
                     $j->journalEnd=Carbon::parse($j->journalEnd)->format('Y/m/d');
                     $j->passDeadLine=$passDeadLine;
@@ -93,7 +100,7 @@ class JournalController extends Controller
     }
 
     //在學生輸入週誌之前的顯示
-    public function defaultJournalBeforeInput(Request $request)
+    public function getJournalDetailsBeforeInput(Request $request)
     {
         $re = $request->all();
         $objValidator = Validator::make($request->all(), array(

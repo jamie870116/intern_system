@@ -193,7 +193,7 @@ class Job_openingController extends Controller
     {
         $token = JWTAuth::getToken();
         $user = JWTAuth::toUser($token);
-        $jobOp = job_opEloquent::where('c_account', $user->account)->SortByUpdates_DESC()->paginate(12);
+        $jobOp = job_opEloquent::where('c_account', $user->account)->withTrashed()->SortByUpdates_DESC()->paginate(12);
         foreach ($jobOp as $j){
             $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
             $j->jResume_num=Match::where('joid',$j->joid)->count();

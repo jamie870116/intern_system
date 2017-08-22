@@ -125,7 +125,7 @@ return [
     'driver' => env('MAIL_DRIVER', 'smtp'),
     'host' => env('MAIL_HOST', 'smtp.gmail.com'),
     'port' => env('MAIL_PORT', 587),
-    'from' => ['address' => 'jamie1110234013@gmail.com', 'name' => 'jamie'],
+    'from' => ['address' => 'jamie870116@gmail.com', 'name' => 'jamie'],
     // 'from' => ['address' => 's1110234013@nutc.edu.tw', 'name' => 'jamie'],
     'encryption' => env('MAIL_ENCRYPTION', 'tls'),
     'username' => env('MAIL_USERNAME'),

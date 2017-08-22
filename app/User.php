@@ -31,4 +31,8 @@ class User extends Authenticatable
     public function company(){
         return $this->hasOne('App\Com_basic','c_account','account');
     }
+
+    public function jobOpens(){
+        return $this->hasMany('App\Job_opening','c_account','account');
+    }
 }

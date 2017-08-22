@@ -22,4 +22,10 @@ class Match extends Model
     {
         return $query->orderby('updated_at','asc');
     }
+
+    //取得職缺資料
+    public function jobOpen()
+    {
+        return $this->hasOne('App\Job_opening','joid','joid');
+    }
 }

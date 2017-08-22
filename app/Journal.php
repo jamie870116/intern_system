@@ -13,7 +13,7 @@ class Journal extends Model
     protected $fillable = [
         'SCid','journalOrder','journalDetail_1','journalDetail_2',
         'journalStart','journalEnd','journalInstructor','journalComments_ins',
-        'journalComments_teacher','grade_ins','grade_teacher'
+        'journalComments_teacher','grade_ins','grade_teacher','scoredTime_tea','scoredTime_com'
     ];
     //
     public function scopeSortByDESC($query){

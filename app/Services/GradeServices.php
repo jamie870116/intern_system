@@ -52,6 +52,7 @@ class GradeServices
         if($journal){
             $journal->journalComments_teacher=$re['journalComments_teacher'];
             $journal->grade_teacher=$re['grade_teacher'];
+            $journal->scoredTime_tea=Carbon::now();
             $journal->save();
             if(Journal::count() != 0){
                 return '批改週誌成功';
@@ -82,6 +83,7 @@ class GradeServices
         if($journal){
             $journal->journalComments_teacher=$re['journalComments_ins'];
             $journal->grade_teacher=$re['grade_ins'];
+            $journal->scoredTime_com=Carbon::now();
             $journal->save();
             if(Journal::count() != 0){
                 return '批改週誌成功';
