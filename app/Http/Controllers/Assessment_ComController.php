@@ -18,7 +18,7 @@ class Assessment_ComController extends Controller
 
     public function __construct(Assessment_ComServices $Assessment_ComServices)
     {
-        $this->middleware('student');
+        $this->middleware('company');
         $this->Assessment_ComServices = $Assessment_ComServices;
     }
     //取得待輸入之學生成績列表
@@ -29,11 +29,11 @@ class Assessment_ComController extends Controller
         $Assessment_list = array();
         foreach($stu_course as $stu_cour){
             $course=CourseEloquent::where('courseId',$stu_cour->courseId)->first();
-            if(Carbon::now() > $course->courseEnd){
+            if(Carbon::now() > $course->courseEnd && $stu_cour->assessmentStatus = 0){
                 $stu_cour->assessmentStatus = 1;
             }
             $stu = UserEloquent::where('id',$stu_cour->sid)->first();
-            $list = array('stu_name'=>$stu->u_name,'SCid'=>$stu_course->SCid,'assessmentStatus'=>$stu_cour->assessmentStatus);
+            $list = array('stu_name'=>$stu->u_name,'SCid'=>$stu_cour->SCid,'assessmentStatus'=>$stu_cour->assessmentStatus);
             $Assessment_list[] = $list;
         }
         return response()->json(['Assessment_list'=>$Assessment_list], 200, [], JSON_UNESCAPED_UNICODE);

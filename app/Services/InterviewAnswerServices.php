@@ -42,8 +42,12 @@ class InterviewAnswerServices{
         if($interC && $interS){
             $inSQ = Interviews_stu_questions::GetVersion($interS->insQuestionVer)->get();
             $inCQ = Interviews_com_questions::GetVersion($interC->insCQuestionVer)->get();
+            $inSQ_num = Interviews_stu_questions::GetVersion($interS->insQuestionVer)->count();
+            $inCQ_num = Interviews_com_questions::GetVersion($interC->insCQuestionVer)->count();
             $interC->questions=$inCQ;
             $interS->questions=$inSQ;
+            $interC->questions_num=$inSQ_num;
+            $interS->questions_num=$inCQ_num;
             $stu = Stu_course::find($SCid)->user_stu()->first();
             $com = Stu_course::find($SCid)->user_com()->first();
             $com_b = User::find($com->id)->company()->first();

@@ -29,7 +29,7 @@ class MatchServices
         $m = MatchEloquent::where('sid', $user->id)->where('joid', $re['joid'])->first();
         if (!$m) {
             $resume = stuBasicEloquent::where('sid', $user->id)->first();
-            if ($resume->eduSystem != null) {
+            if ($resume->eTypes != null) {
                 $match = new MatchEloquent();
                 $match->joid = $re['joid'];
 

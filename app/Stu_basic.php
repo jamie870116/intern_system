@@ -11,7 +11,7 @@ class Stu_basic extends Model
     public  $timestamps=false;
     protected $fillable = [
         'sid','chiName','engName','bornedPlace','birthday','gender','address','email','contact',
-        'ES','ER','EW','TOEIC','TOEFL','autobiography','Oname','OS','OR','OW','eduSystem','graduateYear',
+        'ES','ER','EW','TOEIC','TOEFL','autobiography','Oname','OS','OR','OW','graduateYear',
         'graduatedSchool','department','section','profilePic','licenceFile','eTypes'
     ];
 

@@ -39,7 +39,6 @@ class CreateStuBasicTable extends Migration
             $table->tinyInteger('OW')->nullable()->default(0);//第二外語名稱寫
 
             //學歷
-            $table->tinyInteger('eduSystem')->nullable()->default(0);//學制
             $table->string('graduateYear',15)->nullable();//畢業年分
             $table->string('graduatedSchool',50)->nullable();//畢業學校
             $table->string('department',50)->nullable();//科系

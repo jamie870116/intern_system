@@ -95,14 +95,37 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::put('studentEditJournal','JournalController@studentEditJournal');//學生輸入週誌內容
 
     //週誌成績管理相關
-    Route::get('teacherGetStudentList','GradeController@teacherGetStudentList');//老師取得學生列表
-    Route::get('teacherGetStudentCourseList','GradeController@teacherGetStudentCourseList');//老師取得特定學生之課程列表
+//    Route::get('teacherGetStudentList','GradeController@teacherGetStudentList');//老師取得學生列表
+//    Route::get('teacherGetStudentCourseList','GradeController@teacherGetStudentCourseList');//老師取得特定學生之課程列表
+    Route::get('getCourseList','GradeController@getCourseList');//取得該企業或老師底下的所有課程名稱和學生
     Route::get('teacherGetStudentJournalList','GradeController@teacherGetStudentJournalList');//老師取得特定學生的某一課程之週誌列表
     Route::post('teacherScoreStudentJournal','GradeController@teacherScoreStudentJournal');//老師批改學生週誌
-    Route::get('companyGetStudentListByJoId','GradeController@companyGetStudentListByJoId');//廠商取得學生列表透過joid
-    Route::get('companyGetStudentJournalListBySCid','GradeController@companyGetStudentJournalListBySCid');//廠商取得特定學生的某一課程之週誌列表
+//    Route::get('companyGetStudentListByJoId','GradeController@companyGetStudentListByJoId');//廠商取得學生列表透過joid
+//    Route::get('companyGetStudentJournalListBySCid','GradeController@companyGetStudentJournalListBySCid');//廠商取得特定學生的某一課程之週誌列表
     Route::post('companyScoreStudentJournal','GradeController@companyScoreStudentJournal');//廠商批改學生週誌
     Route::get('getStudentJournalDetailByJournalID','GradeController@getStudentJournalDetailByJournalID');//取得特定週誌
+
+    //訪談紀錄
+    Route::post('teacherCreateComInterview','InterviewAnswerController@teacherCreateComInterview');//老師輸入對企業問卷
+    Route::put('teacherEditComInterview','InterviewAnswerController@teacherEditComInterview');//老師修改對企業問卷
+    Route::post('teacherCreateStuInterview','InterviewAnswerController@teacherCreateStuInterview');//老師輸入對學生問卷
+    Route::put('teacherEditStuInterview','InterviewAnswerController@teacherEditStuInterview');//老師修改對學生問卷
+//    Route::get('getInternStudentList','InterviewAnswerController@getInternStudentList');//取得該老師所有指導生列表
+    Route::get('getNullComInterview','InterviewAnswerController@getNullComInterview');//取得填寫訪談紀錄前的預設資料(企業)
+    Route::get('getNullStuInterview','InterviewAnswerController@getNullStuInterview');//取得填寫訪談紀錄前的預設資料(學生)
+
+    //成果評量相關_廠商
+//    Route::get('companyGetAssessmentList','Assessment_ComController@companyGetAssessmentList');//取得待輸入之學生成績列表
+    Route::get('getAssessmentBeforeInput','Assessment_ComController@getAssessmentBeforeInput');//廠商在輸入成績前的預設資料
+    Route::post('companyCreateAssessment','Assessment_ComController@companyCreateAssessment');//廠商輸入成績
+    Route::put('companyEditAssessment','Assessment_ComController@companyEditAssessment');//廠商修改成績
+    Route::get('getCompanyAssessmentById','Assessment_ComController@getCompanyAssessmentById');//取得廠商所輸入之成績
+
+    //成果評量相關_老師
+    Route::get('teacherGetAssessmentList','Assessment_TeachController@teacherGetAssessmentList');//老師取得可輸入成績之學生列表，當assessmentStatus=2
+    Route::post('teacherCreateAssessment','Assessment_TeachController@teacherCreateAssessment');//老師輸入成績
+    Route::put('teacherEditAssessment','Assessment_TeachController@teacherEditAssessment');//老師修改成績
+    Route::get('getTeacherAssessmentById','Assessment_TeachController@getTeacherAssessmentById');//顯示老師所輸入之成績
 
     //週誌心得管理
     Route::post('createReview','ReviewsController@createReview');//新增實習心得
@@ -120,14 +143,6 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::put('editNewStuQuestion','InterviewQuestionsController@editNewStuQuestion');//修改學生訪談題目
     Route::put('editNewComQuestion','InterviewQuestionsController@editNewComQuestion');//修改企業訪談題目
 
-    //訪談紀錄
-    Route::post('teacherCreateComInterview','InterviewAnswerController@teacherCreateComInterview');//老師輸入對企業問卷
-    Route::put('teacherEditComInterview','InterviewAnswerController@teacherEditComInterview');//老師修改對企業問卷
-    Route::post('teacherCreateStuInterview','InterviewAnswerController@teacherCreateStuInterview');//老師輸入對學生問卷
-    Route::put('teacherEditStuInterview','InterviewAnswerController@teacherEditStuInterview');//老師修改對學生問卷
-    Route::get('getInternStudentList','InterviewAnswerController@getInternStudentList');//取得該老師所有指導生列表
-    Route::get('getNullComInterview','InterviewAnswerController@getNullComInterview');//取得填寫訪談紀錄前的預設資料(企業)
-    Route::get('getNullStuInterview','InterviewAnswerController@getNullStuInterview');//取得填寫訪談紀錄前的預設資料(學生)
 
     //站內信相關
     Route::get('getMailTitleBySid', 'MailController@getMailTitleBySid');//取得學生信件

@@ -19,6 +19,7 @@ class Assessment_ComServices{
         $Stu_c=Stu_courseEloquent::where('SCid',$Assessment_Com->SCid)->first();
         if(Carbon::now() > $Stu_c->courseEnd){
             $Stu_c->assessmentStatus = 2;
+            $Stu_c->save();
         }
         if (Assessment_ComEloquent::count() != 0) {
             return $Assessment_Com->asId;

@@ -148,9 +148,11 @@ class ResumeServices
             $stuBas->OS = $re['OS'];
             $stuBas->OR = $re['OR'];
             $stuBas->OW = $re['OW'];
-        } elseif (isset($re['OS']) || isset($re['OR']) || isset($re['OW']))
+        } elseif ($re['OS']!=0 || $re['OR']!=0 || $re['OW']!=0)
             return '請填寫其他語言名稱';
         $stuBas->chiName = $re['chiName'];
+        $user->u_name=$re['chiName'];
+        $user->save();
         $stuBas->engName = $re['engName'];
         $stuBas->bornedPlace = $re['bornedPlace'];
         $stuBas->birthday = $re['birthday'];
@@ -167,7 +169,6 @@ class ResumeServices
         if (isset($re['TOEFL']))
             $stuBas->TOEFL = $re['TOEFL'];
         $stuBas->autobiography = $re['autobiography'];
-        $stuBas->eduSystem = $re['eduSystem'];
         $stuBas->graduateYear = $re['graduateYear'];
         $stuBas->graduatedSchool = $re['graduatedSchool'];
         if (isset($re['department']))

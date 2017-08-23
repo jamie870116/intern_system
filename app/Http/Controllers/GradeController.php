@@ -24,6 +24,64 @@ class GradeController extends Controller
         $this->GradeServices = $GradeServices;
     }
 
+    //取得該企業或老師底下的所有課程名稱和學生
+    public function getCourseList(){
+        $token = JWTAuth::getToken();
+        $user = JWTAuth::toUser($token);
+        if($user->u_status==1){
+            $TeaCourse=Stu_course::where('tid',$user->id)->get();
+            $courses =array();
+            foreach ($TeaCourse as $t){
+                $course=Stu_course::find($t->SCid)->courses()->distinct()->first();
+                $course->courseStart=Carbon::parse($course->courseStart)->format('Y/m/d');
+                $course->courseEnd=Carbon::parse($course->courseEnd)->format('Y/m/d');
+                $now = Carbon::now();
+                if($now < $course->courseEnd){
+                    $course->passDeadLine=false;
+                }else{
+                    $course->passDeadLine=true;
+                }
+                $stu_c=Stu_course::where('courseId',$course->courseId)->where('tid',$user->id)->get();
+                foreach ($stu_c as $s){
+                    $stu=Stu_course::find($s->SCid)->user_stu()->first();
+                    $s->stuDetails=$stu;
+                }
+                $course->studentList=$stu_c;
+                $courses[]=$course;
+            }
+            return response()->json(['CourseList'=>$courses], 200, [], JSON_UNESCAPED_UNICODE);
+        }elseif ($user->u_status==2){
+            $TeaCourse=Stu_course::where('c_account',$user->account)->get();
+            $courses =array();
+            foreach ($TeaCourse as $t){
+                $course=Stu_course::find($t->SCid)->courses()->distinct()->first();
+                $course->courseStart=Carbon::parse($course->courseStart)->format('Y/m/d');
+                $course->courseEnd=Carbon::parse($course->courseEnd)->format('Y/m/d');
+                $now = Carbon::now();
+                if($now < $course->courseEnd){
+                    $course->passDeadLine=false;
+                }else{
+                    $course->passDeadLine=true;
+                }
+
+                $stu_c=Stu_course::where('courseId',$course->courseId)->where('c_account',$user->account)->get();
+                foreach ($stu_c as $s){
+                    $stu=Stu_course::find($s->SCid)->user_stu()->first();
+                    if(Carbon::now() > $course->courseEnd && $s->assessmentStatus = 0){
+                        $s->assessmentStatus = 1;
+                        $s->save();
+                    }
+                    $s->stuDetails=$stu;
+                }
+                $course->studentList=$stu_c;
+                $courses[]=$course;
+            }
+            return response()->json(['CourseList'=>$courses], 200, [], JSON_UNESCAPED_UNICODE);
+        }else{
+            return response()->json(array('非老師或企業'), 400, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
     //老師取得學生列表
     public function teacherGetStudentList()
     {
@@ -60,7 +118,7 @@ class GradeController extends Controller
             if($responses!='取得學生課程列表失敗'){
                 return response()->json(['studentCoursesList'=>$responses], 200, [], JSON_UNESCAPED_UNICODE);
             }else{
-                return response()->json(array('$responses'), 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json(array($responses), 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
