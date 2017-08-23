@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Announcement;
 use App\Services\AnnouncementServices;
 use Illuminate\Http\Request;
+use Storage;
 use Validator;
 
 class AnnouncementController extends Controller
@@ -139,6 +140,36 @@ class AnnouncementController extends Controller
                 return response()->json($announcement, 200, [], JSON_UNESCAPED_UNICODE);
             }else{
                 return response()->json(['取得失敗'], 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
+
+    //下載公告附檔
+    public function downloadAnnouncementFileByFileName(Request $request){
+
+        $re = $request->all();
+        $objValidator = Validator::make($request->all(), array(
+            'fileName' => 'required',
+        ), array(
+            'fileName.required' => '請輸入檔名',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        }else{
+            $path = storage_path().'/'.'app/'.'public/announcement/'.$re['fileName'];
+//        $file_path = 'public/user-upload/licences/example.docx';
+            $l_file=Storage::exists($path);
+
+            if(file_exists($path)){
+//                $files = Storage::files('public/user-upload/licences');
+                return response()->download($path);
+            }else{
+                return response()->json(array('下載失敗'), 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }

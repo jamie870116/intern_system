@@ -21,6 +21,10 @@ Route::post('Register', 'AuthController@register');//註冊
 Route::post('Logout', 'AuthController@getLogout');//登出
 Route::get('Check_code', 'AuthController@check_code');//驗證信
 Route::post('forgetPassword', 'AuthController@forgetPassword');//忘記密碼(重置密碼信)
+Route::get('getAnnouncement','AnnouncementController@getAnnouncement');//修改公告
+Route::get('getAnnouncementByKeywords','AnnouncementController@getAnnouncementByKeywords');//關鍵字搜尋公告
+Route::get('getCompanyList', 'Com_basicController@getCompanyList');//取得所有廠商列表
+Route::get('downloadAnnouncementFileByFileName','AnnouncementController@downloadAnnouncementFileByFileName');//下載公告附檔
 
 Route::group(['middleware' => 'jwt'], function () {
     //取得使用者資料
@@ -43,7 +47,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('getCompanyDetailsByToken', 'Com_basicController@getCompanyDetailsByToken');//取得廠商自己的簡介
     Route::post('editCompanyDetails', 'Com_basicController@editCompanyDetails');//修改廠商資料
     Route::get('getCompanyDetailsByAccount', 'Com_basicController@getCompanyDetailsByAccount');//依帳號查詢廠商資料
-    Route::get('getCompanyList', 'Com_basicController@getCompanyList');//取得所有廠商列表
+
 
     //媒合相關
     Route::post('studentSubmitResume', 'MatchController@studentSubmitResume');//投遞履歷resume
@@ -149,8 +153,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::post('createAnnouncement','AnnouncementController@createAnnouncement');//新增公告
     Route::post('editAnnouncement','AnnouncementController@editAnnouncement');//修改公告
     Route::delete('deleteAnnouncement','AnnouncementController@deleteAnnouncement');//刪除公告
-    Route::get('getAnnouncement','AnnouncementController@getAnnouncement');//修改公告
-    Route::get('getAnnouncementByKeywords','AnnouncementController@getAnnouncementByKeywords');//關鍵字搜尋公告
+
 
 
 });
