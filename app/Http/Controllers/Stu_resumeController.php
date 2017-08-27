@@ -154,7 +154,6 @@ class Stu_resumeController extends Controller
             'OS'=>'nullable|integer',
             'OR'=>'nullable|integer',
             'OW'=>'nullable|integer',
-            'eduSystem' => 'required|integer',//學制
             'graduateYear' => 'required',
             'autobiography' => 'required',//自傳
             'graduatedSchool' => 'required',
@@ -175,7 +174,6 @@ class Stu_resumeController extends Controller
             'ES.required' => '請選擇英語會話能力',
             'ER.required' => '請選擇英語閱讀能力',
             'EW.required' => '請選擇英語書寫能力',
-            'eduSystem.required' => '請選擇學制',
             'graduateYear.required' => '請輸入畢業年',
             'autobiography.required' => '請輸入自傳',
             'graduatedSchool.required' => '請輸入畢業學校',

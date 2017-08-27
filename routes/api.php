@@ -21,6 +21,7 @@ Route::post('Register', 'AuthController@register');//註冊
 Route::post('Logout', 'AuthController@getLogout');//登出
 Route::get('Check_code', 'AuthController@check_code');//驗證信
 Route::post('forgetPassword', 'AuthController@forgetPassword');//忘記密碼(重置密碼信)
+
 Route::get('getAnnouncement','AnnouncementController@getAnnouncement');//修改公告
 Route::get('getAnnouncementByKeywords','AnnouncementController@getAnnouncementByKeywords');//關鍵字搜尋公告
 Route::get('getCompanyList', 'Com_basicController@getCompanyList');//取得所有廠商列表

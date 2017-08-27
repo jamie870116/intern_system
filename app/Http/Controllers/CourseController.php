@@ -183,10 +183,10 @@ class CourseController extends Controller
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
-            'mid' => 'required|integer',
+            'mid' => 'required|integer',//陣列
             'tid' => 'required|integer',
             'courseId' => 'required|integer',
-            'firstDay' => 'required|date',
+            'firstDay' => 'required|date',//陣列
 
         ), array(
             'mid.required' => '請輸入媒合ID',
