@@ -24,7 +24,6 @@ class MatchController extends Controller
         $this->middleware('company', ['only' => 'companyGetResumeByAccount', 'companyRejectResume', 'companyAcceptResume',
             'companyGetJobOpeningContactByMid', 'companySendInterviewNotice', 'companyFailedInterview','companyPassInterview']);
         $this->middleware('student', ['only' => 'studentSubmitResume', 'studentAcceptInterview', 'studentAcceptJob']);
-        $this->middleware('admin', ['only' => 'adminGetSuccessMatch', 'adminGetTeacherData', 'adminFillInTeacher']);
         $this->MatchServices = $MatchServices;
     }
 
@@ -77,7 +76,7 @@ class MatchController extends Controller
                 $response[] = $stdRe;
             }
 //[$responses]
-            return response()->json($response, 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['ResumeList'=>$response], 200, [], JSON_UNESCAPED_UNICODE);
         } else {
             return response()->json(['取得資料失敗'], 400, [], JSON_UNESCAPED_UNICODE);
         }

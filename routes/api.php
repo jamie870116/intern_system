@@ -146,11 +146,17 @@ Route::group(['middleware' => 'jwt'], function () {
 
 
     //站內信相關
-    Route::get('getMailTitleBySid', 'MailController@getMailTitleBySid');//取得學生信件
-    Route::get('getMailTitleByC_account', 'MailController@getMailTitleByC_account');//取得企業信件
     Route::get('getMailDetails', 'MailController@getMailDetails');//已讀信件
+    Route::get('getMailByToken', 'MailController@getMailByToken');//取得信件(收件)
+    Route::get('getSentMailByToken', 'MailController@getSentMailByToken');//取得送件
+    Route::get('getTrashFolder', 'MailController@getTrashFolder');//取得回收信件
+    Route::delete('mailForceDeleted', 'MailController@mailForceDeleted');//永久刪除信件
+    Route::post('mailRestoreDeleted', 'MailController@mailRestoreDeleted');//回復刪除信件
+    Route::post('sendMail', 'MailController@sendMail');//寄信
+    Route::post('replyMailById', 'MailController@replyMailById');//回覆信件
     Route::post('mailDeleted', 'MailController@mailDeleted');//刪除信件
     Route::post('favouriteMail', 'MailController@favouriteMail');//加到最愛信件
+
 
     //系辦帳號管理相關
     Route::get('getAllUserList','AccountController@getAllUserList');//取得所有使用者資料

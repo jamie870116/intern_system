@@ -15,6 +15,48 @@ use JWTAuth;
 
 class MailServices
 {
+    public function sendMail_ser($re){
+
+        $token = JWTAuth::getToken();
+        $users = JWTAuth::toUser($token);
+
+        $mail= new MatchLogEloquent();
+        $mail->mRecipient=$re['mRecipient'];
+        $mail->mTitle=$re['mTitle'];
+        $mail->miContent=$re['miContent'];
+        $mail->mSender=$users->account;
+
+        $mail->save();
+        if(MatchLogEloquent::count()!=0){
+            return '送出信件成功';
+        }else{
+            return '送出信件失敗';
+        }
+    }
+
+    public function replyMailById_ser($re){
+        $token = JWTAuth::getToken();
+        $users = JWTAuth::toUser($token);
+
+        $oldMail=MatchLogEloquent::where('logid',$re['logid'])->first();
+        if($oldMail){
+            $mail= new MatchLogEloquent();
+            $mail->mRecipient=$oldMail->mSender;
+            $mail->mTitle='RE:['.$oldMail->mTitle.']';
+            $mail->miContent=$re['miContent'];
+            $mail->mSender=$users->account;
+
+            $mail->save();
+            if(MatchLogEloquent::count()!=0){
+                return '回覆信件成功';
+            }else{
+                return '回覆信件失敗';
+            }
+        }else{
+            return '查無欲回覆之信件';
+        }
+    }
+
     public function getMailDetails_ser($re)
     {
         $ml = MatchLogEloquent::where('logid', $re)->first();
@@ -61,6 +103,31 @@ class MailServices
             return '查無此信件資料';
         }
     }
+
+    public function mailForceDeleted_ser($re){
+        $ml = MatchLogEloquent::withTrashed()->where('logid', $re)->first();
+        if($ml){
+
+            $ml->forceDelete();
+            return '永久刪除信件成功';
+
+        }else{
+            return '查無此信件資料';
+        }
+    }
+
+     public function mailRestoreDeleted_ser($re){
+        $ml = MatchLogEloquent::onlyTrashed()->where('logid', $re)->first();
+        if($ml){
+
+            $ml->restore();
+            return '回復刪除信件成功';
+
+        }else{
+            return '查無此信件資料';
+        }
+    }
+
 
     public function favouriteMail_ser($re){
         $ml = MatchLogEloquent::where('logid', $re)->first();

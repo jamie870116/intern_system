@@ -15,7 +15,7 @@ class MatchLog extends Model
     public  $timestamps=true;
 
     protected $fillable = [
-        'mstatus','mid','mailDeadline',
+        'mstatus','mid','mailDeadline','mSender','mRecipient','mTitle','miContent',
         'read','favourite'
     ];
 
