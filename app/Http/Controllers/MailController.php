@@ -3,13 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Services\MailServices;
-use App\User;
+use App\Station_Letter;
 use Illuminate\Http\Request;
 
-use App\Match as MatchEloquent;
-use App\User as UserEloquent;
-use App\Job_opening as JopOpEloquent;
-use App\MatchLog as MatchLogEloquent;
 use JWTAuth;
 
 use Validator;
@@ -32,7 +28,7 @@ class MailController extends Controller
         $token = JWTAuth::getToken();
         $users = JWTAuth::toUser($token);
 
-        $mail=MatchLogEloquent::where('mRecipient',$users->account)->SortByUpdates_DESC()->get();
+        $mail=Station_Letter::where('lRecipient',$users->account)->SortByUpdates_DESC()->get();
         if($mail){
             return response()->json(['MailList'=>$mail], 200, [], JSON_UNESCAPED_UNICODE);
         }else{
@@ -45,7 +41,7 @@ class MailController extends Controller
         $token = JWTAuth::getToken();
         $users = JWTAuth::toUser($token);
 
-        $mail=MatchLogEloquent::where('mSender',$users->account)->SortByUpdates_DESC()->get();
+        $mail=Station_Letter::where('lSender',$users->account)->SortByUpdates_DESC()->get();
         if($mail){
             return response()->json(['SentMailList'=>$mail], 200, [], JSON_UNESCAPED_UNICODE);
         }else{
@@ -58,14 +54,14 @@ class MailController extends Controller
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
-            'mRecipient' => 'required',
-            'mTitle' => 'required',
-            'miContent' => 'required',
+            'lRecipient' => 'required',
+            'lTitle' => 'required',
+            'lContent' => 'required',
 
         ), array(
-            'mRecipient.required' => '請輸入收件人帳號',
-            'mTitle.required' => '請輸入標題',
-            'miContent.required' => '請輸入內容',
+            'lRecipient.required' => '請輸入收件人帳號',
+            'lTitle.required' => '請輸入標題',
+            'lContent.required' => '請輸入內容',
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
@@ -90,12 +86,12 @@ class MailController extends Controller
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
-            'logid' => 'required',
-            'miContent' => 'required',
+            'slId' => 'required',
+            'lContent' => 'required',
 
         ), array(
-            'logid.required' => '請輸入欲回覆之信件ID',
-            'miContent.required' => '請輸入內容',
+            'slId.required' => '請輸入欲回覆之信件ID',
+            'lContent.required' => '請輸入內容',
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
@@ -203,10 +199,10 @@ class MailController extends Controller
     {
         $re = $request->all();
         $objValidator = Validator::make($request->all(), array(
-            'logid' => 'required|integer'
+            'slId' => 'required|integer'
         ), array(
-            'logid.required' => '請輸入信件ID',
-            'logid.integer' => '請輸入int格式',
+            'slId.required' => '請輸入信件ID',
+            'slId.integer' => '請輸入int格式',
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
@@ -216,12 +212,12 @@ class MailController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
+            $mail=Station_Letter::where('slId',$re['slId'])->first();
 
-            $responses = $this->MailServices->getMailDetails_ser($re['logid']);
-            if ($responses != '查無此信件資料') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+            if ($mail) {
+                return response()->json($mail, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json(['查無此信件資料'], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -231,10 +227,10 @@ class MailController extends Controller
     {
         $re = $request->all();
         $objValidator = Validator::make($request->all(), array(
-            'logid' => 'required|integer'
+            'slId' => 'required|integer'
         ), array(
-            'logid.required' => '請輸入信件ID',
-            'logid.integer' => '請輸入int格式',
+            'slId.required' => '請輸入信件ID',
+            'slId.integer' => '請輸入int格式',
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
@@ -244,7 +240,7 @@ class MailController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
-            $responses = $this->MailServices->mailDeleted_ser($re['logid']);
+            $responses = $this->MailServices->mailDeleted_ser($re['slId']);
             if ($responses == '刪除信件成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -259,7 +255,7 @@ class MailController extends Controller
         $token = JWTAuth::getToken();
         $users = JWTAuth::toUser($token);
 
-        $mail=MatchLogEloquent::onlyTrashed()->where('mRecipient',$users->account)->orWhere('mSender',$users->account)->get();
+        $mail=Station_Letter::onlyTrashed()->where('lRecipient',$users->account)->orWhere('lSender',$users->account)->get();
         if($mail){
             return response()->json(['MailList'=>$mail], 200, [], JSON_UNESCAPED_UNICODE);
         }else{
@@ -272,10 +268,10 @@ class MailController extends Controller
     {
         $re = $request->all();
         $objValidator = Validator::make($request->all(), array(
-            'logid' => 'required|integer'
+            'slId' => 'required|integer'
         ), array(
-            'logid.required' => '請輸入信件ID',
-            'logid.integer' => '請輸入int格式',
+            'slId.required' => '請輸入信件ID',
+            'slId.integer' => '請輸入int格式',
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
@@ -285,7 +281,7 @@ class MailController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
-            $responses = $this->MailServices->mailForceDeleted_ser($re['logid']);
+            $responses = $this->MailServices->mailForceDeleted_ser($re['slId']);
             if ($responses == '永久刪除信件成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -299,10 +295,10 @@ class MailController extends Controller
     {
         $re = $request->all();
         $objValidator = Validator::make($request->all(), array(
-            'logid' => 'required|integer'
+            'slId' => 'required|integer'
         ), array(
-            'logid.required' => '請輸入信件ID',
-            'logid.integer' => '請輸入int格式',
+            'slId.required' => '請輸入信件ID',
+            'slId.integer' => '請輸入int格式',
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
@@ -312,7 +308,7 @@ class MailController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
-            $responses = $this->MailServices->mailRestoreDeleted_ser($re['logid']);
+            $responses = $this->MailServices->mailRestoreDeleted_ser($re['slId']);
             if ($responses == '回復刪除信件成功') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -326,10 +322,10 @@ class MailController extends Controller
     {
         $re = $request->all();
         $objValidator = Validator::make($request->all(), array(
-            'logid' => 'required|integer'
+            'slId' => 'required|integer'
         ), array(
-            'logid.required' => '請輸入信件ID',
-            'logid.integer' => '請輸入int格式',
+            'slId.required' => '請輸入信件ID',
+            'slId.integer' => '請輸入int格式',
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
@@ -339,7 +335,7 @@ class MailController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
-            $responses = $this->MailServices->favouriteMail_ser($re['logid']);
+            $responses = $this->MailServices->favouriteMail_ser($re['slId']);
             if ($responses != '查無此信件資料') {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
