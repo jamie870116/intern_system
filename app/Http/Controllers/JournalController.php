@@ -89,8 +89,8 @@ class JournalController extends Controller
                     $j->stuNum=$stu->account;
                     $j->comName=$com->u_name;
                     $j->teaName=$tea->u_name;
-                    $j->journalStart=Carbon::parse($j->journalStart)->format('Y/m/d');
-                    $j->journalEnd=Carbon::parse($j->journalEnd)->format('Y/m/d');
+                    $j->journalStart=Carbon::parse($j->journalStart)->format('Y-m-d');
+                    $j->journalEnd=Carbon::parse($j->journalEnd)->format('Y-m-d');
                     $j->passDeadLine=$passDeadLine;
                 }
                 return response()->json(['journalList'=>$journal], 200, [], JSON_UNESCAPED_UNICODE);
@@ -136,8 +136,8 @@ class JournalController extends Controller
                 $journal->stuNum=$stu->account;
                 $journal->comName=$com->u_name;
                 $journal->teaName=$tea->u_name;
-                $journal->journalStart=Carbon::parse($journal->journalStart)->format('Y/m/d');
-                $journal->journalEnd=Carbon::parse($journal->journalEnd)->format('Y/m/d');
+                $journal->journalStart=Carbon::parse($journal->journalStart)->format('Y-m-d');
+                $journal->journalEnd=Carbon::parse($journal->journalEnd)->format('Y-m-d');
                 $journal->passDeadLine=$passDeadLine;
 
 
