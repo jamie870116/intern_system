@@ -28,11 +28,7 @@ class MailServices
         $mail->lSender=$users->account;
 
         $mail->save();
-        if(Station_Letter::count()!=0){
-            return '送出信件成功';
-        }else{
-            return '送出信件失敗';
-        }
+        return '送出信件成功';
     }
 
     public function replyMailById_ser($re){
@@ -48,11 +44,7 @@ class MailServices
             $mail->lSender=$users->account;
 
             $mail->save();
-            if(Station_Letter::count()!=0){
-                return '回覆信件成功';
-            }else{
-                return '回覆信件失敗';
-            }
+            return '回覆信件成功';
         }else{
             return '查無欲回覆之信件';
         }
@@ -142,8 +134,6 @@ class MailServices
                 $ml->save();
                 return '成功取消加入我的最愛';
             }
-
-
         }else{
             return '查無此信件資料';
         }

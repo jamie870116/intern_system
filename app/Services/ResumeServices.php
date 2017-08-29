@@ -33,11 +33,7 @@ class ResumeServices
         $stuJExp->sid = $id;
 
         $stuJExp->save();
-        if (stuJExpEloquent::count() != 0) {
-            return $stuJExp->jid;
-        } else {
-            return '新增工作資料失敗';
-        }
+        return $stuJExp->jid;
 
     }
 
@@ -52,11 +48,7 @@ class ResumeServices
 
         $stuWor->save();
 
-        if (stuWorksEloquent::count() != 0) { //rowcount
-            return $stuWor->wid;
-        } else {
-            return '新增作品資料失敗';
-        }
+        return $stuWor->wid;
     }
 
     public function newAbilityById($re)
@@ -70,11 +62,7 @@ class ResumeServices
 
         $stuA->save();
 
-        if (stuAbilityEloquent::count() != 0) { //rowcount
-            return $stuA->abiid;
-        } else {
-            return '新增能力資料失敗';
-        }
+        return $stuA->abiid;
     }
 
     //新增履歷結束
@@ -176,11 +164,7 @@ class ResumeServices
         if (isset($re['section']))
             $stuBas->section = $re['section'];
         $stuBas->save();
-        if (stuBasicEloquent::count() != 0) { //rowcount
-            return '修改基本資料成功';
-        } else {
-            return '修改基本資料失敗';
-        }
+        return '修改基本資料成功';
     }
 
 

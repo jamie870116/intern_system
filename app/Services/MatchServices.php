@@ -49,11 +49,7 @@ class MatchServices
                 $st_letter->lContent='';
                 $st_letter->lNotes='';
                 $st_letter->save();
-                if (MatchEloquent::count() != 0 && MatchLogEloquent::count() != 0) {
-                    return '學生送出媒合資料成功';
-                } else {
-                    return '學生送出媒合資料失敗';
-                }
+                return '學生送出媒合資料成功';
             } else {
                 return '去填履歷再來吧';
             }
@@ -86,11 +82,7 @@ class MatchServices
                 $st_letter->lContent='failed';
                 $st_letter->lNotes='';
                 $st_letter->save();
-                if (MatchEloquent::count() != 0 && MatchLogEloquent::count() != 0) {
-                    return '廠商拒絕媒合成功';
-                } else {
-                    return '廠商拒絕媒合失敗';
-                }
+                return '廠商拒絕媒合成功';
             } else {
                 return '流程錯誤';
             }
@@ -116,7 +108,7 @@ class MatchServices
                 $log->mstatus = $status;
                 $log->mid = $re['mid'];
                 $log->save();
-                if (MatchEloquent::count() != 0 && $status == 6 && MatchLogEloquent::count() != 0) {
+                if ($status == 6) {
                     $st_letter=new Station_Letter();
                     $st_letter->lStatus=$status;
                     $user=User::where('id',$match->sid)->first();
@@ -126,7 +118,7 @@ class MatchServices
                     $st_letter->lNotes='';
                     $st_letter->save();
                     return '廠商直接錄取成功';
-                } elseif (MatchEloquent::count() != 0 && $status == 3 && MatchLogEloquent::count() != 0) {
+                } elseif ($status == 3) {
                     $st_letter=new Station_Letter();
                     $st_letter->lStatus=$status;
                     $user=User::where('id',$match->sid)->first();
@@ -165,14 +157,9 @@ class MatchServices
                 $st_letter->lContent='';
                 $st_letter->lNotes=$interview;
                 $st_letter->save();
-                if (Interviews::count() != 0) {
-
-                    $data = ['mail' => $user->mail, 'interview' => $interview];
-                    dispatch(new sendInterviewNoticeMail($data));
-                    return '成功';
-                } else {
-                    return '失敗';
-                }
+                $data = ['mail' => $user->mail, 'interview' => $interview];
+                dispatch(new sendInterviewNoticeMail($data));
+                return '成功';
             } else {
                 return '流程錯誤';
             }
@@ -205,9 +192,9 @@ class MatchServices
                 $st_letter->lContent='接受面試';
                 $st_letter->lNotes='';
                 $st_letter->save();
-                if (MatchEloquent::count() != 0 && $status == 4 && MatchLogEloquent::count() != 0) {
+                if ($status == 4) {
                     return '接受面試成功';
-                } elseif (MatchEloquent::count() != 0 && $status == 5 && MatchLogEloquent::count() != 0) {
+                } elseif ($status == 5 ) {
                     return '拒絕面試成功';
                 } else {
                     return '接受面試失敗';
@@ -251,11 +238,7 @@ class MatchServices
                 $st_letter->lNotes='';
                 $st_letter->save();
 
-                if (MatchEloquent::count() != 0 && MatchLogEloquent::count() != 0) {
-                    return '廠商通知學生未綠取成功';
-                } else {
-                    return '廠商通知學生未綠取失敗';
-                }
+                return '廠商通知學生未綠取成功';
             } else {
                 return '流程錯誤';
             }
@@ -286,11 +269,7 @@ class MatchServices
                 $st_letter->lContent='';
                 $st_letter->lNotes='';
                 $st_letter->save();
-                if (MatchEloquent::count() != 0 && MatchLogEloquent::count() != 0) {
-                    return '廠商通知學生綠取成功';
-                } else {
-                    return '廠商通知學生綠取失敗';
-                }
+                return '廠商通知學生綠取成功';
             } else {
                 return '流程錯誤';
             }
@@ -325,9 +304,9 @@ class MatchServices
                 $st_letter->lContent='';
                 $st_letter->lNotes='';
                 $st_letter->save();
-                if (MatchEloquent::count() != 0 && $status == 9 && MatchLogEloquent::count() != 0) {
+                if ($status == 9) {
                     return '接受工作成功';
-                } elseif (MatchEloquent::count() != 0 && $status == 10 && MatchLogEloquent::count() != 0) {
+                } elseif ($status == 10) {
                     return '拒絕工作成功';
                 } else {
                     return '接受面試失敗';

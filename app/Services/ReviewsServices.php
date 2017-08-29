@@ -13,11 +13,7 @@ class ReviewsServices
         $review=Reviews::create($re);
         $review->save();
 
-        if(Reviews::count()!=0){
-            return '新增心得成功';
-        }else{
-            return '新增心得失敗';
-        }
+        return '新增心得成功';
     }
 
     public function editReview_ser($re){
@@ -26,11 +22,7 @@ class ReviewsServices
             $review->reContent=$re['reContent'];
             $review->save();
 
-            if(Reviews::count()!=0){
-                return '新增心得成功';
-            }else{
-                return '新增心得失敗';
-            }
+            return '新增心得成功';
         }else{
             return '找不到此心得';
         }

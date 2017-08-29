@@ -38,11 +38,7 @@ class AnnouncementServices
         $announcement->anTittle = $re['anTittle'];
         $announcement->anContent = $re['anContent'];
         $announcement->save();
-        if(Announcement::count()!=0){
-            return '發布公告成功';
-        }else{
-            return '發布公告失敗';
-        }
+        return '發布公告成功';
 
     }
     public function editAnnouncement_ser($request){
@@ -88,11 +84,7 @@ class AnnouncementServices
             $announcement->anTittle = $re['anTittle'];
             $announcement->anContent = $re['anContent'];
             $announcement->save();
-            if(Announcement::count()!=0){
-                return '修改公告成功';
-            }else{
-                return '修改公告失敗';
-            }
+            return '修改公告成功';
         }else{
             return '查無此公告';
         }

@@ -88,11 +88,7 @@ class InterviewAnswerServices{
         $InterviewCom->insCAns = $re['insCAns'];
         $InterviewCom->insCQuestionVer = $re['insCQuestionVer'];
         $InterviewCom->insCComments = $re['insCComments'];
-        if (InterviewComEloquent::count() != 0) {
-            return '訪談紀錄新增成功';
-        } else {
-            return '訪談紀錄新增失敗';
-        }
+        return '訪談紀錄新增成功';
     }
     public function teacherEditComInterview_ser($re)
     {
@@ -107,11 +103,7 @@ class InterviewAnswerServices{
         $InterviewCom->insCAns = $re['insCAns'];
         $InterviewCom->insCQuestionVer = $re['insCQuestionVer'];
         $InterviewCom->insCComments = $re['insCComments'];
-        if (InterviewComEloquent::count() != 0) {
-            return '訪談紀錄修改成功';
-        } else {
-            return '訪談紀錄修改失敗';
-        }
+        return '訪談紀錄修改成功';
     }
     public function teacherCreateStuInterview_ser($re)
     {
@@ -126,11 +118,7 @@ class InterviewAnswerServices{
         $InterviewCom->insAns = $re['insAns'];
         $InterviewCom->insQuestionVer = $re['insQuestionVer'];
         $InterviewCom->insComments = $re['insComments'];
-        if (InterviewStuEloquent::count() != 0) {
-            return '訪談紀錄新增成功';
-        } else {
-            return '訪談紀錄新增失敗';
-        }
+        return '訪談紀錄新增成功';
     }
     public function teacherEditStuInterview_ser($re)
     {
@@ -145,10 +133,6 @@ class InterviewAnswerServices{
         $InterviewCom->insAns = $re['insAns'];
         $InterviewCom->insQuestionVer = $re['insQuestionVer'];
         $InterviewCom->insComments = $re['insComments'];
-        if (InterviewStuEloquent::count() != 0) {
-            return '訪談紀錄修改成功';
-        } else {
-            return '訪談紀錄修改失敗';
-        }
+        return '訪談紀錄修改成功';
     }
 }

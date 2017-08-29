@@ -70,11 +70,7 @@ class CompanyServices
         $com->cintroduction = $re['cintroduction'];
         $com->cempolyee_num = $re['cempolyee_num'];
         $com->save();
-        if (comEloquent::count() != 0) {
-            return '修改廠商資料成功';
-        } else {
-            return '修改廠商資料失敗';
-        }
+        return '修改廠商資料成功';
     }
 
     public function adminDeleteCompany_ser($re)
@@ -87,11 +83,7 @@ class CompanyServices
         $user->started = 2;
 
         $com->save();
-        if (comEloquent::count() != 0) {
-            return '刪除廠商成功';
-        } else {
-            return '刪除廠商失敗';
-        }
+        return '刪除廠商成功';
     }
 
     //依帳號查詢廠商資料

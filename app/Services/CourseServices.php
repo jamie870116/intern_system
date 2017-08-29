@@ -23,11 +23,7 @@ class CourseServices
         $course->courseStart = $re['courseStart'];
         $course->courseEnd = $re['courseEnd'];
         $course->save();
-        if (courseEloquent::count() != 0) {
-            return '新增課程資料成功';
-        } else {
-            return '新增課程資料失敗';
-        }
+        return '新增課程資料成功';
     }
 
     public function adminEditCourseByCourseID_ser($re)
@@ -40,11 +36,7 @@ class CourseServices
             $course->courseStart = $re['courseStart'];
             $course->courseEnd = $re['courseEnd'];
             $course->save();
-            if (courseEloquent::count() != 0) {
-                return '修改課程資料成功';
-            } else {
-                return '修改課程資料失敗';
-            }
+            return '修改課程資料成功';
         } else {
             return '查無此課程';
         }
@@ -56,11 +48,7 @@ class CourseServices
         $course = courseEloquent::where('courseId', $re['courseId'])->first();
         if ($course) {
             $course->delete();
-            if (courseEloquent::count() != 0) {
-                return '刪除課程資料成功';
-            } else {
-                return '刪除課程資料失敗';
-            }
+            return '刪除課程資料成功';
         } else {
             return '查無此課程';
         }
@@ -199,11 +187,7 @@ class CourseServices
             }
 
         }
-        if (MatchEloquent::count() != 0 && MatchLogEloquent::count() != 0 && StuCourseEloquent::count() != 0) {
-            return '加入學生成功';
-        } else {
-            return '加入學生失敗';
-        }
+        return '加入學生成功';
 
     }
 
@@ -216,11 +200,7 @@ class CourseServices
             $match->save();
             $stu_c->delete();
 
-            if (StuCourseEloquent::count() != 0) {
-                return '刪除課程資料成功';
-            } else {
-                return '刪除課程資料失敗';
-            }
+            return '刪除課程資料成功';
         } else {
             return '查無此課程';
         }

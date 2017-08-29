@@ -26,11 +26,7 @@ class Assessment_TeachServices{
             $Assessment_Teach->totalScore = $re['totalScore'];
             $Assessment_Teach->save();
             $Stu_c->save();
-            if (Assessment_TeachEloquent::count() != 0 & Stu_courseEloquent::count() != 0) {
-                return $Assessment_Teach->asTId;
-            } else {
-                return '新增成果評量失敗';
-            }
+            return $Assessment_Teach->asTId;
         }else{
             return '流程錯誤';
         }
@@ -52,11 +48,7 @@ class Assessment_TeachServices{
         $Assessment_Teach->comment = $re['comment'];
         $Assessment_Teach->totalScore = $re['totalScore'];
         $Assessment_Teach->save();
-        if (Assessment_TeachEloquent::count() != 0) {
-            return $Assessment_Teach->asTId;
-        } else {
-            return '修改成果評量失敗';
-        }
+        return $Assessment_Teach->asTId;
 
     }
 }

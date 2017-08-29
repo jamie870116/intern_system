@@ -41,11 +41,7 @@ class QuestionsServices
             $newQ->insQuestion=$question;
             $newQ->save();
 
-            if(Interviews_stu_questions::count()!=0){
-                return '學生訪談題目新增成功';
-            }else{
-                return '學生訪談題目新增失敗';
-            }
+            return '學生訪談題目新增成功';
         } else {
             return array('找不到題目');
         }
@@ -68,11 +64,7 @@ class QuestionsServices
             $newQ->insCQuestion=$question;
             $newQ->save();
 
-            if(Interviews_com_questions::count()!=0){
-                return '學生訪談題目新增成功';
-            }else{
-                return '學生訪談題目新增失敗';
-            }
+            return '學生訪談題目新增成功';
         } else {
             return array('找不到題目');
         }
@@ -98,11 +90,7 @@ class QuestionsServices
                 }
             }
 
-            if(Interviews_stu_questions::count()!=0){
-                return '學生訪談題目修改成功';
-            }else{
-                return '學生訪談題目修改失敗';
-            }
+            return '學生訪談題目修改成功';
         } else {
             return array('找不到題目');
         }
@@ -127,11 +115,7 @@ class QuestionsServices
                 }
             }
 
-            if(Interviews_com_questions::count()!=0){
-                return '企業訪談題目修改成功';
-            }else{
-                return '企業訪談題目修改失敗';
-            }
+            return '企業訪談題目修改成功';
         } else {
             return array('找不到題目');
         }

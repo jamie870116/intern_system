@@ -21,11 +21,7 @@ class Assessment_ComServices{
             $Stu_c->assessmentStatus = 2;
             $Stu_c->save();
         }
-        if (Assessment_ComEloquent::count() != 0) {
-            return $Assessment_Com->asId;
-        } else {
-            return '新增成果評量失敗';
-        }
+        return $Assessment_Com->asId;
     }
 
     public function companyEditAssessment_ser($re)
@@ -64,11 +60,7 @@ class Assessment_ComServices{
             $Assessment_Com->asAbsenteeism_days = $re['asAbsenteeism_days'];
             $Assessment_Com->asAbsenteeism_hours = $re['asAbsenteeism_hours'];
             $Assessment_Com->save();
-            if (Assessment_ComEloquent::count() != 0) {
-                return '修改成果評量成功';
-            } else {
-                return '修改成果評量失敗';
-            }
+            return '修改成果評量成功';
         }else{
             return '找不到';
         }

@@ -54,11 +54,7 @@ class GradeServices
             $journal->grade_teacher=$re['grade_teacher'];
             $journal->scoredTime_tea=Carbon::now();
             $journal->save();
-            if(Journal::count() != 0){
-                return '批改週誌成功';
-            }else{
-                return '批改週誌失敗';
-            }
+            return '批改週誌成功';
         }else{
             return '查無此週誌';
         }
@@ -85,11 +81,7 @@ class GradeServices
             $journal->grade_teacher=$re['grade_ins'];
             $journal->scoredTime_com=Carbon::now();
             $journal->save();
-            if(Journal::count() != 0){
-                return '批改週誌成功';
-            }else{
-                return '批改週誌失敗';
-            }
+            return '批改週誌成功';
         }else{
             return '查無此週誌';
         }

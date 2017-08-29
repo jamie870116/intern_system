@@ -28,11 +28,7 @@ class JournalServices{
             $journal->journalInstructor=$re['journalInstructor'];
             $journal->save();
 
-            if (JournalEloquent::count() != 0) {
-                return '週誌輸入成功';
-            } else {
-                return '週誌輸入失敗';
-            }
+            return '週誌輸入成功';
         }
 
     }

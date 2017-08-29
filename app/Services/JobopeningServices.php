@@ -37,11 +37,7 @@ class JobopeningServices
         $jobOpen->jcontact_email = $re['jcontact_email'];
 //        $jobOpen->jdeadline =Carbon::parse($re['jdeadline'])->format('Y/m/d');
         $jobOpen->save();
-        if (job_opEloquent::count() != 0) {
-            return $jobOpen->joid;
-        } else {
-            return '新增職缺資料失敗';
-        }
+        return $jobOpen->joid;
     }
 
     public function editJobOpening_ser($re)
@@ -62,11 +58,7 @@ class JobopeningServices
         $jobOpen->jcontact_email = $re['jcontact_email'];
         $jobOpen->save();
 
-        if (job_opEloquent::count() != 0) {
-            return '修改職缺資料成功';
-        } else {
-            return '修改職缺資料失敗';
-        }
+        return '修改職缺資料成功';
     }
 
     public function deleteJobOpeningByAdmin_ser($re)
@@ -76,11 +68,7 @@ class JobopeningServices
 
         $jobOpen->delete();
 
-        if (job_opEloquent::count() != 0) {
-            return '職缺已刪除';
-        } else {
-            return '職缺刪除失敗';
-        }
+        return '職缺已刪除';
     }
 
     public function deleteJobOpeningByCom_ser($re)
@@ -89,11 +77,7 @@ class JobopeningServices
 
         $jobOpen->delete();
 
-        if (job_opEloquent::count() != 0) {
-            return '職缺已刪除';
-        } else {
-            return '職缺刪除失敗';
-        }
+        return '職缺已刪除';
     }
 
     public function sortByTime_DESC($re)
