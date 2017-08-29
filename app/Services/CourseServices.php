@@ -57,7 +57,8 @@ class CourseServices
 
     public function adminAddStudentToCourse_ser($re)
     {
-        $j=0;
+        $h=0;
+        $f=$re['firstDay'];
         foreach ($re['mid'] as $mid){
             $match = MatchEloquent::where('mid', $mid)->first();
 
@@ -65,13 +66,13 @@ class CourseServices
                 if ($match->mstatus == 9 || $match->mstatus == 11) {
                     $match->mstatus = 11;
                     $match->tid = $re['tid'];
-                    $jobOp = Job_opening::where('joid', $match->joid)->first();
+                    $jobOp = Job_opening::withTrashed()->where('joid', $match->joid)->first();
                     $jobOp->jNOP -= 1;
                     $jobOp->save();
                     $match->save();
                     $log = new MatchLogEloquent();//給企業信件->none
                     $log->mstatus = 11;
-                    $log->mid = $re['mid'];
+                    $log->mid = $mid;
                     $log->save();
                     $c = StuCourseEloquent::where('courseId', $re['courseId'])->where('sid', $match->sid)->first();
                     if (!$c) {
@@ -84,7 +85,7 @@ class CourseServices
                         $stu_c->save();
                         $course = Course::where('courseId', $re['courseId'])->first();
                         if ($course) {
-                            $first = $re['firstDay'][$j];
+                            $first = $f;
                             for ($i = 0; $i < $course->courseJournal; $i++) {
                                 $type=$jobOp->jtypes;
                                 if ($type == 0) {  //暑期
@@ -120,62 +121,62 @@ class CourseServices
                         } else {
                             return '查不到課程';
                         }
-                        $j++;
+                        $h++;
                     } else {
-                        $c->c_account = $match->c_account;
-                        $c->sid = $match->sid;
-                        $c->tid = $re['tid'];
-                        $c->courseId = $re['courseId'];
-                        $c->save();
-                        $jo=Journal::where('SCid',$c->SCid)->get();
-                        foreach ($jo as $j){
-                            $j->delete();
-                        }
-
-                        $course = Course::where('courseId', $re['courseId'])->first();
-                        if ($course) {
-                            $first = $re['firstDay'][$j];
-
-                            for ($i = 0; $i < $course->courseJournal; $i++) {
-                                Log::error($i);
-                                $type=$jobOp->jtypes;
-
-                                if ($type == 0) {  //暑期
-                                    $journal = new Journal();
-                                    $journal->SCid = $c->SCid;
-                                    $journal->journalOrder = $i+1;
-                                    if ($i == 0) {
-                                        $journal->journalStart = Carbon::parse($first);
-                                        $journal->journalEnd = Carbon::parse($first)->addWeeks(1)->subDay();
-
-                                    } else {
-                                        $journal->journalStart = Carbon::parse($first)->addWeeks($i);
-                                        $journal->journalEnd = Carbon::parse($first)->addWeeks($i + 1)->subDay();
-                                    }
-                                    $journal->save();
-
-                                } elseif ($type == 1) { //學期
-                                    $journal = new Journal();
-                                    $journal->SCid = $c->SCid;
-                                    $journal->journalOrder = $i+1;
-                                    if ($i == 0) {
-                                        $journal->journalStart = Carbon::parse($first);
-                                        $journal->journalEnd = Carbon::parse($first)->addWeeks(2)->subDay();
-
-                                    } else {
-                                        $journal->journalStart = Carbon::parse($first)->addWeeks($i + 1);
-                                        $journal->journalEnd = Carbon::parse($first)->addWeeks($i + 3)->subDay();
-                                    }
-                                    $journal->save();
-                                } else {
-                                    exit;
-                                }
-                            }
-                            $j++;
-                        } else {
-                            return '查不到課程';
-                        }
-
+//                        $c->c_account = $match->c_account;
+//                        $c->sid = $match->sid;
+//                        $c->tid = $re['tid'];
+//                        $c->courseId = $re['courseId'];
+//                        $c->save();
+//                        $jo=Journal::where('SCid',$c->SCid)->get();
+//                        foreach ($jo as $j){
+//                            $j->delete();
+//                        }
+//
+//                        $course = Course::where('courseId', $re['courseId'])->first();
+//                        if ($course) {
+//                            $first =$f;
+//
+//                            for ($i = 0; $i < $course->courseJournal; $i++) {
+//                                Log::error($i);
+//                                $type=$jobOp->jtypes;
+//
+//                                if ($type == 0) {  //暑期
+//                                    $journal = new Journal();
+//                                    $journal->SCid = $c->SCid;
+//                                    $journal->journalOrder = $i+1;
+//                                    if ($i == 0) {
+//                                        $journal->journalStart = Carbon::parse($first);
+//                                        $journal->journalEnd = Carbon::parse($first)->addWeeks(1)->subDay();
+//
+//                                    } else {
+//                                        $journal->journalStart = Carbon::parse($first)->addWeeks($i);
+//                                        $journal->journalEnd = Carbon::parse($first)->addWeeks($i + 1)->subDay();
+//                                    }
+//                                    $journal->save();
+//
+//                                } elseif ($type == 1) { //學期
+//                                    $journal = new Journal();
+//                                    $journal->SCid = $c->SCid;
+//                                    $journal->journalOrder = $i+1;
+//                                    if ($i == 0) {
+//                                        $journal->journalStart = Carbon::parse($first);
+//                                        $journal->journalEnd = Carbon::parse($first)->addWeeks(2)->subDay();
+//
+//                                    } else {
+//                                        $journal->journalStart = Carbon::parse($first)->addWeeks($i + 1);
+//                                        $journal->journalEnd = Carbon::parse($first)->addWeeks($i + 3)->subDay();
+//                                    }
+//                                    $journal->save();
+//                                } else {
+//                                    exit;
+//                                }
+//                            }
+//                            $h++;
+//                        } else {
+//                            return '查不到課程';
+//                        }
+                        return '學生已在此課程之中';
                     }
 
                 } else {

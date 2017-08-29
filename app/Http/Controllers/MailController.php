@@ -49,6 +49,35 @@ class MailController extends Controller
         }
     }
 
+    //關鍵字用以查詢廠商名稱或帳號
+    public function getCompanyByNameOrAccount(Request $request){
+        $re = $request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'comp' => 'required',
+
+        ), array(
+            'comp.required' => '請輸入關鍵字用以查詢廠商名稱或帳號',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $keyword = '%' . $re['comp'] . '%';
+            $responses = $this->MailServices->getCompanyByNameOrAccount_ser($keyword);
+            $r=array($responses);
+            if ($responses == '送出信件成功') {
+                return response()->json($r, 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json($r, 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
+
     //寄信
     public function sendMail(Request $request){
         $re = $request->all();

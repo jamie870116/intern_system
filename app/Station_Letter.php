@@ -19,6 +19,7 @@ class Station_Letter extends Model
         'lRecipient','lTitle',
         'lContent','lNotes',
         'read','favourite',
+        'lSenderName','lRecipientName',
     ];
 
 

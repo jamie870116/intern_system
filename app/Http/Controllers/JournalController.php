@@ -37,7 +37,7 @@ class JournalController extends Controller
             $journalCom = UserEloquent::where('account', $stu_cour->c_account)->first();
             $course=Stu_course::find($stu_cour->SCid)->courses()->first();
             $now = Carbon::now();
-            Log::error($course);
+
             if($now < $course->courseEnd){
                $passDeadLine=false;
             }else{

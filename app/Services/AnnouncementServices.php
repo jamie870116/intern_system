@@ -35,6 +35,7 @@ class AnnouncementServices
                 return "附檔上傳失敗";
             }
         }
+        str_replace(array("\r", "\n", "\r\n", "\n\r"), '',$re['anTittle']);
         $announcement->anTittle = $re['anTittle'];
         $announcement->anContent = $re['anContent'];
         $announcement->save();
@@ -81,6 +82,7 @@ class AnnouncementServices
                     return "附檔上傳失敗";
                 }
             }
+            str_replace(array("\r", "\n", "\r\n", "\n\r"), '',$re['anTittle']);
             $announcement->anTittle = $re['anTittle'];
             $announcement->anContent = $re['anContent'];
             $announcement->save();

@@ -7,6 +7,7 @@
  */
 
 namespace App\Services;
+
 use App\Job_opening;
 use App\Match;
 //use App\MatchLog as MatchLogEloquent;
@@ -16,36 +17,58 @@ use JWTAuth;
 
 class MailServices
 {
-    public function sendMail_ser($re){
 
-        $token = JWTAuth::getToken();
-        $users = JWTAuth::toUser($token);
-
-        $mail= new Station_Letter();
-        $mail->lRecipient=$re['lRecipient'];
-        $mail->lTitle=$re['lTitle'];
-        $mail->lContent=$re['lContent'];
-        $mail->lSender=$users->account;
-
-        $mail->save();
-        return '送出信件成功';
+    public function getCompanyByNameOrAccount_ser($keyword){
+        $com = User::where('account','like', $keyword)->orWhere('u_name', 'like', $keyword)->first();
+        if($com){
+            return [$com->account,$com->u_name];
+        }else{
+            return '取得失敗';
+        }
     }
 
-    public function replyMailById_ser($re){
+    public function sendMail_ser($re)
+    {
+
+        $token = JWTAuth::getToken();
+        $users = JWTAuth::toUser($token);
+        $com = User::where('account', $re['lRecipient'])->first();
+        if($com->u_status==2){
+            $mail = new Station_Letter();
+            $mail->lRecipient = $re['lRecipient'];
+            $mail->lRecipientName = $com->u_name;
+            $mail->lTitle = $re['lTitle'];
+            $mail->lContent = $re['lContent'];
+            $mail->lSender = $users->account;
+            $mail->lSenderName = $users->u_name;
+
+            $mail->save();
+            return '送出信件成功';
+        }else{
+            return '只能寄給廠商';
+        }
+
+
+    }
+
+    public function replyMailById_ser($re)
+    {
         $token = JWTAuth::getToken();
         $users = JWTAuth::toUser($token);
 
-        $oldMail=Station_Letter::where('slId',$re['slId'])->first();
-        if($oldMail){
-            $mail= new Station_Letter();
-            $mail->lRecipient=$oldMail->lSender;
-            $mail->lTitle='RE:['.$oldMail->lTitle.']';
-            $mail->lContent=$re['lContent'];
-            $mail->lSender=$users->account;
+        $oldMail = Station_Letter::where('slId', $re['slId'])->first();
+        if ($oldMail) {
+            $mail = new Station_Letter();
+            $mail->lRecipient = $oldMail->lSender;
+            $mail->lRecipientName = User::where('account', $oldMail->lSender)->first()->u_name;
+            $mail->lTitle = 'RE:[' . $oldMail->lTitle . ']';
+            $mail->lContent = $re['lContent'];
+            $mail->lSender = $users->account;
+            $mail->lSenderName = $users->u_name;
 
             $mail->save();
             return '回覆信件成功';
-        }else{
+        } else {
             return '查無欲回覆之信件';
         }
     }
@@ -85,56 +108,60 @@ class MailServices
 //        }
 //    }
 
-    public function mailDeleted_ser($re){
+    public function mailDeleted_ser($re)
+    {
         $ml = Station_Letter::where('slId', $re)->first();
-        if($ml){
+        if ($ml) {
 
             $ml->delete();
             return '刪除信件成功';
 
-        }else{
+        } else {
             return '查無此信件資料';
         }
     }
 
-    public function mailForceDeleted_ser($re){
+    public function mailForceDeleted_ser($re)
+    {
         $ml = Station_Letter::withTrashed()->where('slId', $re)->first();
-        if($ml){
+        if ($ml) {
 
             $ml->forceDelete();
             return '永久刪除信件成功';
 
-        }else{
+        } else {
             return '查無此信件資料';
         }
     }
 
-     public function mailRestoreDeleted_ser($re){
+    public function mailRestoreDeleted_ser($re)
+    {
         $ml = Station_Letter::onlyTrashed()->where('slId', $re)->first();
-        if($ml){
+        if ($ml) {
 
             $ml->restore();
             return '回復刪除信件成功';
 
-        }else{
+        } else {
             return '查無此信件資料';
         }
     }
 
 
-    public function favouriteMail_ser($re){
+    public function favouriteMail_ser($re)
+    {
         $ml = Station_Letter::where('slId', $re)->first();
-        if($ml){
-            if($ml->favourite==false){
-                $ml->favourite=true;
+        if ($ml) {
+            if ($ml->favourite == false) {
+                $ml->favourite = true;
                 $ml->save();
                 return '成功加入我的最愛';
-            }else{
-                $ml->favourite=false;
+            } else {
+                $ml->favourite = false;
                 $ml->save();
                 return '成功取消加入我的最愛';
             }
-        }else{
+        } else {
             return '查無此信件資料';
         }
     }

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 
+use App\Station_Letter;
 use Carbon\Carbon;
 use JWTAuth;
 use App\Assessment_Com as Assessment_ComEloquent;
@@ -14,8 +15,16 @@ class Assessment_ComServices{
     {
         $Assessment_Com = new Assessment_ComEloquent($re);
         $Assessment_Com->save();
-
-
+        $teacher=Stu_courseEloquent::find($re['SCid'])->user_tea()->first();
+        $student=Stu_courseEloquent::find($re['SCid'])->user_stu()->first();
+        $st_letter=new Station_Letter();
+        $st_letter->lStatus=15;
+        $st_letter->lTitle='學生有新的週誌';
+        $st_letter->lRecipient=$teacher->account;
+        $st_letter->lRecipientName=$teacher->u_name;
+        $st_letter->lContent='您的學生'.$student->u_name.'填寫了新的週誌';
+        $st_letter->lNotes='';
+        $st_letter->save();
         $Stu_c=Stu_courseEloquent::where('SCid',$Assessment_Com->SCid)->first();
         if(Carbon::now() > $Stu_c->courseEnd){
             $Stu_c->assessmentStatus = 2;
@@ -23,6 +32,7 @@ class Assessment_ComServices{
         }
         return $Assessment_Com->asId;
     }
+
 
     public function companyEditAssessment_ser($re)
     {

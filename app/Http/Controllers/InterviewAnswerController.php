@@ -133,7 +133,7 @@ class InterviewAnswerController extends Controller
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
-            'SCid' => 'required|unique:interview_com,SCid',
+            'SCid' => 'required',
             'insCDate' => 'required|date',
             'insCNum' => 'required|integer',
             'insComName' => 'required',
@@ -156,7 +156,6 @@ class InterviewAnswerController extends Controller
             'insCComments.required' => '請輸入綜合評語',
             'date' => '請輸入日期',
             'integer' => '請輸入integer',
-            'unique' => '已訪談過',
 
         ));
         if ($objValidator->fails()) {
@@ -232,7 +231,7 @@ class InterviewAnswerController extends Controller
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
-            'SCid' => 'required|unique:interview_com,SCid',
+            'SCid' => 'requiredd',
             'insDate' => 'required|date',
             'insNum' => 'required|integer',
             'insStuName' => 'required',
@@ -255,7 +254,6 @@ class InterviewAnswerController extends Controller
             'insComments.required' => '請輸入綜合評語',
             'date' => '請輸入日期',
             'integer' => '請輸入integer',
-            'unique' => '已訪談過',
 
         ));
         if ($objValidator->fails()) {
@@ -283,7 +281,7 @@ class InterviewAnswerController extends Controller
 
         $objValidator = Validator::make($request->all(), array(
             'insId' => 'required',
-            'SCid' => 'required|unique:interview_com,SCid',
+            'SCid' => 'required',
             'insDate' => 'required|date',
             'insNum' => 'required|integer',
             'insStuName' => 'required',

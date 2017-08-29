@@ -16,11 +16,13 @@ class CreateStationLetterTable extends Migration
         Schema::create('station_letter', function (Blueprint $table) {
             $table->increments('slId');//AI
             $table->tinyInteger('lStatus')->default(0);//信件種類
-            $table->string('lSender',50)->default('系統');//寄件人帳號
+            $table->string('lSender',50)->default('admin123');//寄件人帳號
+            $table->string('lSenderName',50)->default('系辦');//寄件人名字
             $table->string('lRecipient',50);//收件人帳號
+            $table->string('lRecipientName',50);//收件人名字
             $table->string('lTitle',100);//標題
             $table->longText('lContent')->nullable();//信件內容
-            $table->JSON('lNotes')->nullable();//信件備註(給前端參數用)
+            $table->longText('lNotes')->nullable();//信件備註(給前端參數用)
             $table->boolean('read')->default(false);//是否已讀
             $table->boolean('favourite')->default(false);//我的最愛
             $table->softDeletes();//軟刪除

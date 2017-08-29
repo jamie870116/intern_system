@@ -45,6 +45,7 @@ class MatchServices
                 $st_letter=new Station_Letter();
                 $st_letter->lStatus=1;
                 $st_letter->lRecipient=$com->c_account;
+                $st_letter->lRecipientName=$com->u_name;
                 $st_letter->lTitle='有學生向您投遞履歷';
                 $st_letter->lContent='';
                 $st_letter->lNotes='';
@@ -78,6 +79,7 @@ class MatchServices
                 $st_letter->lStatus=2;
                 $user=User::where('id',$match->sid)->first();
                 $st_letter->lRecipient=$user->account;
+                $st_letter->lRecipientName=$user->u_name;
                 $st_letter->lTitle='應徵結果通知';
                 $st_letter->lContent='failed';
                 $st_letter->lNotes='';
@@ -113,6 +115,7 @@ class MatchServices
                     $st_letter->lStatus=$status;
                     $user=User::where('id',$match->sid)->first();
                     $st_letter->lRecipient=$user->account;
+                    $st_letter->lRecipientName=$user->u_namw;
                     $st_letter->lTitle='應徵結果通知';
                     $st_letter->lContent='直接錄取';
                     $st_letter->lNotes='';
@@ -123,6 +126,7 @@ class MatchServices
                     $st_letter->lStatus=$status;
                     $user=User::where('id',$match->sid)->first();
                     $st_letter->lRecipient=$user->account;
+                    $st_letter->lRecipientName=$user->u_name;
                     $st_letter->lTitle='應徵結果通知';
                     $st_letter->lContent='接受面試';
                     $st_letter->lNotes='';
@@ -153,6 +157,7 @@ class MatchServices
                 $st_letter=new Station_Letter();
                 $st_letter->lStatus=12;//面試通知信
                 $st_letter->lRecipient=$user->account;
+                $st_letter->lRecipientName=$user->u_name;
                 $st_letter->lTitle='面試通知信';
                 $st_letter->lContent='';
                 $st_letter->lNotes=$interview;
@@ -188,6 +193,7 @@ class MatchServices
                 $st_letter=new Station_Letter();
                 $st_letter->lStatus=$status;
                 $st_letter->lRecipient=$match->c_account;
+                $st_letter->lRecipientName=User::where('account',$match->c_account)->first()->u_name;
                 $st_letter->lTitle='面試接受與否';
                 $st_letter->lContent='接受面試';
                 $st_letter->lNotes='';
@@ -233,6 +239,7 @@ class MatchServices
                 $st_letter=new Station_Letter();
                 $st_letter->lStatus=8;
                 $st_letter->lRecipient=$user->account;
+                $st_letter->lRecipientName=$user->u_name;
                 $st_letter->lTitle='面試結果通知';
                 $st_letter->lContent='';
                 $st_letter->lNotes='';
@@ -265,6 +272,7 @@ class MatchServices
                 $st_letter=new Station_Letter();
                 $st_letter->lStatus=7;
                 $st_letter->lRecipient=$user->account;
+                $st_letter->lRecipientName=$user->u_name;
                 $st_letter->lTitle='面試結果通知';
                 $st_letter->lContent='';
                 $st_letter->lNotes='';
@@ -300,6 +308,7 @@ class MatchServices
                 $st_letter=new Station_Letter();
                 $st_letter->lStatus=$status;
                 $st_letter->lRecipient=$match->c_account;
+                $st_letter->lRecipientName=User::where('account',$match->c_account)->first()->u_name;
                 $st_letter->lTitle='應徵與否';
                 $st_letter->lContent='';
                 $st_letter->lNotes='';

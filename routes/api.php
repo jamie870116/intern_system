@@ -83,6 +83,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::put('adminEditCourseByCourseID', 'CourseController@adminEditCourseByCourseID');
     Route::delete('adminDeleteCourse', 'CourseController@adminDeleteCourse');
     Route::get('adminGetSuccessMatch', 'CourseController@adminGetSuccessMatch'); //系辦取得已成功的媒合資料
+    Route::get('adminGetSuccessMatchByStudent', 'CourseController@adminGetSuccessMatchByStudent'); //系辦以學生姓名或學號取得已成功的媒合資料
     Route::get('adminGetTeacherData', 'CourseController@adminGetTeacherData'); //系辦取得所有老師資訊
     Route::get('adminGetCourse', 'CourseController@adminGetCourse'); //系辦取得課程資料
     Route::post('adminAddStudentToCourse', 'CourseController@adminAddStudentToCourse'); //系辦將學生加入課程並給予實習老師

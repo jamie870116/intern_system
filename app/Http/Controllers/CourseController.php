@@ -132,10 +132,56 @@ class CourseController extends Controller
         }
     }
 
+    //系辦以學生姓名或學號取得已成功的媒合資料
+    public function adminGetSuccessMatchByStudent(Request $request)
+    {
+        $re = $request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'student' => 'required',
+        ), array(
+            'student.required' => '請輸入學生姓名或學號',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $keyword = '%' . $re['student'] . '%';
+            $stu=User::where('account','like', $keyword)->orWhere('u_name','like', $keyword)->get();
+
+            if ($stu) {
+                $student=array();
+                foreach ($stu as $s){
+                    $match = MatchEloquent::where('mstatus', 9)->where('sid',$s->id)->get();
+                    if($match){
+                        foreach ($match as $m){
+                            $m->stu_name=$s->u_name;
+                            $m->stu_num=$s->account;
+                            $m->eTypes=Stu_basic::where('sid',$s->id)->first()->eTypes;
+                            $m->com_name=User::where('account',$m->c_account)->first()->u_name;
+                            $m->com_num=$m->c_account;
+                            $student[]=$m;
+                        }
+
+                    }
+                }
+                return response()->json(['SuccessMatchList'=>$student], 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                $r=array('取得資料失敗');
+                return response()->json($r, 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+
+    }
+
     //系辦取得已成功的媒合資料
     public function adminGetSuccessMatch()
     {
-        $match = MatchEloquent::where('mstatus', 9)->SortByUpdates_DESC()->paginate(4);
+        $match = MatchEloquent::where('mstatus', 9)->SortByUpdates_DESC()->get();
         if ($match) {
             foreach ($match as $m){
                 $stu=User::where('id',$m->sid)->first();
@@ -144,7 +190,6 @@ class CourseController extends Controller
                 $m->eTypes=Stu_basic::where('sid',$stu->id)->first()->eTypes;
                 $m->com_name=User::where('account',$m->c_account)->first()->u_name;
                 $m->com_num=$m->c_account;
-
             }
             return response()->json(['SuccessMatchList'=>$match], 200, [], JSON_UNESCAPED_UNICODE);
         } else {
@@ -152,6 +197,7 @@ class CourseController extends Controller
             return response()->json($r, 400, [], JSON_UNESCAPED_UNICODE);
         }
     }
+
 
     //系辦取得課程資料
     public function adminGetCourse()
@@ -183,13 +229,13 @@ class CourseController extends Controller
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
-            'mid' => 'required|integer',//陣列
-            'tid' => 'required|integer',
-            'courseId' => 'required|integer',
-            'firstDay' => 'required|date',//陣列
+            'mid.*' => 'required',//陣列
+            'tid' => 'required',
+            'courseId' => 'required',
+            'firstDay' => 'required|date',
 
         ), array(
-            'mid.required' => '請輸入媒合ID',
+            'mid.*.required' => '請輸入媒合ID',
             'tid.required' => '請回傳老師ID',
             'courseId.required' => '請回傳課程ID',
             'firstDay.required' => '請輸入開始實習的日期',
@@ -207,9 +253,9 @@ class CourseController extends Controller
             $responses = $this->CourseServices->adminAddStudentToCourse_ser($re);
             $r=array($responses);
             if ($responses == '加入學生成功') {
-                return response()->json($r, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($r, 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }

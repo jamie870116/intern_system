@@ -44,7 +44,9 @@ class GradeController extends Controller
                 $stu_c=Stu_course::where('courseId',$course->courseId)->where('tid',$user->id)->get();
                 foreach ($stu_c as $s){
                     $stu=Stu_course::find($s->SCid)->user_stu()->first();
-                    $s->stuDetails=$stu;
+                    $s->stuName=$stu->u_name;
+                    $s->stuId=$stu->id;
+                    $s->stuAccount=$stu->account;
                 }
                 $course->studentList=$stu_c;
                 $courses[]=$course;
@@ -71,7 +73,9 @@ class GradeController extends Controller
                         $s->assessmentStatus = 1;
                         $s->save();
                     }
-                    $s->stuDetails=$stu;
+                    $s->stuName=$stu->u_name;
+                    $s->stuId=$stu->id;
+                    $s->stuAccount=$stu->account;
                 }
                 $course->studentList=$stu_c;
                 $courses[]=$course;

@@ -6,6 +6,9 @@ use App\Interviews;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Course;
+use App\Stu_course;
+use App\Station_Letter;
 use App\Match as MatchEloquent;
 
 
@@ -31,18 +34,32 @@ class Kernel extends ConsoleKernel
 //        $schedule->command('queue:work')->everyMinute();
 
         $schedule->call(function(){
+            $course=Course::all();
+            foreach ($course as $c){
+                if(Carbon::now()>$c->courseEnd){
+                    $stu_course=Stu_course::where('courseId', $c->courseId)->get();
+                    foreach ($stu_course as $stu_c){
+                        if($stu_c->assessmentStatu==0){
+                            $stu_c->assessmentStatus=1;
+                            $stu_c->save();
+                            $company=Stu_course::find($stu_c->SCid)->user_com()->first();
+                            $student=Stu_course::find($stu_c->SCid)->user_stu()->first();
+                            $st_letter=new Station_Letter();
+                            $st_letter->lStatus=14;
+                            $st_letter->lTitle='學生可以考核了';
+                            $st_letter->lRecipient=$company->account;
+                            $st_letter->lRecipientNmae=$company->u_name;
+                            $st_letter->lContent='您的學生'.$student->u_name.'已經可以考核了';
+                            $st_letter->lNotes='';
+                            $st_letter->save();
+                        }
 
-            $match=MatchEloquent::where('mstatus',3)->get();
-
-            foreach ($match as $m){
-                $in=Interviews::where('mid',$m->mid)->first();
-               $twoDayLater= $in->intime->subDays(2);
-                $now=Carbon::now();
-                if($now>$twoDayLater){
-                   $m->mstatus=5;
-                   $m->save();
+                    }
                 }
             }
+
+
+
         })->everyMinute();
     }
 
