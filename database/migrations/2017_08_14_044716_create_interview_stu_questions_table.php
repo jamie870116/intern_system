@@ -17,6 +17,7 @@ class CreateInterviewStuQuestionsTable extends Migration
 
             $table->increments('insQId');//AI
             $table->longText('insQuestion');//題目名稱
+            $table->tinyInteger('insAnswerType')->default(0);//答案類型
             $table->integer('insQuestionVer');//題目版本
             $table->timestamps();
         });

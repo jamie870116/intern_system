@@ -12,7 +12,7 @@ class Interviews_stu_questions extends Model
     public  $timestamps=true;
 
     protected $fillable = [
-        'insQuestion','insQuestionVer'
+        'insQuestion','insQuestionVer','insAnswerType'
     ];
 
     public function scopeGetLatestVersion($query){

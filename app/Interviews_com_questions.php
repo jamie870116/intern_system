@@ -11,7 +11,7 @@ class Interviews_com_questions extends Model
     public  $timestamps=true;
 
     protected $fillable = [
-        'insCQuestion','insCQuestionVer'
+        'insCQuestion','insCQuestionVer','insCAnswerType'
     ];
 
     public function scopeGetLatestVersion($query){

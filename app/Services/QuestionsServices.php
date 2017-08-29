@@ -38,7 +38,8 @@ class QuestionsServices
             }
             $newQ=new Interviews_stu_questions();
             $newQ->insQuestionVer=$ver;
-            $newQ->insQuestion=$question;
+            $newQ->insQuestion=$question['insQuestion'];
+            $newQ->insAnswerType=$question['insAnswerType'];
             $newQ->save();
 
             return '學生訪談題目新增成功';
@@ -61,7 +62,9 @@ class QuestionsServices
             }
             $newQ=new Interviews_com_questions();
             $newQ->insCQuestionVer=$ver;
-            $newQ->insCQuestion=$question;
+            $newQ->insCQuestion=$question['insCQuestion'];
+            $newQ->insCAnswerType=$question['insCAnswerType'];
+
             $newQ->save();
 
             return '學生訪談題目新增成功';
@@ -80,6 +83,7 @@ class QuestionsServices
                 if($i->insQId==$re['insQId']){
                     $newQ=new Interviews_stu_questions();
                     $newQ->insQuestion=$re['insQuestion'];
+                    $newQ->insAnswerType=$re['insAnswerType'];
                     $newQ->insQuestionVer=$ver;
                     $newQ->save();
                 }else{
@@ -105,6 +109,7 @@ class QuestionsServices
                 if($i->insCQId==$re['insCQId']){
                     $newQ=new Interviews_com_questions();
                     $newQ->insCQuestion=$re['insCQuestion'];
+                    $newQ->insCAnswerType=$re['insCAnswerType'];
                     $newQ->insCQuestionVer=$ver;
                     $newQ->save();
                 }else{

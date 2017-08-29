@@ -106,8 +106,11 @@ class InterviewQuestionsController extends Controller
 
         $objValidator = Validator::make($request->all(), array(
             'insQuestion' => 'required',
+            'insAnswerType' => 'required|integer',
         ), array(
             'insQuestion.required' => '請輸入學生訪談題目',
+            'insAnswerType.required' => '請輸入學生訪談題目答案類型',
+            'integer' => '請輸入int',
 
         ));
         if ($objValidator->fails()) {
@@ -118,7 +121,7 @@ class InterviewQuestionsController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
-            $responses = $this->QuestionsServices->createNewStuQuestion_ser($re['insQuestion']);
+            $responses = $this->QuestionsServices->createNewStuQuestion_ser($re);
             if ($responses == '學生訪談題目新增成功') {
                 return response()->json(array($responses), 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -134,8 +137,11 @@ class InterviewQuestionsController extends Controller
 
         $objValidator = Validator::make($request->all(), array(
             'insCQuestion' => 'required',
+            'insCAnswerType' => 'required',
         ), array(
             'insCQuestion.required' => '請輸入企業訪談題目',
+            'insCAnswerType.required' => '請輸入企業訪談題目答案類型',
+            'integer' => '請輸入int',
 
         ));
         if ($objValidator->fails()) {
@@ -146,7 +152,7 @@ class InterviewQuestionsController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
-            $responses = $this->QuestionsServices->createNewComQuestion_ser($re['insCQuestion']);
+            $responses = $this->QuestionsServices->createNewComQuestion_ser($re);
             if ($responses == '企業訪談題目新增成功') {
                 return response()->json(array($responses), 200, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -162,10 +168,13 @@ class InterviewQuestionsController extends Controller
 
         $objValidator = Validator::make($request->all(), array(
             'insQuestion' => 'required',
+            'insAnswerType' => 'required|integer',
             'insQId' => 'required',
         ), array(
             'insQuestion.required' => '請輸入學生訪談題目',
             'insQId.required' => '請輸入學生訪談題目ID',
+            'insAnswerType.required' => '請輸入學生訪談題目答案類型',
+            'integer' => '請輸入int',
 
         ));
         if ($objValidator->fails()) {
@@ -193,9 +202,11 @@ class InterviewQuestionsController extends Controller
         $objValidator = Validator::make($request->all(), array(
             'insCQuestion' => 'required',
             'insCQId' => 'required',
+            'insCAnswerType' => 'required',
         ), array(
             'insCQuestion.required' => '請輸入企業訪談題目',
             'insCQId.required' => '請輸入企業訪談題目ID',
+            'insCAnswerType.required' => '請輸入企業訪談題目答案類型',
 
         ));
         if ($objValidator->fails()) {
