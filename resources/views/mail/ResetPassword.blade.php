@@ -1,2 +1,2 @@
 請點下列網址，以重置密碼
-<h3><a href="http://tsaiweb.southeastasia.cloudapp.azure.com/jamie/public/api/resetPassword?token={{$token}}">http://tsaiweb.southeastasia.cloudapp.azure.com/jamie/public/api/resetPassword?token={{$token}}</a></h3>
+<h3><a href="http://tsaiweb.southeastasia.cloudapp.azure.com/aa9453aa/#ResetPassword?token={{$token}}">http://tsaiweb.southeastasia.cloudapp.azure.com/aa9453aa/#ResetPassword?token={{$token}}</a></h3>

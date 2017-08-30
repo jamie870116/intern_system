@@ -19,9 +19,7 @@ class CreateInterviewStuTable extends Migration
             $table->integer('SCid');//課程老師學生廠商連結
             $table->date('insDate');//訪視日期
             $table->integer('insNum');//進用實習生人數
-            $table->string('insStuName',30);//student name
             $table->string('insStuClass',100);//student class
-            $table->string('insAddress',200);//實習地址
             $table->tinyInteger('insVisitWay');//訪視方法
             $table->string('insAns',500);//訪視答案，以逗點隔開
             $table->tinyInteger('insQuestionVer');//題目版本

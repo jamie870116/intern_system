@@ -11,8 +11,8 @@ class Interviews_stu extends Model
     public  $timestamps=true;
 
     protected $fillable = [
-        'SCid','insDate','insNum','insStuName'
-        ,'insStuClass','insAddress','insVisitWay'
+        'SCid','insDate','insNum'
+        ,'insStuClass','insVisitWay'
         ,'insAns','insQuestionVer','insComments'
     ];
 }

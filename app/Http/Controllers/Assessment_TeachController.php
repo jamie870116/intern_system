@@ -94,12 +94,28 @@ class Assessment_TeachController extends Controller
     public function getTeacherAssessmentById(Request $request)
     {
         $re = $request->all();
-        $Assessment_Teach=Assessment_TeachEloquent::where('asTId',$re['asTId'])->first();
-        if ($Assessment_Teach) {
-            return response()->json($Assessment_Teach, 200, [], JSON_UNESCAPED_UNICODE);
+
+        $objValidator = Validator::make($request->all(), array(
+            'SCid' => 'required',
+        ), array(
+            'SCid.required' => '請輸入SCid',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
         } else {
-            return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
+            $Assessment_Teach=Assessment_TeachEloquent::where('SCid',$re['SCid'])->first();
+            if ($Assessment_Teach) {
+                return response()->json($Assessment_Teach, 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json('取得成果評量資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
+            }
         }
+
     }
 
     //老師修改成績

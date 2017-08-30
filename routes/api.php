@@ -72,7 +72,10 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::delete('deleteAbilityById', 'Stu_resumeController@deleteAbilityById');
 
     //取得履歷資料
-    Route::get('findResumeDataById', 'Stu_resumeController@findResumeDataById');
+    Route::get('findResumeDataById', 'Stu_resumeController@findResumeDataById');//學生取自己的
+    Route::get('getResumeDataBySid', 'Stu_resumeController@getResumeDataBySid');//其他人取
+
+
     //下載證照範例檔
     Route::get('downloadLicenseFile','Stu_resumeController@downloadLicenseFile');
 

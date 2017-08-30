@@ -42,7 +42,6 @@ class Assessment_ComServices{
         if($Stu_c->assessmentStatus==3){
             return '老師已評分，無法再行修改，請聯絡系辦';
         }elseif($Assessment_Com){
-            $Assessment_Com->SCid = $re['SCid'];
             $Assessment_Com->asStart = $re['asStart'];
             $Assessment_Com->asEnd = $re['asEnd'];
             $Assessment_Com->asDepartment = $re['asDepartment'];

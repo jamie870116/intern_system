@@ -22,7 +22,7 @@ class Stu_resumeController extends Controller
 
     public function __construct(ResumeServices $ResumeServices)
     {
-        $this->middleware('student');
+        $this->middleware('student',['except'=>'getResumeDataBySid']);
         $this->ResumeServices = $ResumeServices;
     }
 
@@ -130,6 +130,37 @@ class Stu_resumeController extends Controller
         return response()->json($stdRe, 200, [], JSON_UNESCAPED_UNICODE);
     }
     //取得自己的履歷結束
+
+    //取得學生履歷
+    public function getResumeDataBySid(Request $request)
+    {
+        $re = $request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'sid' => 'required|integer',
+        ), array(
+            'sid.required' => '請輸入jid',
+            'integer' => '請輸入int'
+
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $id = $re['sid'];
+            $stuBas = stuBasicEloquent::where('sid', $id)->first();
+            $stuJExp = stuJExpEloquent::where('sid', $id)->get();
+            $stuWor = stuWorksEloquent::where('sid', $id)->get();
+            $stuA=stuAbilityEloquent::where('sid', $id)->get();
+            $stdRe = array('stu_basic'=>$stuBas,'stu_jobExperience'=> $stuJExp,'stu_works'=> $stuWor,'stu_ability'=>$stuA);
+            return response()->json($stdRe, 200, [], JSON_UNESCAPED_UNICODE);
+        }
+
+    }
 
     //修改履歷開始
     public function editBasicDataById(Request $request)

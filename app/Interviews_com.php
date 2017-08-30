@@ -11,8 +11,7 @@ class Interviews_com extends Model
     public  $timestamps=true;
 
     protected $fillable = [
-        'SCid','insCDate','insCNum','insComName',
-        'insComTel','insAddress','insCVisitWay','insCAns',
+        'SCid','insCDate','insCNum','insCVisitWay','insCAns',
         'insCQuestionVer','insCComments'
     ];
 }

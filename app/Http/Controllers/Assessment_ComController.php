@@ -21,23 +21,23 @@ class Assessment_ComController extends Controller
         $this->middleware('company');
         $this->Assessment_ComServices = $Assessment_ComServices;
     }
-    //取得待輸入之學生成績列表
-    public function companyGetAssessmentList(){
-        $token = JWTAuth::getToken();
-        $user = JWTAuth::toUser($token);
-        $stu_course = Stu_courseEloquent::where('c_account', $user->account)->get();
-        $Assessment_list = array();
-        foreach($stu_course as $stu_cour){
-            $course=CourseEloquent::where('courseId',$stu_cour->courseId)->first();
-            if(Carbon::now() > $course->courseEnd && $stu_cour->assessmentStatus = 0){
-                $stu_cour->assessmentStatus = 1;
-            }
-            $stu = UserEloquent::where('id',$stu_cour->sid)->first();
-            $list = array('stu_name'=>$stu->u_name,'SCid'=>$stu_cour->SCid,'assessmentStatus'=>$stu_cour->assessmentStatus);
-            $Assessment_list[] = $list;
-        }
-        return response()->json(['Assessment_list'=>$Assessment_list], 200, [], JSON_UNESCAPED_UNICODE);
-    }
+//    //取得待輸入之學生成績列表
+//    public function companyGetAssessmentList(){
+//        $token = JWTAuth::getToken();
+//        $user = JWTAuth::toUser($token);
+//        $stu_course = Stu_courseEloquent::where('c_account', $user->account)->where('assessmentStatus',1)->get();
+//        $Assessment_list = array();
+//        foreach($stu_course as $stu_cour){
+////            $course=CourseEloquent::where('courseId',$stu_cour->courseId)->first();
+////            if(Carbon::now() > $course->courseEnd && $stu_cour->assessmentStatus = 0){
+////                $stu_cour->assessmentStatus = 1;
+////            }
+//            $stu = UserEloquent::where('id',$stu_cour->sid)->first();
+//            $list = array('stu_name'=>$stu->u_name,'SCid'=>$stu_cour->SCid,'assessmentStatus'=>$stu_cour->assessmentStatus);
+//            $Assessment_list[] = $list;
+//        }
+//        return response()->json(['Assessment_list'=>$Assessment_list], 200, [], JSON_UNESCAPED_UNICODE);
+//    }
 
     //廠商在輸入成績前的預設資料
     public function getAssessmentBeforeInput(Request $request){
@@ -70,7 +70,7 @@ class Assessment_ComController extends Controller
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
-            'SCid' => 'required',
+            'SCid' => 'required|unique:Assessment_Com,SCid',
             'asStart' => 'required|date',
             'asEnd' => 'required|date',
             'asDepartment' => 'required',
@@ -127,6 +127,7 @@ class Assessment_ComController extends Controller
             'asAbsenteeism_hours.required' => '請輸入曠職時數',
             'date' => '請輸入日期',
             'integer' =>'請輸入數字',
+            'unique' =>'已填寫過',
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
@@ -152,7 +153,6 @@ class Assessment_ComController extends Controller
 
         $objValidator = Validator::make($request->all(), array(
             'asId' => 'required',
-            'SCid' => 'required',
             'asStart' => 'required|date',
             'asEnd' => 'required|date',
             'asDepartment' => 'required',
@@ -180,7 +180,6 @@ class Assessment_ComController extends Controller
             'asAbsenteeism_days' => 'required|integer',
             'asAbsenteeism_hours' => 'required|integer',
         ), array(
-            'SCid.required' => '請輸入SCid',
             'asId.required' => '請輸入asId',
             'asStart.required' => '請輸入實習開始時間',
             'asEnd.required' => '請輸入實習結束時間',
@@ -232,13 +231,30 @@ class Assessment_ComController extends Controller
     public function getCompanyAssessmentById(Request $request)
     {
         $re = $request->all();
-        $Assessment_Com=Assessment_Com::where('asId',$re['asId'])->first();
-        $Assessment_Com->totalGrade_Com=$Assessment_Com->asGrade1+$Assessment_Com->asGrade2+$Assessment_Com->asGrade3+$Assessment_Com->asGrade4+$Assessment_Com->asGrade5;
-        if ($Assessment_Com) {
-            return response()->json($Assessment_Com, 200, [], JSON_UNESCAPED_UNICODE);
+        $objValidator = Validator::make($request->all(), array(
+            'SCid' => 'required',
+        ), array(
+            'SCid.required' => '請輸入SCid',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
         } else {
-            return response()->json('取得職缺資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
+            $Assessment_Com=Assessment_Com::where('SCid',$re['SCid'])->get();
+            foreach ($Assessment_Com as $a){
+                $a->totalGrade_Com=$a->asGrade1+$a->asGrade2+$a->asGrade3+$a->asGrade4+$a->asGrade5;
+            }
+            if ($Assessment_Com) {
+                return response()->json($Assessment_Com, 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json('取得成果評量資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
+            }
         }
+
     }
 
 }

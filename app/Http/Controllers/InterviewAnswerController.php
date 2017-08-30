@@ -122,7 +122,7 @@ class InterviewAnswerController extends Controller
             if ($responses == '取得訪談紀錄失敗') {
                 return response()->json(array($responses), 400, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json(['InterviewList'=>$responses], 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -136,9 +136,6 @@ class InterviewAnswerController extends Controller
             'SCid' => 'required',
             'insCDate' => 'required|date',
             'insCNum' => 'required|integer',
-            'insComName' => 'required',
-            'insComTel' => 'required',
-            'insAddress' => 'required',
             'insCVisitWay' => 'required|integer',
             'insCAns' => 'required',
             'insCQuestionVer' => 'required|integer',
@@ -147,9 +144,6 @@ class InterviewAnswerController extends Controller
             'SCid.required' => '請輸入關聯的鍵值(SCid)',
             'insCDate.required' => '請輸入訪談日期',
             'insCNum.required' => '請輸入進用人數',
-            'insComName.required' => '請輸入實習員名稱',
-            'insComTel.required' => '請輸入公司電話',
-            'insAddress.required' => '請輸入公司住址',
             'insCVisitWay.required' => '請輸入訪談方式',
             'insCAns.required' => '請輸入訪談答案',
             'insCQuestionVer.required' => '請輸入訪談問卷版本',
@@ -186,9 +180,6 @@ class InterviewAnswerController extends Controller
             'insCId' => 'required',
             'insCDate' => 'required|date',
             'insCNum' => 'required|integer',
-            'insComName' => 'required',
-            'insComTel' => 'required',
-            'insAddress' => 'required',
             'insCVisitWay' => 'required|integer',
             'insCAns' => 'required',
             'insCQuestionVer' => 'required|integer',
@@ -198,9 +189,6 @@ class InterviewAnswerController extends Controller
             'insCId.required' => '請輸入問卷的鍵值(insCId)',
             'insCDate.required' => '請輸入訪談日期',
             'insCNum.required' => '請輸入進用人數',
-            'insComName.required' => '請輸入實習員名稱',
-            'insComTel.required' => '請輸入公司名稱',
-            'insAddress.required' => '請輸入公司住址',
             'insCVisitWay.required' => '請輸入訪談方式',
             'insCAns.required' => '請輸入訪談答案',
             'insCQuestionVer.required' => '請輸入訪談問卷版本',
@@ -234,9 +222,7 @@ class InterviewAnswerController extends Controller
             'SCid' => 'required',
             'insDate' => 'required|date',
             'insNum' => 'required|integer',
-            'insStuName' => 'required',
             'insStuClass' => 'required',
-            'insAddress' => 'required',
             'insVisitWay' => 'required|integer',
             'insAns' => 'required',
             'insQuestionVer' => 'required|integer',
@@ -245,9 +231,7 @@ class InterviewAnswerController extends Controller
             'SCid.required' => '請輸入關聯的鍵值(SCid)',
             'insDate.required' => '請輸入訪談日期',
             'insNum.required' => '請輸入進用人數',
-            'insStuName.required' => '請輸入學生名稱',
             'insStuClass.required' => '請輸入學生班級',
-            'insAddress.required' => '請輸入實習地住址',
             'insVisitWay.required' => '請輸入訪談方式',
             'insAns.required' => '請輸入訪談答案',
             'insQuestionVer.required' => '請輸入訪談問卷版本',
@@ -284,9 +268,7 @@ class InterviewAnswerController extends Controller
             'SCid' => 'required',
             'insDate' => 'required|date',
             'insNum' => 'required|integer',
-            'insStuName' => 'required',
             'insStuClass' => 'required',
-            'insAddress' => 'required',
             'insVisitWay' => 'required|integer',
             'insAns' => 'required',
             'insQuestionVer' => 'required|integer',
@@ -295,9 +277,7 @@ class InterviewAnswerController extends Controller
             'SCid.required' => '請輸入關聯的鍵值(SCid)',
             'insDate.required' => '請輸入訪談日期',
             'insNum.required' => '請輸入進用人數',
-            'insStuName.required' => '請輸入學生名稱',
             'insStuClass.required' => '請輸入學生班級',
-            'insAddress.required' => '請輸入實習地住址',
             'insVisitWay.required' => '請輸入訪談方式',
             'insAns.required' => '請輸入訪談答案',
             'insQuestionVer.required' => '請輸入訪談問卷版本',

@@ -43,7 +43,8 @@ class JournalController extends Controller
             }else{
                 $passDeadLine=true;
             }
-            $list = array('SCid'=>$stu_cour->SCid,'com_name'=> $journalCom->u_name, 'courseName'=>$course->courseName,'passDeadLine'=>$passDeadLine);
+            $com_b = UserEloquent::find($journalCom->id)->company()->first();
+            $list = array('SCid'=>$stu_cour->SCid,'profilePic'=>$com_b->profilePic,'com_name'=> $journalCom->u_name, 'courseName'=>$course->courseName,'passDeadLine'=>$passDeadLine);
 
             $intern_list[] = $list;
 
