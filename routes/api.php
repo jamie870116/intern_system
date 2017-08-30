@@ -115,6 +115,7 @@ Route::group(['middleware' => 'jwt'], function () {
 //    Route::get('getInternStudentList','InterviewAnswerController@getInternStudentList');//取得該老師所有指導生列表
     Route::get('getNullComInterview','InterviewAnswerController@getNullComInterview');//取得填寫訪談紀錄前的預設資料(企業)
     Route::get('getNullStuInterview','InterviewAnswerController@getNullStuInterview');//取得填寫訪談紀錄前的預設資料(學生)
+    Route::get('getInterviewBySCid','InterviewAnswerController@getInterviewBySCid');//取得填寫過的訪談紀錄
 
     //成果評量相關_廠商
 //    Route::get('companyGetAssessmentList','Assessment_ComController@companyGetAssessmentList');//取得待輸入之學生成績列表

@@ -18,7 +18,7 @@ class InterviewAnswerServices{
         $com = Stu_course::find($re['SCid'])->user_com()->first();
         $com_b = User::find($com->id)->company()->first();
         if($inCQ&&$stu&&$com_b){
-            return array('InterviewQ'=>$inCQ,'stuName'=>$stu->u_name,'comTel'=>$com->u_tel,'comName'=>$com->u_name,'comAddress'=>$com_b->caddress,$re['SCid']);
+            return array('InterviewQ'=>$inCQ,'stuName'=>$stu->u_name,'comTel'=>$com->u_tel,'comName'=>$com->u_name,'comAddress'=>$com_b->caddress,'SCid'=>$re['SCid']);
         }else{
             return '取得訪談紀錄失敗';
         }
@@ -30,7 +30,7 @@ class InterviewAnswerServices{
         $com = Stu_course::find($re['SCid'])->user_com()->first();
         $com_b = User::find($com->id)->company()->first();
         if($inSQ&&$stu&&$com_b){
-            return array('InterviewQ'=>$inSQ,'stuName'=>$stu->u_name,'comTel'=>$com->u_tel,'comName'=>$com->u_name,'comAddress'=>$com_b->caddress,$re['SCid']);
+            return array('InterviewQ'=>$inSQ,'stuName'=>$stu->u_name,'comTel'=>$com->u_tel,'comName'=>$com->u_name,'comAddress'=>$com_b->caddress,'SCid'=>$re['SCid']);
         }else{
             return '取得訪談紀錄失敗';
         }
@@ -90,6 +90,7 @@ class InterviewAnswerServices{
         $InterviewCom->insCComments = $re['insCComments'];
         return '訪談紀錄新增成功';
     }
+
     public function teacherEditComInterview_ser($re)
     {
         $InterviewCom=InterviewComEloquent::where('insCId',$re['insCId'])->first();
@@ -105,6 +106,7 @@ class InterviewAnswerServices{
         $InterviewCom->insCComments = $re['insCComments'];
         return '訪談紀錄修改成功';
     }
+
     public function teacherCreateStuInterview_ser($re)
     {
         $InterviewCom = new InterviewStuEloquent();
@@ -120,6 +122,7 @@ class InterviewAnswerServices{
         $InterviewCom->insComments = $re['insComments'];
         return '訪談紀錄新增成功';
     }
+
     public function teacherEditStuInterview_ser($re)
     {
         $InterviewCom=InterviewStuEloquent::where('insId',$re['insId'])->first();

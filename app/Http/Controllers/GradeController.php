@@ -44,9 +44,11 @@ class GradeController extends Controller
                 $stu_c=Stu_course::where('courseId',$course->courseId)->where('tid',$user->id)->get();
                 foreach ($stu_c as $s){
                     $stu=Stu_course::find($s->SCid)->user_stu()->first();
+                    $stu_b=Stu_course::find($s->SCid)->stu_basic()->first();
                     $s->stuName=$stu->u_name;
                     $s->stuId=$stu->id;
                     $s->stuAccount=$stu->account;
+                    $s->profilePic=$stu_b->profilePic;
                 }
                 $course->studentList=$stu_c;
                 $courses[]=$course;
@@ -76,6 +78,8 @@ class GradeController extends Controller
                     $s->stuName=$stu->u_name;
                     $s->stuId=$stu->id;
                     $s->stuAccount=$stu->account;
+                    $stu_b=Stu_course::find($s->SCid)->stu_basic()->first();
+                    $s->profilePic=$stu_b->profilePic;
                 }
                 $course->studentList=$stu_c;
                 $courses[]=$course;

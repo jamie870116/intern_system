@@ -66,7 +66,7 @@ class InterviewAnswerController extends Controller
             if ($responses == '取得訪談紀錄失敗') {
                 return response()->json(array($responses), 400, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json(['NullComInterviewList'=>$responses], 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -94,7 +94,7 @@ class InterviewAnswerController extends Controller
             if ($responses == '取得訪談紀錄失敗') {
                 return response()->json(array($responses), 400, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json(['NullComInterviewList'=>$responses], 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -231,7 +231,7 @@ class InterviewAnswerController extends Controller
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
-            'SCid' => 'requiredd',
+            'SCid' => 'required',
             'insDate' => 'required|date',
             'insNum' => 'required|integer',
             'insStuName' => 'required',
