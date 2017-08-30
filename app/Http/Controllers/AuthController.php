@@ -258,7 +258,7 @@ class AuthController extends Controller
 
     }
 
-    //忘記密碼(重置密碼信)
+    //忘記密碼
     public function forgetPassword(Request $request)
     {
         $re = $request->all();
@@ -278,12 +278,16 @@ class AuthController extends Controller
         } else {
             $user = UserEloquent::where('account', $re['account'])->first();
             if ($user) {
-                $password = '888888';
-                $user->password = bcrypt($password);
-                $data = ['mail' => $user->email, 'pw' => $password];
-                dispatch(new resetPasswordMail($data));
+                $key="";
+                $pattern = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                for($i=0;$i<15;$i++){
+                    $key .= $pattern{rand(0,35)};
+                }
                 $user->save();
-                return response()->json(['已寄出重置密碼郵件'], 200, [], JSON_UNESCAPED_UNICODE);
+                $data = ['mail' => $user->email, 'token' => $key];
+                dispatch(new resetPasswordMail($data));
+
+                return response()->json(['去重設密碼'], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json(['查無此帳號'], 400, [], JSON_UNESCAPED_UNICODE);
             }
@@ -296,6 +300,7 @@ class AuthController extends Controller
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
+            'token' => 'required',
             'password' => 'required|max:20|min:6',
             'conf_pass' => 'required'
         ), array(
@@ -303,6 +308,7 @@ class AuthController extends Controller
             'conf_pass.required' => '請再次輸入密碼',
             'max' => '字數請介於6~20位元',
             'min' => '字數請介於6~20位元',
+            'token.required' => '請輸入驗證碼'
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
@@ -314,8 +320,7 @@ class AuthController extends Controller
         } else if ($re['password'] != $re['conf_pass']) {
             return response()->json(['兩次密碼不一致'], 400, [], JSON_UNESCAPED_UNICODE);
         } else {
-            $token = JWTAuth::getToken();
-            $user = JWTAuth::toUser($token);
+            $user = UserEloquent::where('check_code', $re['token'])->first();
             if ($user) {
                 $user->password = bcrypt($re['password']);
                 $user->save();

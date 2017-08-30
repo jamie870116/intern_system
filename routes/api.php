@@ -20,7 +20,8 @@ Route::post('Login', 'AuthController@postLogin');//登入
 Route::post('Register', 'AuthController@register');//註冊
 Route::post('Logout', 'AuthController@getLogout');//登出
 Route::get('Check_code', 'AuthController@check_code');//驗證信
-Route::post('forgetPassword', 'AuthController@forgetPassword');//忘記密碼(重置密碼信)
+Route::post('forgetPassword', 'AuthController@forgetPassword');//忘記密碼
+Route::post('resetPassword', 'AuthController@resetPassword');//重設密碼
 
 Route::get('getAnnouncement','AnnouncementController@getAnnouncement');//修改公告
 Route::get('getAnnouncementByKeywords','AnnouncementController@getAnnouncementByKeywords');//關鍵字搜尋公告
@@ -30,8 +31,6 @@ Route::get('downloadAnnouncementFileByFileName','AnnouncementController@download
 Route::group(['middleware' => 'jwt'], function () {
     //取得使用者資料
     Route::get('findUserDetailsByToken', 'AuthController@findUserDetailsByToken');
-
-    Route::post('resetPassword', 'AuthController@resetPassword');//重設密碼
 
     //職缺相關
     Route::post('createJobOpening', 'Job_openingController@createJobOpening');//新增職缺
@@ -48,7 +47,6 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('getCompanyDetailsByToken', 'Com_basicController@getCompanyDetailsByToken');//取得廠商自己的簡介
     Route::post('editCompanyDetails', 'Com_basicController@editCompanyDetails');//修改廠商資料
     Route::get('getCompanyDetailsByAccount', 'Com_basicController@getCompanyDetailsByAccount');//依帳號查詢廠商資料
-
 
     //媒合相關
     Route::post('studentSubmitResume', 'MatchController@studentSubmitResume');//投遞履歷resume

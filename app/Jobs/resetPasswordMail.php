@@ -33,7 +33,7 @@ class resetPasswordMail implements ShouldQueue
         $data=$this->data;
         Mail::send('mail.ResetPassword', $data, function($message) use($data)
         {
-            $message->to($data['mail'], $data['pw'])->subject('密碼重置信件');
+            $message->to($data['mail'], $data['token'])->subject('密碼重置信件');
         });
     }
 }
