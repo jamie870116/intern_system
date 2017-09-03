@@ -63,6 +63,7 @@ class InterviewAnswerServices{
 
                 $stu = Stu_course::find($SCid)->user_stu()->first();
                 $com = Stu_course::find($SCid)->user_com()->first();
+                $stu_b = Stu_course::find($SCid)->stu_basic()->first();
                 $com_b = User::find($com->id)->company()->first();
 
                 $interS->stuName=$stu->u_name;
@@ -70,7 +71,7 @@ class InterviewAnswerServices{
                 $interS->comTel=$com->u_tel;
                 $interS->comName=$com->u_name;
                 $interS->cAddress=$com_b->caddress;
-                $interS->profilePic=$com_b->profilePic;
+                $interS->profilePic=$stu_b->profilePic;
             }
 
                 return ['InterviewComList'=>$interCs,'InterviewStuList'=>$interSs];

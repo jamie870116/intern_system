@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Job_opening;
 use App\Services\MatchServices;
 
+use App\Stu_ability;
 use Illuminate\Http\Request;
 
 use App\Match as MatchEloquent;
@@ -72,7 +73,8 @@ class MatchController extends Controller
                 $stuBas = stuBasicEloquent::where('sid', $id)->first();
                 $stuJExp = stuJExpEloquent::where('sid', $id)->get();
                 $stuWor = stuWorksEloquent::where('sid', $id)->get();
-                $stdRe = array('mid'=>$mid, 'stuBasic'=>$stuBas, 'stuJobExperience'=> $stuJExp, 'stuWorks'=> $stuWor);
+                $stuA=Stu_ability::where('sid', $id)->get();
+                $stdRe = array('mid'=>$mid, 'stuBasic'=>$stuBas, 'stuJobExperience'=> $stuJExp, 'stuWorks'=> $stuWor,'stuAb'=>$stuA);
                 $response[] = $stdRe;
             }
 //[$responses]

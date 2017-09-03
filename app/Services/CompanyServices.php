@@ -4,6 +4,7 @@ namespace App\Services;
 
 
 use App\Com_basic as comEloquent;
+use App\Job_opening;
 use App\User as userEloquent;
 use App\User;
 use File;
@@ -59,6 +60,11 @@ class CompanyServices
             }
 
 
+        }
+        $jobs=Job_opening::where('c_account',$user->account)->get();
+        foreach ($jobs as $j){
+            $jobs->c_name=$re['c_name'];
+            $j->save();
         }
         $user->u_name = $re['c_name'];
         $user->u_tel = $re['u_tel'];

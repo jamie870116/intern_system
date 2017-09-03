@@ -30,7 +30,7 @@ class MatchServices
         $m = MatchEloquent::where('sid', $user->id)->where('joid', $re['joid'])->first();
         if (!$m) {
             $resume = stuBasicEloquent::where('sid', $user->id)->first();
-            if ($resume->eTypes != null) {
+            if ($resume->autobiography != null) {
                 $match = new MatchEloquent();
                 $match->joid = $re['joid'];
 
@@ -45,7 +45,7 @@ class MatchServices
                 $st_letter=new Station_Letter();
                 $st_letter->lStatus=1;
                 $st_letter->lRecipient=$com->c_account;
-                $st_letter->lRecipientName=$com->u_name;
+                $st_letter->lRecipientName=$com->c_name;
                 $st_letter->lTitle='有學生向您投遞履歷';
                 $st_letter->lContent='';
                 $st_letter->lNotes='';

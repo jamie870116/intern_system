@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Com_basic;
 use App\Jobs\resetPasswordMail;
 use App\Stu_basic;
+use App\Teacher_profile_pic;
 use Carbon\Carbon;
 use Cookie;
 use Illuminate\Http\Request;
@@ -249,6 +250,10 @@ class AuthController extends Controller
             }elseif($user->u_status==2){
                 $com_basic=Com_basic::where('c_account',$user->account)->first();
                 $user->profilePic=$com_basic->profilePic;
+            }elseif ($user->u_status==1){
+                $teaPic = Teacher_profile_pic::where('tid', $user->id)->first();
+                if($teaPic)
+                $user->profilePic=$teaPic->profilePic;
             }
             $ex_time = Carbon::now()->addHour(5)->timestamp;
             return response()->json($user, 200)->cookie('token', $token, $ex_time);

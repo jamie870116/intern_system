@@ -83,7 +83,7 @@ class AccountController extends Controller
             if ($responses == '此id不是學生'||$responses == 'Id不存在') {
                 return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json(['ResumeList'=>$responses], 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }

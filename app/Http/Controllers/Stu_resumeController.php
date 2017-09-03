@@ -139,7 +139,7 @@ class Stu_resumeController extends Controller
         $objValidator = Validator::make($request->all(), array(
             'sid' => 'required|integer',
         ), array(
-            'sid.required' => '請輸入jid',
+            'sid.required' => '請輸入sid',
             'integer' => '請輸入int'
 
         ));
@@ -185,7 +185,7 @@ class Stu_resumeController extends Controller
             'OS'=>'nullable|integer',
             'OR'=>'nullable|integer',
             'OW'=>'nullable|integer',
-            'graduateYear' => 'required',
+            'graduateYear' => 'required|integer',
             'autobiography' => 'required',//自傳
             'graduatedSchool' => 'required',
             'department' => 'nullable',//系

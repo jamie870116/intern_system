@@ -5,11 +5,79 @@ namespace App\Services;
 
 use App\Journal;
 use App\Stu_course;
+use App\Teacher_profile_pic;
 use Carbon\Carbon;
 use JWTAuth;
+use Storage;
 
 class GradeServices
 {
+    public function teacherUploadProfilePic_ser($request,$file)
+    {
+
+        $token = JWTAuth::getToken();
+        $user = JWTAuth::toUser($token);
+        $id = $user->id;
+        $teaPic = Teacher_profile_pic::where('tid', $id)->first();
+        if($teaPic){
+            if ($file) {
+                $extension = $file->getClientOriginalExtension();
+                $file_name = strval(time()) . str_random(5) . '_pro.' . $extension;
+
+                if ($request->hasFile('profilePic')) {
+                    if ($teaPic->profilePic != null) {
+
+                        $file_path = 'public/user-upload/' . $teaPic->profilePic;
+                        $file = Storage::exists('public/user-upload/' . $teaPic->profilePic);
+
+//                    Log::error(Storage::exists('public/user-upload/' . $teaPic->profilePic));
+
+                        if ($file) {
+                            Storage::delete($file_path);
+                        } else {
+                            return 'failed';
+                        }
+                    }
+                    $path = $request->file('profilePic')->storeAs(
+                        'public/user-upload/', $file_name
+                    );
+                    //<img src='storage/user-upload/1501257619SWUxK.png' >
+                    $teaPic->tid=$id;
+                    $teaPic->profilePic = $file_name;
+                    $teaPic->save();
+                } else {
+                    return "頭貼上傳失敗";
+                }
+            }else{
+                return "頭貼上傳失敗";
+            }
+        }else{
+            $teaPic= new Teacher_profile_pic();
+            if ($file) {
+                $extension = $file->getClientOriginalExtension();
+                $file_name = strval(time()) . str_random(5) . '_pro.' . $extension;
+
+                if ($request->hasFile('profilePic')) {
+                    $path = $request->file('profilePic')->storeAs(
+                        'public/user-upload/', $file_name
+                    );
+                    //<img src='storage/user-upload/1501257619SWUxK.png' >
+                    $teaPic->tid=$id;
+                    $teaPic->profilePic = $file_name;
+                    $teaPic->save();
+                } else {
+                    return "頭貼上傳失敗";
+                }
+            }else{
+                return "頭貼上傳失敗";
+            }
+        }
+
+
+        return "上傳頭貼成功";
+    }
+
+
     public function teacherGetStudentCourseList_ser($re)
     {
         $token = JWTAuth::getToken();

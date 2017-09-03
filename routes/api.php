@@ -107,6 +107,8 @@ Route::group(['middleware' => 'jwt'], function () {
 //    Route::get('companyGetStudentJournalListBySCid','GradeController@companyGetStudentJournalListBySCid');//廠商取得特定學生的某一課程之週誌列表
     Route::post('companyScoreStudentJournal','GradeController@companyScoreStudentJournal');//廠商批改學生週誌
     Route::get('getStudentJournalDetailByJournalID','GradeController@getStudentJournalDetailByJournalID');//取得特定週誌
+     Route::get('teacherGetNotExpiredStudentList','GradeController@teacherGetNotExpiredStudentList');//老師取得未過期學生列表
+     Route::post('teacherUploadProfilePic','GradeController@teacherUploadProfilePic');//老師上傳頭貼
 
     //訪談紀錄
     Route::post('teacherCreateComInterview','InterviewAnswerController@teacherCreateComInterview');//老師輸入對企業問卷
