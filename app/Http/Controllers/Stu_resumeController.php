@@ -151,13 +151,20 @@ class Stu_resumeController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
-            $id = $re['sid'];
-            $stuBas = stuBasicEloquent::where('sid', $id)->first();
-            $stuJExp = stuJExpEloquent::where('sid', $id)->get();
-            $stuWor = stuWorksEloquent::where('sid', $id)->get();
-            $stuA=stuAbilityEloquent::where('sid', $id)->get();
-            $stdRe = array('stu_basic'=>$stuBas,'stu_jobExperience'=> $stuJExp,'stu_works'=> $stuWor,'stu_ability'=>$stuA);
-            return response()->json($stdRe, 200, [], JSON_UNESCAPED_UNICODE);
+            $token = JWTAuth::getToken();
+            $user = JWTAuth::toUser($token);
+            if($user->u_status!=0){
+                $id = $re['sid'];
+                $stuBas = stuBasicEloquent::where('sid', $id)->first();
+                $stuJExp = stuJExpEloquent::where('sid', $id)->get();
+                $stuWor = stuWorksEloquent::where('sid', $id)->get();
+                $stuA=stuAbilityEloquent::where('sid', $id)->get();
+                $stdRe = array('stu_basic'=>$stuBas,'stu_jobExperience'=> $stuJExp,'stu_works'=> $stuWor,'stu_ability'=>$stuA);
+                return response()->json($stdRe, 200, [], JSON_UNESCAPED_UNICODE);
+            }else{
+                return response()->json(['你沒有權限觀看他人履歷'], 200, [], JSON_UNESCAPED_UNICODE);
+            }
+
         }
 
     }

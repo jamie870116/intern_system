@@ -115,7 +115,7 @@ class MatchServices
                     $st_letter->lStatus=$status;
                     $user=User::where('id',$match->sid)->first();
                     $st_letter->lRecipient=$user->account;
-                    $st_letter->lRecipientName=$user->u_namw;
+                    $st_letter->lRecipientName=$user->u_name;
                     $st_letter->lTitle='應徵結果通知';
                     $st_letter->lContent='直接錄取';
                     $st_letter->lNotes='';

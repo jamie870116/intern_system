@@ -168,7 +168,11 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('getAllStudentList','AccountController@getAllStudentList');//取得所有學生資料
     Route::get('getAllTeacherList','AccountController@getAllTeacherList');//取得所有老師資料
     Route::get('getAllCompanyList','AccountController@getAllCompanyList');//取得所有廠商資料
+    Route::get('searchAllCompanyByKeyword','AccountController@searchAllCompanyByKeyword');//搜尋廠商名稱(全部)
+    Route::get('getReviewedCompanyList','AccountController@getReviewedCompanyList');//取得已審核廠商資料
+    Route::get('searchReviewedCompanyByKeyword','AccountController@searchReviewedCompanyByKeyword');//搜尋廠商名稱(已審核)
     Route::get('getNoReviewedCompanyList','AccountController@getNoReviewedCompanyList');//取得已通過驗證未審核的廠商資料
+    Route::get('searchNoReviewedCompanyByKeyword','AccountController@searchNoReviewedCompanyByKeyword');//搜尋廠商名稱(未審核)
     Route::get('adminGetStudentResumeById','AccountController@adminGetStudentResumeById');//取得某學生履歷
     Route::get('adminGetCompanyDetailsById','AccountController@adminGetCompanyDetailsById');//取得某廠商基本資料
     Route::get('getDisabledUsersList','AccountController@getDisabledUsersList');//取得停用中的帳號

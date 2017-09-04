@@ -28,7 +28,7 @@ class AccountController extends Controller
 
     //取得所有學生資料
     public function getAllStudentList(){
-        $students=User::where('u_status',0)->get();
+        $students=User::where('u_status',0)->paginate(12);
         if($students)
             return response()->json(['studentsList'=>$students], 200, [], JSON_UNESCAPED_UNICODE);
         else
@@ -37,7 +37,7 @@ class AccountController extends Controller
 
     //取得所有老師資料
     public function getAllTeacherList(){
-        $teachers=User::where('u_status',1)->get();
+        $teachers=User::where('u_status',1)->paginate(12);
         if($teachers)
             return response()->json(['teachersList'=>$teachers], 200, [], JSON_UNESCAPED_UNICODE);
         else
@@ -46,7 +46,16 @@ class AccountController extends Controller
 
     //取得所有廠商資料
     public function getAllCompanyList(){
-        $companies=User::where('u_status',2)->get();
+        $companies=User::where('u_status',2)->paginate(12);
+        if($companies)
+            return response()->json(['companiesList'=>$companies], 200, [], JSON_UNESCAPED_UNICODE);
+        else
+            return response()->json(['找不到所有廠商資料'], 400, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    //取得已審核的廠商資料
+    public function getReviewedCompanyList(){
+        $companies=User::where('u_status',2)->where('started',1)->paginate(12);
         if($companies)
             return response()->json(['companiesList'=>$companies], 200, [], JSON_UNESCAPED_UNICODE);
         else
@@ -55,11 +64,92 @@ class AccountController extends Controller
 
     //取得已通過驗證未審核的廠商資料
     public function getNoReviewedCompanyList(){
-        $companies=User::where('u_status',2)->where('started',2)->get();
+        $companies=User::where('u_status',2)->where('started',2)->paginate(12);
         if($companies)
             return response()->json(['companiesList'=>$companies], 200, [], JSON_UNESCAPED_UNICODE);
         else
             return response()->json(['找不到已通過驗證未審核的廠商資料'], 400, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    //搜尋廠商名稱(全部)
+    public function searchAllCompanyByKeyword(Request $request){
+        $re = $request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'keyword' => 'required'
+        ), array(
+            'keyword.required' => '請輸入關鍵字'
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
+        } else {
+            $keyword = '%' . $re['keyword'] . '%';
+            $responses=$this->AccountServices->searchAllCompanyByKeyword_ser($keyword);
+            if ($responses == '找不到') {
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
+
+    //搜尋廠商名稱(已審核)
+    public function searchReviewedCompanyByKeyword(Request $request){
+        $re = $request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'keyword' => 'required'
+        ), array(
+            'keyword.required' => '請輸入關鍵字'
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
+        } else {
+            $keyword = '%' . $re['keyword'] . '%';
+            $responses=$this->AccountServices->searchReviewedCompanyByKeyword_ser($keyword);
+            if ($responses == '找不到') {
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
+
+    //搜尋廠商名稱(未審核)
+    public function searchNoReviewedCompanyByKeyword(Request $request){
+        $re = $request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'keyword' => 'required'
+        ), array(
+            'keyword.required' => '請輸入關鍵字'
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
+        } else {
+            $keyword = '%' . $re['keyword'] . '%';
+            $responses=$this->AccountServices->searchNoReviewedCompanyByKeyword_ser($keyword);
+            if ($responses == '找不到') {
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
     }
 
     //取得某學生履歷

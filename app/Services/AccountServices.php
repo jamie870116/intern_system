@@ -42,6 +42,30 @@ class AccountServices
         }
     }
 
+    public function searchAllCompanyByKeyword_ser($keyword){
+        $companies=User::where('u_status',2)->where('u_name', 'like', $keyword)->paginate(12);
+        if($companies)
+            return $companies;
+        else
+            return '找不到';
+    }
+
+    public function searchReviewedCompanyByKeyword_ser($keyword){
+        $companies=User::where('u_status',2)->where('started',1)->where('u_name', 'like', $keyword)->paginate(12);
+        if($companies)
+            return $companies;
+        else
+            return '找不到';
+    }
+
+    public function searchNoReviewedCompanyByKeyword_ser($keyword){
+        $companies=User::where('u_status',2)->where('started',2)->where('u_name', 'like', $keyword)->paginate(12);
+        if($companies)
+            return $companies;
+        else
+            return '找不到';
+    }
+
     public function adminGetCompanyDetailsByAccount_ser($id)
     {
         $com = User::findOrFail($id)->company;
