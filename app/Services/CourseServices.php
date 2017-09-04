@@ -9,6 +9,7 @@ use App\Journal;
 use App\Match as MatchEloquent;
 use App\MatchLog as MatchLogEloquent;
 use App\Stu_course as StuCourseEloquent;
+use App\Stu_course;
 use Carbon\Carbon;
 use Log;
 
@@ -47,6 +48,11 @@ class CourseServices
     {
         $course = courseEloquent::where('courseId', $re['courseId'])->first();
         if ($course) {
+            $stu_c=Stu_course::where('courseId',$re['courseId'])->get();
+            foreach ($stu_c as $s){
+                $j=Stu_course::find($s->SCid)->journals()->delete();
+                $s->delete();
+            }
             $course->delete();
             return '刪除課程資料成功';
         } else {

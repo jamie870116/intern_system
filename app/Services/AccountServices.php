@@ -42,6 +42,20 @@ class AccountServices
         }
     }
 
+    public function searchAllUserByKeyword_ser($keyword,$u_status){
+        if($u_status==3){
+            $users=User::where('u_name', 'like', $keyword)->paginate(12);
+        }else{
+            $users=User::where('u_status',$u_status)->where('u_name', 'like', $keyword)->paginate(12);
+        }
+
+        if($users)
+            return $users;
+        else
+            return '找不到';
+    }
+
+
     public function searchAllCompanyByKeyword_ser($keyword){
         $companies=User::where('u_status',2)->where('u_name', 'like', $keyword)->paginate(12);
         if($companies)

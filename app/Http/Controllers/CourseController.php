@@ -178,7 +178,7 @@ class CourseController extends Controller
 
     }
 
-    //系辦取得已成功的媒合資料
+    //系辦取得全部已成功的媒合資料
     public function adminGetSuccessMatch()
     {
         $match = MatchEloquent::where('mstatus', 9)->SortByUpdates_DESC()->get();
@@ -280,6 +280,12 @@ class CourseController extends Controller
             return response()->json($error, 400);//422
         } else {
             $stu_c=StuCourseEloquent::where('courseId',$re['courseId'])->get();
+            foreach ($stu_c as $s){
+                $stu=Stu_basic::where('sid',$s->sid)->first();
+                $s->stuName=$stu->chiName;
+                $s->profilePic=$stu->profilePic;
+            }
+
            if($stu_c){
                return response()->json($stu_c, 200, [], JSON_UNESCAPED_UNICODE);
            }else{

@@ -118,7 +118,7 @@ class Com_basicController extends Controller
         }
     }
 
-    // 依帳號查詢廠商資料
+    // 依帳號查詢廠商介紹
     public function getCompanyDetailsByAccount(Request $request){
     	$re = $request->all();
 

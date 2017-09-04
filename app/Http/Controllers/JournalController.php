@@ -131,7 +131,55 @@ class JournalController extends Controller
                 $passDeadLine=true;
             }
             if(!$journal){
-                return response()->json(array('找不到週誌列表'), 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json(array('找不到週誌'), 400, [], JSON_UNESCAPED_UNICODE);
+            }else {
+                $journal->stuName=$stu->u_name;
+                $journal->stuNum=$stu->account;
+                $journal->comName=$com->u_name;
+                $journal->teaName=$tea->u_name;
+                $journal->journalStart=Carbon::parse($journal->journalStart)->format('Y-m-d');
+                $journal->journalEnd=Carbon::parse($journal->journalEnd)->format('Y-m-d');
+                $journal->passDeadLine=$passDeadLine;
+
+
+                return response()->json(['journalList'=>$journal], 200, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+
+    }
+
+    //取得特定週誌
+    public function getJournalDetailsByJournalID(Request $request)
+    {
+        $re = $request->all();
+        $objValidator = Validator::make($request->all(), array(
+            'journalID' => 'required|integer',
+        ), array(
+            'journalID.required' => '請輸入週誌ID',
+            'integer' => '請輸入int',
+
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $journal=JournalEloquent::where('journalID',$re['journalID'])->first();
+            $course=Stu_course::find($journal->SCid)->courses()->first();
+            $stu=Stu_course::find($journal->SCid)->user_stu()->first();
+            $com=Stu_course::find($journal->SCid)->user_com()->first();
+            $tea=Stu_course::find($journal->SCid)->user_tea()->first();
+            $now = Carbon::now();
+            if($now < $course->courseEnd){
+                $passDeadLine=false;
+            }else{
+                $passDeadLine=true;
+            }
+            if(!$journal){
+                return response()->json(array('找不到週誌'), 400, [], JSON_UNESCAPED_UNICODE);
             }else {
                 $journal->stuName=$stu->u_name;
                 $journal->stuNum=$stu->account;

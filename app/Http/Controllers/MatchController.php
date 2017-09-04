@@ -141,7 +141,7 @@ class MatchController extends Controller
         }
     }
 
-    //取得廠商聯絡資訊
+    //取得廠商聯絡資訊，用在廠商輸入面試通知時
     public function companyGetJobOpeningContactByMid(Request $request)
     {
         $re = $request->all();
@@ -172,7 +172,7 @@ class MatchController extends Controller
 
     }
 
-    //面試通知
+    //廠商填寫面試通知並寄出
     public function companySendInterviewNotice(Request $request)
     {
         $re = $request->all();
@@ -246,7 +246,7 @@ class MatchController extends Controller
         }
     }
 
-    //面試失敗
+    //廠商回應-面試失敗
     public function companyFailedInterview(Request $request)
     {
         $re = $request->all();
@@ -276,7 +276,7 @@ class MatchController extends Controller
         }
     }
 
-    //面試成功
+    //廠商回應-面試成功
     public function companyPassInterview(Request $request)
     {
         $re = $request->all();

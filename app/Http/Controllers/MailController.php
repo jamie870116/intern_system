@@ -78,7 +78,7 @@ class MailController extends Controller
         }
     }
 
-    //寄信
+    //寄信-學生對廠商
     public function sendMail(Request $request){
         $re = $request->all();
 
@@ -86,7 +86,6 @@ class MailController extends Controller
             'lRecipient' => 'required',
             'lTitle' => 'required',
             'lContent' => 'required',
-
         ), array(
             'lRecipient.required' => '請輸入收件人帳號',
             'lTitle.required' => '請輸入標題',
@@ -139,89 +138,6 @@ class MailController extends Controller
             }
         }
     }
-//    //取得學生信件
-//    public function getMailTitleBySid()
-//    {
-//
-//            $token = JWTAuth::getToken();
-//            $users = JWTAuth::toUser($token);
-//            $match = MatchEloquent::where('sid', $users->id)->get();
-//
-//
-//            if (!$match) {
-//                return response()->json('取得媒合資料錯誤', 400, [], JSON_UNESCAPED_UNICODE);
-//            }else{
-//                $response = array();
-//                $stu_name = $users->u_name;
-//
-//                foreach ($match as $m) {
-//                    $com = UserEloquent::where('account', $m->c_account)->first();
-//                    if (!$com) {
-//                        return response()->json('取得廠商資料錯誤', 400, [], JSON_UNESCAPED_UNICODE);
-//                    }
-//                    $com_name = $com->u_name;
-//                    $logs = MatchLogEloquent::where('mid', $m->mid)->whereIn('mstatus', array(2, 3, 6, 7, 8, 11))->SortByUpdates_DESC()->get();
-//                    if (!$match) {
-//                        return response()->json('取得信件內容錯誤', 400, [], JSON_UNESCAPED_UNICODE);
-//                    }
-//                    $job = JopOpEloquent::where('joid', $m->joid)->first();
-//                    if (!$match) {
-//                        return response()->json('取得該職缺資料錯誤', 400, [], JSON_UNESCAPED_UNICODE);
-//                    }
-//                    foreach ($logs as $log) {
-//                        $mailData = array($stu_name, $com_name, $log, $job);
-//                        $response[] = $mailData;
-//                    }
-//                }
-//                return response()->json($response, 200, [], JSON_UNESCAPED_UNICODE);
-//            }
-//
-//
-//        }
-
-
-//    //取得企業信件
-//    public function getMailTitleByC_account()
-//    {
-//
-//        $token = JWTAuth::getToken();
-//        $users = JWTAuth::toUser($token);
-//
-//
-//        if ($users) {
-//            $match = MatchEloquent::where('c_account', $users->account)->get();
-//
-//            if (!$match) {
-//                return response()->json('取得媒合資料錯誤', 400, [], JSON_UNESCAPED_UNICODE);
-//            }
-//            $response = array();
-//            $com_name = $users->u_name;
-//
-//            foreach ($match as $m) {
-//                $stu = UserEloquent::where('id', $m->sid)->first();
-//                if (!$stu) {
-//                    return response()->json('取得廠商資料錯誤', 400, [], JSON_UNESCAPED_UNICODE);
-//                }
-//                $stu_name = $stu->u_name;
-//                $logs = MatchLogEloquent::where('mid', $m->mid)->whereIn('mstatus', array(1, 4, 5, 9, 10, 11))->SortByUpdates_DESC()->get();
-//                if (!$match) {
-//                    return response()->json('取得信件內容錯誤', 400, [], JSON_UNESCAPED_UNICODE);
-//                }
-//                $job = JopOpEloquent::where('joid', $m->joid)->first();
-//                if (!$match) {
-//                    return response()->json('取得該職缺資料錯誤', 400, [], JSON_UNESCAPED_UNICODE);
-//                }
-//                foreach ($logs as $log) {
-//                    $mailData = array($com_name, $stu_name, $log, $job);
-//                    $response[] = $mailData;
-//                }
-//            }
-//            return response()->json($response, 200, [], JSON_UNESCAPED_UNICODE);
-//
-//        } else {
-//            return response()->json('error', 400);
-//        }
-//    }
 
     //已讀信件
     public function getMailDetails(Request $request)

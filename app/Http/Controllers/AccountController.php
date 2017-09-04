@@ -19,11 +19,41 @@ class AccountController extends Controller
 
     //取得所有使用者資料
     public function getAllUserList(){
-        $users=User::all();
+        $users=User::GetAll()->get();
         if($users)
         return response()->json(['usersList'=>$users], 200, [], JSON_UNESCAPED_UNICODE);
         else
             return response()->json(['找不到所有使用者資料'], 400, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    //搜尋使用者資料
+    public function searchAllUserByKeyword(Request $request){
+        $re = $request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'keyword' => 'required',
+            'u_status' => 'required|integer',
+        ), array(
+            'keyword.required' => '請輸入關鍵字',
+            'u_status.required' => '請輸入欲搜尋之角色',//0，學生 1，老師 2，企業 3，全部
+            'u_status.integer' => '請輸入int',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
+        } else {
+            $keyword = '%' . $re['keyword'] . '%';
+            $responses=$this->AccountServices->searchAllUserByKeyword_ser($keyword,$re['u_status']);
+            if ($responses == '找不到') {
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
     }
 
     //取得所有學生資料
@@ -35,6 +65,7 @@ class AccountController extends Controller
             return response()->json(['找不到所有學生資料'], 400, [], JSON_UNESCAPED_UNICODE);
     }
 
+
     //取得所有老師資料
     public function getAllTeacherList(){
         $teachers=User::where('u_status',1)->paginate(12);
@@ -43,6 +74,7 @@ class AccountController extends Controller
         else
             return response()->json(['找不到所有老師資料'], 400, [], JSON_UNESCAPED_UNICODE);
     }
+
 
     //取得所有廠商資料
     public function getAllCompanyList(){

@@ -28,6 +28,10 @@ class User extends Authenticatable
     'password','check_code'
     ];
 
+    public function scopeGetAll($query){
+        return $query->where('u_status',0)->orWhere('u_status',1)->orWhere('u_status',2);
+    }
+
     public function company(){
         return $this->hasOne('App\Com_basic','c_account','account');
     }
