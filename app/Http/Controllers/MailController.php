@@ -28,11 +28,23 @@ class MailController extends Controller
         $token = JWTAuth::getToken();
         $users = JWTAuth::toUser($token);
 
-        $mail=Station_Letter::where('lRecipient',$users->account)->SortByUpdates_DESC()->get();
+        $mail=Station_Letter::where('lRecipient',$users->account)->SortByUpdates_DESC()->paginate(12);
+        foreach ($mail as $m){
+            if($m->read==0){
+                $m->read=false;
+            }else{
+                $m->read=true;
+            }
+            if($m->favourite==0){
+                $m->favourite=false;
+            }else{
+                $m->favourite=true;
+            }
+        }
         if($mail){
-            return response()->json(['MailList'=>$mail], 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json($mail, 200, [], JSON_UNESCAPED_UNICODE);
         }else{
-            return response()->json('', 400, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['取得失敗'], 400, [], JSON_UNESCAPED_UNICODE);
         }
     }
 
@@ -41,11 +53,23 @@ class MailController extends Controller
         $token = JWTAuth::getToken();
         $users = JWTAuth::toUser($token);
 
-        $mail=Station_Letter::where('lSender',$users->account)->SortByUpdates_DESC()->get();
+        $mail=Station_Letter::where('lSender',$users->account)->SortByUpdates_DESC()->paginate(12);
+        foreach ($mail as $m){
+            if($m->read==0){
+                $m->read=false;
+            }else{
+                $m->read=true;
+            }
+            if($m->favourite==0){
+                $m->favourite=false;
+            }else{
+                $m->favourite=true;
+            }
+        }
         if($mail){
-            return response()->json(['SentMailList'=>$mail], 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json($mail, 200, [], JSON_UNESCAPED_UNICODE);
         }else{
-            return response()->json('', 400, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['取得失敗'], 400, [], JSON_UNESCAPED_UNICODE);
         }
     }
 
@@ -157,13 +181,29 @@ class MailController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
+            $token = JWTAuth::getToken();
+            $users = JWTAuth::toUser($token);
             $mail=Station_Letter::where('slId',$re['slId'])->first();
 
-            if ($mail) {
-                return response()->json($mail, 200, [], JSON_UNESCAPED_UNICODE);
-            } else {
-                return response()->json(['查無此信件資料'], 400, [], JSON_UNESCAPED_UNICODE);
+            if($mail->lSender==$users->account||$mail->lRecipient==$users->account){
+                $mail->read=true;
+                $mail->save();
+
+                $mail->read=true;
+                if($mail->favourite==0){
+                    $mail->favourite=false;
+                }else{
+                    $mail->favourite=true;
+                }
+                if ($mail) {
+                    return response()->json($mail, 200, [], JSON_UNESCAPED_UNICODE);
+                } else {
+                    return response()->json(['查無此信件資料'], 400, [], JSON_UNESCAPED_UNICODE);
+                }
+            }else{
+                return response()->json(['這不是你的信'], 400, [], JSON_UNESCAPED_UNICODE);
             }
+
         }
     }
 
@@ -187,9 +227,9 @@ class MailController extends Controller
         } else {
             $responses = $this->MailServices->mailDeleted_ser($re['slId']);
             if ($responses == '刪除信件成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -200,11 +240,23 @@ class MailController extends Controller
         $token = JWTAuth::getToken();
         $users = JWTAuth::toUser($token);
 
-        $mail=Station_Letter::onlyTrashed()->where('lRecipient',$users->account)->orWhere('lSender',$users->account)->get();
+        $mail=Station_Letter::onlyTrashed()->where('lRecipient',$users->account)->orWhere('lSender',$users->account)->paginate(12);
+        foreach ($mail as $m){
+            if($m->read==0){
+                $m->read=false;
+            }else{
+                $m->read=true;
+            }
+            if($m->favourite==0){
+                $m->favourite=false;
+            }else{
+                $m->favourite=true;
+            }
+        }
         if($mail){
-            return response()->json(['MailList'=>$mail], 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json($mail, 200, [], JSON_UNESCAPED_UNICODE);
         }else{
-            return response()->json('', 400, [], JSON_UNESCAPED_UNICODE);
+            return response()->json(['取得失敗'], 400, [], JSON_UNESCAPED_UNICODE);
         }
     }
 
@@ -228,9 +280,9 @@ class MailController extends Controller
         } else {
             $responses = $this->MailServices->mailForceDeleted_ser($re['slId']);
             if ($responses == '永久刪除信件成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -255,9 +307,9 @@ class MailController extends Controller
         } else {
             $responses = $this->MailServices->mailRestoreDeleted_ser($re['slId']);
             if ($responses == '回復刪除信件成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -282,10 +334,36 @@ class MailController extends Controller
         } else {
             $responses = $this->MailServices->favouriteMail_ser($re['slId']);
             if ($responses != '查無此信件資料') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             }
+        }
+    }
+
+    //取得我的最愛
+    public function getFavouriteFolder()
+    {
+        $token = JWTAuth::getToken();
+        $users = JWTAuth::toUser($token);
+
+        $mail=Station_Letter::where('lRecipient',$users->account)->where('favourite',true)->orWhere('lSender',$users->account)->where('favourite',true)->paginate(12);
+        foreach ($mail as $m){
+            if($m->read==0){
+                $m->read=false;
+            }else{
+                $m->read=true;
+            }
+            if($m->favourite==0){
+                $m->favourite=false;
+            }else{
+                $m->favourite=true;
+            }
+        }
+        if($mail){
+            return response()->json($mail, 200, [], JSON_UNESCAPED_UNICODE);
+        }else{
+            return response()->json(['取得失敗'], 400, [], JSON_UNESCAPED_UNICODE);
         }
     }
 

@@ -8,6 +8,7 @@ use Carbon\Carbon;
 
 
 class JournalServices{
+
     public function studentEditJournal_ser($re)
     {
 
@@ -15,6 +16,7 @@ class JournalServices{
         $course=Stu_course::find($journal->SCid)->courses()->first();
         $student=Stu_course::find($course->SCid)->user_stu()->first();
         $company=Stu_course::find($course->SCid)->user_com()->first();
+        $teacher=Stu_course::find($course->SCid)->user_tea()->first();
         $now = Carbon::now();
         if($now < $course->courseEnd){
             $passDeadLine=false;
@@ -24,6 +26,24 @@ class JournalServices{
         if($passDeadLine){
             return '週誌已過期，無法修改';
         }else{
+            if($journal->journalDetail_1==null){
+                $st_letter=new Station_Letter();
+                $st_letter->lStatus=13;
+                $st_letter->lTitle='學生有新的週誌';
+                $st_letter->lRecipient=$company->account;
+                $st_letter->lRecipientName=$company->u_name;
+                $st_letter->lContent='您的學生 '.$student->u_name.'填寫了新的週誌';
+                $st_letter->lNotes='';
+                $st_letter->save();
+
+                $st_letter->lStatus=13;
+                $st_letter->lTitle='學生有新的週誌';
+                $st_letter->lRecipient=$teacher->account;
+                $st_letter->lRecipientName=$teacher->u_name;
+                $st_letter->lContent='您的學生 '.$student->u_name.'填寫了新的週誌';
+                $st_letter->lNotes='';
+                $st_letter->save();
+            }
             $journal->journalDetail_1=$re['journalDetail_1'];
             $journal->journalDetail_2=$re['journalDetail_2'];
             $journal->journalStart=$re['journalStart'];
@@ -31,15 +51,7 @@ class JournalServices{
             $journal->journalInstructor=$re['journalInstructor'];
             $journal->save();
         }
-        if($journal->journalDetail_1==null){
-            $st_letter=new Station_Letter();
-            $st_letter->lStatus=13;
-            $st_letter->lTitle='學生有新的週誌';
-            $st_letter->lRecipient=$company->account;
-            $st_letter->lContent='您的學生 '.$student->u_name.'填寫了新的週誌';
-            $st_letter->lNotes='';
-            $st_letter->save();
-        }
+
         return '週誌輸入成功';
     }
 }

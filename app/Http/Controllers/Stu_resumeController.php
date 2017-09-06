@@ -244,6 +244,33 @@ class Stu_resumeController extends Controller
 
     }
 
+    //學生上傳頭貼
+    public function studentUploadProfilePic(Request $request){
+        $objValidator = Validator::make($request->all(), array(
+            'profilePic'=>'required|image'
+        ), array(
+            'image'=>'圖檔格式錯誤(副檔名須為jpg ,jpeg, png, bmp, gif, or svg)',
+            'required'=>'請上傳圖片'
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $file=$request->file('profilePic');
+            $responses = $this->ResumeServices->studentUploadProfilePic_ser($request,$file);
+            if ($responses == '頭貼上傳失敗') {
+                $r=array($responses);
+                return response()->json($r, 400, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+
+    }
 
     public function deleteJobExperienceById(Request $request)
     {

@@ -167,6 +167,45 @@ class ResumeServices
         return '修改基本資料成功';
     }
 
+    public function studentUploadProfilePic_ser($request, $file)
+    {
+
+        $token = JWTAuth::getToken();
+        $user = JWTAuth::toUser($token);
+        $id = $user->id;
+        $stuBas = stuBasicEloquent::where('sid', $id)->first();
+
+        if ($file) {
+            $extension = $file->getClientOriginalExtension();
+            $file_name = strval(time()) . str_random(5) . '_pro.' . $extension;
+
+            if ($request->hasFile('profilePic')) {
+                if ($stuBas->profilePic != null) {
+
+                    $file_path = 'public/user-upload/' . $stuBas->profilePic;
+                    $file = Storage::exists('public/user-upload/' . $stuBas->profilePic);
+
+                    Log::error(Storage::exists('public/user-upload/' . $stuBas->profilePic));
+
+                    if ($file) {
+                        Storage::delete($file_path);
+                    } else {
+                        return 'failed';
+                    }
+                }
+                $path = $request->file('profilePic')->storeAs(
+                    'public/user-upload/', $file_name
+                );
+                //<img src='storage/user-upload/1501257619SWUxK.png' >
+                $stuBas->profilePic = $file_name;
+            } else {
+                return "頭貼上傳失敗";
+            }
+        }
+        $stuBas->save();
+        return  $stuBas->profilePic;
+    }
+
 
     public function deleteJobExperienceById_ser($re)
     {

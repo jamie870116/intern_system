@@ -8,6 +8,7 @@ use App\Job_opening;
 use App\Journal;
 use App\Match as MatchEloquent;
 use App\MatchLog as MatchLogEloquent;
+use App\Station_Letter;
 use App\Stu_course as StuCourseEloquent;
 use App\Stu_course;
 use Carbon\Carbon;
@@ -70,18 +71,20 @@ class CourseServices
 
             if ($match) {
                 if ($match->mstatus == 9 || $match->mstatus == 11) {
-                    $match->mstatus = 11;
-                    $match->tid = $re['tid'];
-                    $jobOp = Job_opening::withTrashed()->where('joid', $match->joid)->first();
-                    $jobOp->jNOP -= 1;
-                    $jobOp->save();
-                    $match->save();
-                    $log = new MatchLogEloquent();//給企業信件->none
-                    $log->mstatus = 11;
-                    $log->mid = $mid;
-                    $log->save();
+
                     $c = StuCourseEloquent::where('courseId', $re['courseId'])->where('sid', $match->sid)->first();
                     if (!$c) {
+                        $match->mstatus = 11;
+                        $match->tid = $re['tid'];
+                        $jobOp = Job_opening::withTrashed()->where('joid', $match->joid)->first();
+                        $jobOp->jNOP -= 1;
+                        $jobOp->save();
+                        $match->save();
+                        $log = new MatchLogEloquent();//給企業信件->none
+                        $log->mstatus = 11;
+                        $log->mid = $mid;
+                        $log->save();
+
                         $stu_c = new StuCourseEloquent();
                         $stu_c->c_account = $match->c_account;
                         $stu_c->sid = $match->sid;
@@ -89,6 +92,29 @@ class CourseServices
                         $stu_c->mid = $mid;
                         $stu_c->courseId = $re['courseId'];
                         $stu_c->save();
+
+                        $student=Stu_course::find($stu_c->SCid)->user_stu()->first();
+                        $company=Stu_course::find($stu_c->SCid)->user_com()->first();
+                        $teacher=Stu_course::find($stu_c->SCid)->user_tea()->first();
+
+                        $st_letter=new Station_Letter();
+                        $st_letter->lStatus=11;
+                        $st_letter->lTitle='有學生加入實習課程';
+                        $st_letter->lRecipient=$teacher->account;
+                        $st_letter->lRecipientName=$teacher->u_name;
+                        $st_letter->lContent='您的學生 '.$student->u_name.'成為您的指導實習生';
+                        $st_letter->lNotes='';
+                        $st_letter->save();
+
+                        $st_letter=new Station_Letter();
+                        $st_letter->lStatus=11;
+                        $st_letter->lTitle='有學生加入實習課程';
+                        $st_letter->lRecipient=$company->account;
+                        $st_letter->lRecipientName=$company->u_name;
+                        $st_letter->lContent='您的學生 '.$student->u_name.'成為您的指導實習生';
+                        $st_letter->lNotes='';
+                        $st_letter->save();
+
                         $course = Course::where('courseId', $re['courseId'])->first();
                         if ($course) {
                             $first = $f;

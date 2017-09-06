@@ -199,10 +199,22 @@ class CourseController extends Controller
     }
 
 
-    //系辦取得課程資料
+    //系辦取得時限內課程資料
     public function adminGetCourse()
     {
         $course = Course::GetAvailableCourse()->get();
+        if ($course) {
+            return response()->json(['courseList'=>$course], 200, [], JSON_UNESCAPED_UNICODE);
+        } else {
+            $r=array('取得資料失敗');
+            return response()->json($r, 400, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    //系辦取得全部課程資料
+    public function adminGetAllCourse()
+    {
+        $course = Course::all();
         if ($course) {
             return response()->json(['courseList'=>$course], 200, [], JSON_UNESCAPED_UNICODE);
         } else {

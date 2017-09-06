@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Assessment_Com;
 use App\Services\Assessment_TeachServices;
 use App\Stu_course as Stu_courseEloquent;
 use App\Assessment_Teach as Assessment_TeachEloquent;
@@ -20,7 +21,7 @@ class Assessment_TeachController extends Controller
 
     public function __construct(Assessment_TeachServices $Assessment_TeachServices)
     {
-        $this->middleware('teacher');
+        $this->middleware('teacher',['except'=>'getTeacherAssessmentById']);
         $this->Assessment_TeachServices = $Assessment_TeachServices;
     }
 
@@ -32,7 +33,7 @@ class Assessment_TeachController extends Controller
         $Assessment_list = array();
         foreach($stu_course as $stu_cour){
             $stu = UserEloquent::where('id',$stu_cour->sid)->first();
-            $list = array($stu->u_name,$stu_course->SCid,$stu_cour->assessmentStatus);
+            $list = array('stuName'=>$stu->u_name,$stu_cour);
             $Assessment_list[] = $list;
         }
         return response()->json($Assessment_list, 200, [], JSON_UNESCAPED_UNICODE);
@@ -43,7 +44,7 @@ class Assessment_TeachController extends Controller
     {
         $re = $request->all();
         $objValidator = Validator::make($request->all(), array(
-            'SCid' => 'required|unique:assessment_com,SCid',
+            'SCid' => 'required|unique:assessment_teach,SCid',
             'teacherGrade1' => 'required|integer',
             'teacherGrade2' => 'required|integer',
             'teacherGrade3' => 'required|integer',
@@ -88,6 +89,34 @@ class Assessment_TeachController extends Controller
                 return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
+    }
+
+    //顯示廠商打的成績_老師
+    public function teacherGetComAssessmentById(Request $request)
+    {
+        $re = $request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'SCid' => 'required',
+        ), array(
+            'SCid.required' => '請輸入SCid',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $Assessment_c=Assessment_Com::where('SCid',$re['SCid'])->first();
+            if ($Assessment_c) {
+                return response()->json($Assessment_c, 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json('取得成果評量資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+
     }
 
     //顯示老師所輸入之成績

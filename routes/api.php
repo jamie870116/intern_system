@@ -70,6 +70,7 @@ Route::group(['middleware' => 'jwt'], function () {
 
     //修改、刪除履歷相關
     Route::post('editBasicDataById', 'Stu_resumeController@editBasicDataById');
+    Route::post('studentUploadProfilePic', 'Stu_resumeController@studentUploadProfilePic');//學生上傳頭貼
     Route::delete('deleteJobExperienceById', 'Stu_resumeController@deleteJobExperienceById');
     Route::delete('deleteWorksDataById', 'Stu_resumeController@deleteWorksDataById');
     Route::delete('deleteAbilityById', 'Stu_resumeController@deleteAbilityById');
@@ -89,7 +90,8 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('adminGetSuccessMatch', 'CourseController@adminGetSuccessMatch'); //系辦取得全部已成功的媒合資料
     Route::get('adminGetSuccessMatchByStudent', 'CourseController@adminGetSuccessMatchByStudent'); //系辦以學生姓名或學號取得已成功的媒合資料
     Route::get('adminGetTeacherData', 'CourseController@adminGetTeacherData'); //系辦取得所有老師資訊
-    Route::get('adminGetCourse', 'CourseController@adminGetCourse'); //系辦取得課程資料
+    Route::get('adminGetAllCourse', 'CourseController@adminGetAllCourse'); //系辦取得全部課程資料
+    Route::get('adminGetCourse', 'CourseController@adminGetCourse'); //系辦取得時限內課程資料
     Route::post('adminAddStudentToCourse', 'CourseController@adminAddStudentToCourse'); //系辦將學生加入課程並給予實習老師
     Route::get('adminGetStudentByCourseId', 'CourseController@adminGetStudentByCourseId'); //取得某課程中的學生
     Route::delete('adminDeleteStudentFromCourse', 'CourseController@adminDeleteStudentFromCourse'); //系辦將學生從課程中刪除
@@ -102,17 +104,19 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('getJournalDetailsByJournalID','JournalController@getJournalDetailsByJournalID');//取得特定週誌
 
     //週誌成績管理相關-廠商與老師
-    Route::get('getCourseList','GradeController@getCourseList');//取得該企業或老師底下的所有課程名稱和學生
+    Route::get('getCourseList','GradeController@getCourseList');//取得該企業或老師底下的所有課程名稱和學生(系辦抓全部
     Route::get('teacherGetStudentJournalList','GradeController@teacherGetStudentJournalList');//老師取得特定學生的某一課程之週誌列表
     Route::post('teacherScoreStudentJournal','GradeController@teacherScoreStudentJournal');//老師批改學生週誌
     Route::post('companyScoreStudentJournal','GradeController@companyScoreStudentJournal');//廠商批改學生週誌
     Route::get('getStudentJournalDetailByJournalID','GradeController@getStudentJournalDetailByJournalID');//取得特定週誌
     Route::get('teacherGetNotExpiredStudentList','GradeController@teacherGetNotExpiredStudentList');//老師取得未過期學生列表
     Route::post('teacherUploadProfilePic','GradeController@teacherUploadProfilePic');//老師上傳頭貼
-//    Route::get('teacherGetStudentList','GradeController@teacherGetStudentList');//老師取得學生列表
-//    Route::get('teacherGetStudentCourseList','GradeController@teacherGetStudentCourseList');//老師取得特定學生之課程列表
-//    Route::get('companyGetStudentListByJoId','GradeController@companyGetStudentListByJoId');//廠商取得學生列表透過joid
-//    Route::get('companyGetStudentJournalListBySCid','GradeController@companyGetStudentJournalListBySCid');//廠商取得特定學生的某一課程之週誌列表
+    Route::get('adminGetStudentJournalListBySCid','GradeController@adminGetStudentJournalListBySCid');//系辦取得特定學生的某一課程之週誌列表
+    Route::get('teacherGetStudentList','GradeController@teacherGetStudentList');//老師取得學生列表
+    Route::get('teacherGetStudentCourseList','GradeController@teacherGetStudentCourseList');//老師取得特定學生之課程列表
+    Route::get('companyGetStudentListByJoId','GradeController@companyGetStudentListByJoId');//廠商取得學生列表透過joid
+    Route::get('companyGetStudentJournalListBySCid','GradeController@companyGetStudentJournalListBySCid');//廠商取得特定學生的某一課程之週誌列表
+    Route::get('getStuCourseGradeBySCid','GradeController@getStuCourseGradeBySCid');//取得該課程的成績
 
     //訪談紀錄-老師
     Route::post('teacherCreateComInterview','InterviewAnswerController@teacherCreateComInterview');//老師輸入對企業問卷
@@ -136,6 +140,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::post('teacherCreateAssessment','Assessment_TeachController@teacherCreateAssessment');//老師輸入成績
     Route::put('teacherEditAssessment','Assessment_TeachController@teacherEditAssessment');//老師修改成績
     Route::get('getTeacherAssessmentById','Assessment_TeachController@getTeacherAssessmentById');//顯示老師所輸入之成績
+    Route::get('teacherGetComAssessmentById','Assessment_TeachController@teacherGetComAssessmentById');//顯示廠商打的成績_老師
 
     //週誌心得管理-學生
     Route::post('createReview','ReviewsController@createReview');//新增實習心得
@@ -157,13 +162,14 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('getMailDetails', 'MailController@getMailDetails');//已讀信件，即取得信件詳細資料
     Route::get('getMailByToken', 'MailController@getMailByToken');//取得信件(收件匣)
     Route::get('getSentMailByToken', 'MailController@getSentMailByToken');//取得送件匣
-    Route::post('mailDeleted', 'MailController@mailDeleted');//刪除信件
+    Route::delete('mailDeleted', 'MailController@mailDeleted');//刪除信件
     Route::get('getTrashFolder', 'MailController@getTrashFolder');//取得回收信件
     Route::delete('mailForceDeleted', 'MailController@mailForceDeleted');//永久刪除信件
     Route::post('mailRestoreDeleted', 'MailController@mailRestoreDeleted');//回復刪除信件
     Route::post('sendMail', 'MailController@sendMail');//寄信-學生對廠商
     Route::post('replyMailById', 'MailController@replyMailById');//回覆信件
     Route::post('favouriteMail', 'MailController@favouriteMail');//加到最愛信件
+    Route::get('getFavouriteFolder', 'MailController@getFavouriteFolder');//取得我的最愛
 
     //系辦帳號管理相關
     Route::get('getAllUserList','AccountController@getAllUserList');//取得所有使用者資料

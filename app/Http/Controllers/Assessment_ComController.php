@@ -18,7 +18,7 @@ class Assessment_ComController extends Controller
 
     public function __construct(Assessment_ComServices $Assessment_ComServices)
     {
-        $this->middleware('company');
+        $this->middleware('company',['except'=>'getCompanyAssessmentById']);
         $this->Assessment_ComServices = $Assessment_ComServices;
     }
 //    //取得待輸入之學生成績列表
@@ -70,7 +70,7 @@ class Assessment_ComController extends Controller
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
-            'SCid' => 'required|unique:Assessment_Com,SCid',
+            'SCid' => 'required|unique:assessment_com,SCid',
             'asStart' => 'required|date',
             'asEnd' => 'required|date',
             'asDepartment' => 'required',

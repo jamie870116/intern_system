@@ -142,11 +142,25 @@ class GradeServices
         }
     }
 
+    public function adminGetStudentJournalListBySCid_ser($re){
+
+        $journal= Stu_course::findOrFail($re['SCid'])->journals;
+        if($journal){
+            foreach ($journal as $j){
+                $j->journalStart=Carbon::parse($j->journalStart)->format('Y/m/d');
+                $j->journalEnd=Carbon::parse($j->journalEnd)->format('Y/m/d');
+            }
+            return $journal;
+        }else{
+            return '取得週誌列表失敗';
+        }
+    }
+
     public function companyScoreStudentJournal_ser($re){
         $journal=Journal::find($re['journalID'])->first();
         if($journal){
-            $journal->journalComments_teacher=$re['journalComments_ins'];
-            $journal->grade_teacher=$re['grade_ins'];
+            $journal->journalComments_ins=$re['journalComments_ins'];
+            $journal->grade_ins=$re['grade_ins'];
             $journal->scoredTime_com=Carbon::now();
             $journal->save();
             return '批改週誌成功';

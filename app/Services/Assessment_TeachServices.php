@@ -6,12 +6,14 @@ use App\Stu_course as Stu_courseEloquent;
 
 
 class Assessment_TeachServices{
+
     public function teacherCreateAssessment_ser($re)
     {
         $Stu_c=Stu_courseEloquent::where('SCid',$re['SCid'])->first();
         if($Stu_c->assessmentStatus = 2){
             $Stu_c->assessmentStatus = 3;
             $Assessment_Teach = new Assessment_TeachEloquent();
+            $Assessment_Teach->SCid = $re['SCid'];
             $Assessment_Teach->teacherGrade1 = $re['teacherGrade1'];
             $Assessment_Teach->teacherGrade2 = $re['teacherGrade2'];
             $Assessment_Teach->teacherGrade3 = $re['teacherGrade3'];
