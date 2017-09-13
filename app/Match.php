@@ -10,7 +10,7 @@ class Match extends Model
     protected $primaryKey = 'mid';
     public  $timestamps=true;
     protected $fillable = [
-        'sid','c_account','tid','mfailedreason','mstatus','joid'
+        'sid','c_account','tid','mfailedreason','mstatus','joid','jduties','jdetails',
     ];
 
     public function scopeSortByUpdates_DESC($query)

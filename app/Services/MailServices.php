@@ -61,7 +61,13 @@ class MailServices
             $mail = new Station_Letter();
             $mail->lRecipient = $oldMail->lSender;
             $mail->lRecipientName = User::where('account', $oldMail->lSender)->first()->u_name;
-            $mail->lTitle = 'RE:[' . $oldMail->lTitle . ']';
+            $str = explode ('#',  $oldMail->lTitle);
+            if($str[1]==""){
+                $num=1;
+            }else{
+                $num=$str[1]+1;
+            }
+            $mail->lTitle = 'RE:[' . $oldMail->lTitle . '] #'.$num;
             $mail->lContent = $re['lContent'];
             $mail->lSender = $users->account;
             $mail->lSenderName = $users->u_name;

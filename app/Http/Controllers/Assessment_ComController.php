@@ -251,7 +251,7 @@ class Assessment_ComController extends Controller
             if ($Assessment_Com) {
                 return response()->json($Assessment_Com, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json('取得成果評量資料失敗', 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json('尚未填寫成績資料', 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
 

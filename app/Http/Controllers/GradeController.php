@@ -201,7 +201,7 @@ class GradeController extends Controller
                 }
             }
         }
-        return response()->json($student_list, 200, [], JSON_UNESCAPED_UNICODE);
+        return response()->json(['student_list' => $student_list], 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     //老師取得特定學生之課程列表

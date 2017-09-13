@@ -74,7 +74,7 @@ class MatchController extends Controller
                 $stuJExp = stuJExpEloquent::where('sid', $id)->get();
                 $stuWor = stuWorksEloquent::where('sid', $id)->get();
                 $stuA=Stu_ability::where('sid', $id)->get();
-                $stdRe = array('mid'=>$mid, 'stuBasic'=>$stuBas, 'stuJobExperience'=> $stuJExp, 'stuWorks'=> $stuWor,'stuAb'=>$stuA);
+                $stdRe = array('mid'=>$mid, 'jDuties'=>$m->jduties,'stuBasic'=>$stuBas, 'stuJobExperience'=> $stuJExp, 'stuWorks'=> $stuWor,'stuAb'=>$stuA);
                 $response[] = $stdRe;
             }
 //[$responses]

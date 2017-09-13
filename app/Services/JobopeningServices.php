@@ -3,6 +3,7 @@
 namespace App\Services;
 
 
+use App\Com_basic;
 use App\Job_opening as job_opEloquent;
 use App\Jobs\sendResultmail;
 use App\Jobs\sendResultmail_faild;
@@ -43,22 +44,28 @@ class JobopeningServices
     public function editJobOpening_ser($re)
     {
         $jobOpen = job_opEloquent::where('joid', $re['joid'])->first();
-        $jobOpen->jtypes = $re['jtypes'];
-        $jobOpen->jduties = $re['jduties'];
-        $jobOpen->jdetails = $re['jdetails'];
-        $jobOpen->jsalary_up = $re['jsalary_up'];
-        $jobOpen->jsalary_low = $re['jsalary_low'];
-        $jobOpen->jaddress = $re['jaddress'];
-        $jobOpen->jdeadline = $re['jdeadline'];
-        $jobOpen->jNOP = $re['jNOP'];
-        $jobOpen->jStartDutyTime = $re['jStartDutyTime'];
-        $jobOpen->jEndDutyTime = $re['jEndDutyTime'];
-        $jobOpen->jcontact_name = $re['jcontact_name'];
-        $jobOpen->jcontact_phone = $re['jcontact_phone'];
-        $jobOpen->jcontact_email = $re['jcontact_email'];
-        $jobOpen->save();
+        if($jobOpen){
+            $jobOpen->jtypes = $re['jtypes'];
+            $jobOpen->jduties = $re['jduties'];
+            $jobOpen->jdetails = $re['jdetails'];
+            $jobOpen->jsalary_up = $re['jsalary_up'];
+            $jobOpen->jsalary_low = $re['jsalary_low'];
+            $jobOpen->jaddress = $re['jaddress'];
+            $jobOpen->jdeadline = $re['jdeadline'];
+            $jobOpen->jNOP = $re['jNOP'];
+            $jobOpen->jStartDutyTime = $re['jStartDutyTime'];
+            $jobOpen->jEndDutyTime = $re['jEndDutyTime'];
+            $jobOpen->jcontact_name = $re['jcontact_name'];
+            $jobOpen->jcontact_phone = $re['jcontact_phone'];
+            $jobOpen->jcontact_email = $re['jcontact_email'];
+            $jobOpen->save();
 
-        return '修改職缺資料成功';
+            return '修改職缺資料成功';
+        }else{
+            return '修改職缺資料失敗';
+        }
+
+
     }
 
     public function deleteJobOpeningByAdmin_ser($re)
@@ -96,6 +103,8 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
+                        $com=Com_basic::where('c_account',$j->c_account)->first();
+                        $j->profilePic=$com->profilePic;
                         $token = JWTAuth::getToken();
                         $user = JWTAuth::toUser($token);
                         if($user->u_status==0){
@@ -118,6 +127,8 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
+                        $com=Com_basic::where('c_account',$j->c_account)->first();
+                        $j->profilePic=$com->profilePic;
                         $token = JWTAuth::getToken();
                         $user = JWTAuth::toUser($token);
                         if($user->u_status==0){
@@ -142,6 +153,8 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
+                        $com=Com_basic::where('c_account',$j->c_account)->first();
+                        $j->profilePic=$com->profilePic;
                         $token = JWTAuth::getToken();
                         $user = JWTAuth::toUser($token);
                         if($user->u_status==0){
@@ -163,6 +176,8 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
+                        $com=Com_basic::where('c_account',$j->c_account)->first();
+                        $j->profilePic=$com->profilePic;
                         $token = JWTAuth::getToken();
                         $user = JWTAuth::toUser($token);
                         if($user->u_status==0){
@@ -198,6 +213,8 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
+                        $com=Com_basic::where('c_account',$j->c_account)->first();
+                        $j->profilePic=$com->profilePic;
                         $token = JWTAuth::getToken();
                         $user = JWTAuth::toUser($token);
                         if($user->u_status==0){
@@ -220,6 +237,8 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
+                        $com=Com_basic::where('c_account',$j->c_account)->first();
+                        $j->profilePic=$com->profilePic;
                         $token = JWTAuth::getToken();
                         $user = JWTAuth::toUser($token);
                         if($user->u_status==0){
@@ -243,6 +262,8 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
+                        $com=Com_basic::where('c_account',$j->c_account)->first();
+                        $j->profilePic=$com->profilePic;
                         $token = JWTAuth::getToken();
                         $user = JWTAuth::toUser($token);
                         if($user->u_status==0){
@@ -264,6 +285,8 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
+                        $com=Com_basic::where('c_account',$j->c_account)->first();
+                        $j->profilePic=$com->profilePic;
                         $token = JWTAuth::getToken();
                         $user = JWTAuth::toUser($token);
                         if($user->u_status==0){
@@ -299,6 +322,8 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
+                        $com=Com_basic::where('c_account',$j->c_account)->first();
+                        $j->profilePic=$com->profilePic;
                         $token = JWTAuth::getToken();
                         $user = JWTAuth::toUser($token);
                         if($user->u_status==0){
@@ -321,6 +346,8 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
+                        $com=Com_basic::where('c_account',$j->c_account)->first();
+                        $j->profilePic=$com->profilePic;
                         $token = JWTAuth::getToken();
                         $user = JWTAuth::toUser($token);
                         if($user->u_status==0){
@@ -344,6 +371,8 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
+                        $com=Com_basic::where('c_account',$j->c_account)->first();
+                        $j->profilePic=$com->profilePic;
                         $token = JWTAuth::getToken();
                         $user = JWTAuth::toUser($token);
                         if($user->u_status==0){
@@ -365,6 +394,8 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
+                        $com=Com_basic::where('c_account',$j->c_account)->first();
+                        $j->profilePic=$com->profilePic;
                         $token = JWTAuth::getToken();
                         $user = JWTAuth::toUser($token);
                         if($user->u_status==0){
@@ -400,6 +431,8 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
+                        $com=Com_basic::where('c_account',$j->c_account)->first();
+                        $j->profilePic=$com->profilePic;
                         $token = JWTAuth::getToken();
                         $user = JWTAuth::toUser($token);
                         if($user->u_status==0){
@@ -422,6 +455,8 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
+                        $com=Com_basic::where('c_account',$j->c_account)->first();
+                        $j->profilePic=$com->profilePic;
                         $token = JWTAuth::getToken();
                         $user = JWTAuth::toUser($token);
                         if($user->u_status==0){
@@ -445,6 +480,8 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
+                        $com=Com_basic::where('c_account',$j->c_account)->first();
+                        $j->profilePic=$com->profilePic;
                         $token = JWTAuth::getToken();
                         $user = JWTAuth::toUser($token);
                         if($user->u_status==0){
@@ -466,6 +503,8 @@ class JobopeningServices
                     foreach ($jobOp as $j){
                         $j->jdeadline=Carbon::parse($j->jdeadline)->format('Y/m/d');
                         $j->jResume_num=Match::where('joid',$j->joid)->count();
+                        $com=Com_basic::where('c_account',$j->c_account)->first();
+                        $j->profilePic=$com->profilePic;
                         $token = JWTAuth::getToken();
                         $user = JWTAuth::toUser($token);
                         if($user->u_status==0){
