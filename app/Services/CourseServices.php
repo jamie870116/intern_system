@@ -71,9 +71,10 @@ class CourseServices
 
             if ($match) {
                 if ($match->mstatus == 9 || $match->mstatus == 11) {
-
                     $c = StuCourseEloquent::where('courseId', $re['courseId'])->where('sid', $match->sid)->first();
                     if (!$c) {
+                        $course = Course::where('courseId', $re['courseId'])->first();
+
                         $match->mstatus = 11;
                         $match->tid = $re['tid'];
                         $jobOp = Job_opening::withTrashed()->where('joid', $match->joid)->first();
@@ -108,6 +109,15 @@ class CourseServices
 
                         $st_letter=new Station_Letter();
                         $st_letter->lStatus=11;
+                        $st_letter->lTitle='實習老師為';
+                        $st_letter->lRecipient=$student->account;
+                        $st_letter->lRecipientName=$student->u_name;
+                        $st_letter->lContent='您已加入'.$course->courseName.'課程，'.'該課程的實習指導老師為 '.$teacher->u_name;
+                        $st_letter->lNotes='';
+                        $st_letter->save();
+
+                        $st_letter=new Station_Letter();
+                        $st_letter->lStatus=11;
                         $st_letter->lTitle='有學生加入實習課程';
                         $st_letter->lRecipient=$company->account;
                         $st_letter->lRecipientName=$company->u_name;
@@ -115,7 +125,7 @@ class CourseServices
                         $st_letter->lNotes='';
                         $st_letter->save();
 
-                        $course = Course::where('courseId', $re['courseId'])->first();
+
                         if ($course) {
                             $first = $f;
                             for ($i = 0; $i < $course->courseJournal; $i++) {

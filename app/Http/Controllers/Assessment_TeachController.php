@@ -32,7 +32,7 @@ class Assessment_TeachController extends Controller
     public function teacherGetAssessmentList(){
         $token = JWTAuth::getToken();
         $user = JWTAuth::toUser($token);
-        $stu_course = Stu_courseEloquent::where('tid', $user->id)->get();
+        $stu_course = Stu_courseEloquent::where('tid', $user->id)->where('assessmentStatus',2)->get();
         $Assessment_list = array();
         foreach($stu_course as $stu_cour){
             $stu = UserEloquent::where('id',$stu_cour->sid)->first();

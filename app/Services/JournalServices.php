@@ -32,7 +32,7 @@ class JournalServices{
                 $st_letter->lTitle='學生有新的週誌';
                 $st_letter->lRecipient=$company->account;
                 $st_letter->lRecipientName=$company->u_name;
-                $st_letter->lContent='您的學生 '.$student->u_name.'填寫了新的週誌';
+                $st_letter->lContent=$student->u_name.'已填寫完週誌，請至學生管理頁面查看';
                 $st_letter->lNotes='';
                 $st_letter->save();
 
@@ -40,7 +40,7 @@ class JournalServices{
                 $st_letter->lTitle='學生有新的週誌';
                 $st_letter->lRecipient=$teacher->account;
                 $st_letter->lRecipientName=$teacher->u_name;
-                $st_letter->lContent='您的學生 '.$student->u_name.'填寫了新的週誌';
+                $st_letter->lContent=$student->u_name.'已填寫完週誌，請至學生管理頁面查看';
                 $st_letter->lNotes='';
                 $st_letter->save();
             }
