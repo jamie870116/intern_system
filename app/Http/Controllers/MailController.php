@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\SendMailBC;
 use App\Services\MailServices;
 use App\Station_Letter;
 use Illuminate\Http\Request;
@@ -53,19 +54,12 @@ class MailController extends Controller
         $token = JWTAuth::getToken();
         $users = JWTAuth::toUser($token);
 
-        $mail=Station_Letter::where('lSender',$users->account)->SortByUpdates_DESC()->paginate(12);
-        foreach ($mail as $m){
-            if($m->read==0){
-                $m->read=false;
-            }else{
-                $m->read=true;
-            }
-            if($m->favourite==0){
-                $m->favourite=false;
-            }else{
-                $m->favourite=true;
-            }
+        $mail=SendMailBC::where('lSender',$users->account)->SortByUpdates_DESC()->paginate(12);
+         foreach ($mail as $m){
+             $m->read=true;
+            $m->favourite=false;
         }
+
         if($mail){
             return response()->json($mail, 200, [], JSON_UNESCAPED_UNICODE);
         }else{
@@ -234,14 +228,41 @@ class MailController extends Controller
         }
     }
 
+    //刪除寄件備份之信件-硬刪除
+    public function sendMailDeleted(Request $request)
+    {
+        $re = $request->all();
+        $objValidator = Validator::make($request->all(), array(
+            'slId' => 'required|integer'
+        ), array(
+            'slId.required' => '請輸入信件ID',
+            'slId.integer' => '請輸入int格式',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $responses = $this->MailServices->sendMailDeleted_ser($re['slId']);
+            if ($responses == '刪除信件成功') {
+                return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
+
     //取得回收信件
     public function getTrashFolder()
     {
         $token = JWTAuth::getToken();
         $users = JWTAuth::toUser($token);
 
-        $mail=Station_Letter::onlyTrashed()->where('lRecipient',$users->account)->orWhere('lSender',$users->account)->paginate(12);
-        foreach ($mail as $m){
+        $mail=Station_Letter::onlyTrashed()->where('lRecipient',$users->account)->paginate(12);
+         foreach ($mail as $m){
             if($m->read==0){
                 $m->read=false;
             }else{

@@ -36,6 +36,8 @@ class MatchServices
 
                 $com = Job_opening::where('joid', $re['joid'])->first();
                 $match->c_account = $com->c_account;
+                $match->jduties = $com->jduties;
+                $match->jdetails = $com->jdetails;
                 $match->sid = $user->id;
                 $match->save();
                 $log = new MatchLogEloquent();//給企業信件->學生的履歷

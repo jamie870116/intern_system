@@ -123,7 +123,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::put('teacherEditComInterview','InterviewAnswerController@teacherEditComInterview');//老師修改對企業問卷
     Route::post('teacherCreateStuInterview','InterviewAnswerController@teacherCreateStuInterview');//老師輸入對學生問卷
     Route::put('teacherEditStuInterview','InterviewAnswerController@teacherEditStuInterview');//老師修改對學生問卷
-//    Route::get('getInternStudentList','InterviewAnswerController@getInternStudentList');//取得該老師所有指導生列表
+    Route::get('getInternStudentList','InterviewAnswerController@getInternStudentList');//取得該老師所有指導生列表
     Route::get('getNullComInterview','InterviewAnswerController@getNullComInterview');//取得填寫訪談紀錄前的預設資料(企業)
     Route::get('getNullStuInterview','InterviewAnswerController@getNullStuInterview');//取得填寫訪談紀錄前的預設資料(學生)
     Route::get('getInterviewBySCid','InterviewAnswerController@getInterviewBySCid');//取得填寫過的訪談紀錄
@@ -163,6 +163,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('getMailByToken', 'MailController@getMailByToken');//取得信件(收件匣)
     Route::get('getSentMailByToken', 'MailController@getSentMailByToken');//取得送件匣
     Route::delete('mailDeleted', 'MailController@mailDeleted');//刪除信件
+    Route::delete('sendMailDeleted', 'MailController@sendMailDeleted');//刪除寄件備份之信件-硬刪除
     Route::get('getTrashFolder', 'MailController@getTrashFolder');//取得回收信件
     Route::delete('mailForceDeleted', 'MailController@mailForceDeleted');//永久刪除信件
     Route::post('mailRestoreDeleted', 'MailController@mailRestoreDeleted');//回復刪除信件

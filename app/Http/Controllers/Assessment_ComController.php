@@ -61,7 +61,7 @@ class Assessment_ComController extends Controller
             $basic=Stu_courseEloquent::find($re['SCid'])->stu_basic()->first();
             $list = array('stu_name'=>$stu->u_name, 'tea_name'=>$tea->u_name, 'profilePic'=>$basic->profilePic);
         }
-        return response()->json(['Assessment_list'=>$list], 200, [], JSON_UNESCAPED_UNICODE);
+        return response()->json([$list], 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     //廠商輸入成績

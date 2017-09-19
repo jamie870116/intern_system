@@ -266,19 +266,20 @@ class Job_openingController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
-            $jobOp = job_opEloquent::where('joid', $re['joid'])->first();
-            $jobOp->jResume_num=Match::where('joid',$jobOp->joid)->count();
-            $token = JWTAuth::getToken();
-            $user = JWTAuth::toUser($token);
-            if($user->u_status==0){
-                $match=Match::where('joid',$re['joid'])->where('sid',$user->id)->first();
-                if($match){
-                    $jobOp->jResume_submitted=true;
-                }else{
-                    $jobOp->jResume_submitted=false;
-                }
-            }
+            $jobOp = job_opEloquent::withTrashed()->where('joid', $re['joid'])->first();
+
             if ($jobOp) {
+                $jobOp->jResume_num=Match::where('joid',$jobOp->joid)->count();
+                $token = JWTAuth::getToken();
+                $user = JWTAuth::toUser($token);
+                if($user->u_status==0){
+                    $match=Match::where('joid',$re['joid'])->where('sid',$user->id)->first();
+                    if($match){
+                        $jobOp->jResume_submitted=true;
+                    }else{
+                        $jobOp->jResume_submitted=false;
+                    }
+                }
                 return response()->json($jobOp, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json(['取得職缺資料失敗'], 400, [], JSON_UNESCAPED_UNICODE);

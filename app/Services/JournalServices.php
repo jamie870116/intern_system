@@ -14,9 +14,9 @@ class JournalServices{
 
         $journal=JournalEloquent::where('journalID',$re['journalID'])->first();
         $course=Stu_course::find($journal->SCid)->courses()->first();
-        $student=Stu_course::find($course->SCid)->user_stu()->first();
-        $company=Stu_course::find($course->SCid)->user_com()->first();
-        $teacher=Stu_course::find($course->SCid)->user_tea()->first();
+        $student=Stu_course::find($journal->SCid)->user_stu()->first();
+        $company=Stu_course::find($journal->SCid)->user_com()->first();
+        $teacher=Stu_course::find($journal->SCid)->user_tea()->first();
         $now = Carbon::now();
         if($now < $course->courseEnd){
             $passDeadLine=false;
