@@ -167,9 +167,9 @@ class InterviewQuestionsController extends Controller
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
-            'insQuestion' => 'required',
-            'insAnswerType' => 'required|integer',
-            'insQId' => 'required',
+            'insQuestion' => 'required',//xxxxx,xxxxx,
+            'insAnswerType' => 'required|',//1,0,
+            'insQId' => 'required',//5,6,
         ), array(
             'insQuestion.required' => '請輸入學生訪談題目',
             'insQId.required' => '請輸入學生訪談題目ID',
@@ -225,4 +225,62 @@ class InterviewQuestionsController extends Controller
             }
         }
     }
+
+    //刪除企業訪談題目
+    public function deleteComQuestion(Request $request)
+    {
+        $re = $request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'insCQId' => 'required|integer',
+        ), array(
+            'insCQId.required' => '請輸入企業訪談題目ID',
+            'integer' => '請輸入int',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $responses = $this->QuestionsServices->editNewComQuestion_ser($re);
+            if ($responses == '企業訪談題目刪除成功') {
+                return response()->json(array($responses), 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json(array($responses), 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
+
+    //刪除學生訪談題目
+    public function deleteStuQuestion(Request $request)
+    {
+        $re = $request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'insQId' => 'required|integer',
+        ), array(
+            'insQId.required' => '請輸入學生訪談題目ID',
+            'integer' => '請輸入int',
+
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $responses = $this->QuestionsServices->deleteStuQuestion_ser($re);
+            if ($responses == '刪除學生訪談題目成功') {
+                return response()->json(array($responses), 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json(array($responses), 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
+
 }

@@ -157,6 +157,8 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::post('createNewComQuestion','InterviewQuestionsController@createNewComQuestion');//新增學生訪談題目
     Route::put('editNewStuQuestion','InterviewQuestionsController@editNewStuQuestion');//修改學生訪談題目
     Route::put('editNewComQuestion','InterviewQuestionsController@editNewComQuestion');//修改企業訪談題目
+    Route::delete('deleteComQuestion','InterviewQuestionsController@deleteComQuestion');//刪除企業訪談題目
+    Route::delete('deleteStuQuestion','InterviewQuestionsController@deleteStuQuestion');//刪除學生訪談題目
 
     //站內信相關-學生與廠商
     Route::get('getMailDetails', 'MailController@getMailDetails');//已讀信件，即取得信件詳細資料
