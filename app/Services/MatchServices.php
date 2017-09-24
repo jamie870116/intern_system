@@ -49,7 +49,7 @@ class MatchServices
                 $st_letter->lStatus = 1;
                 $st_letter->lRecipient = $com->c_account;
                 $st_letter->lRecipientName = $com->c_name;
-                $st_letter->lTitle = '有學生向您投遞履歷';
+                $st_letter->lTitle = '學生 '.$user->u_name.'對您投出履歷';
                 $st_letter->lContent = $user->u_name . '對您投出履歷，請至職缺管理的學生投遞紀錄頁面查看';
                 $st_letter->lNotes = '';
                 $st_letter->save();
@@ -89,7 +89,7 @@ class MatchServices
                 $user = User::where('id', $match->sid)->first();
                 $st_letter->lRecipient = $user->account;
                 $st_letter->lRecipientName = $user->u_name;
-                $st_letter->lTitle = '應徵結果通知';
+                $st_letter->lTitle = $com->u_name.'履歷投遞結果';
                 $comb=Com_basic::where('c_account',$com->account)->first();
                 $st_letter->lContent = '您的履歷未被接受，故不需接受面試\n
                                         未被錄取原因: '.$res.'\n
@@ -133,7 +133,7 @@ class MatchServices
                     $user = User::where('id', $match->sid)->first();
                     $st_letter->lRecipient = $user->account;
                     $st_letter->lRecipientName = $user->u_name;
-                    $st_letter->lTitle = '應徵結果通知';
+                    $st_letter->lTitle = $com->u_name.'履歷投遞結果';
                     $st_letter->lContent = '您已被'.$com->u_name.'直接錄取\n
                                             請點選下列按鈕回覆該企業是否到職\n';
                     $st_letter->lNotes = '';
@@ -145,7 +145,7 @@ class MatchServices
                     $user = User::where('id', $match->sid)->first();
                     $st_letter->lRecipient = $user->account;
                     $st_letter->lRecipientName = $user->u_name;
-                    $st_letter->lTitle = '應徵結果通知';
+                    $st_letter->lTitle = $com->u_name.'履歷投遞結果';
                     $st_letter->lContent = '您的履歷已被接受，'.$com->u_name.'邀請您參加面試\n
                                             請點選下列按鈕回覆該企業是否接受面試\n';
                     $st_letter->lNotes = '';
@@ -179,7 +179,7 @@ class MatchServices
                 $st_letter->lStatus = 12;//面試通知信
                 $st_letter->lRecipient = $user->account;
                 $st_letter->lRecipientName = $user->u_name;
-                $st_letter->lTitle = '面試通知信';
+                $st_letter->lTitle = $com->u_name.'邀請您前來面試';
                 $st_letter->lContent = '您的履歷已被接受，{公司}邀請您參加面試\n
                                         面試資訊如下:\n
                                         公司名稱:'.$com->u_name.'\n
@@ -229,9 +229,9 @@ class MatchServices
                     $st_letter->lStatus = $status;
                     $st_letter->lRecipient = $match->c_account;
                     $st_letter->lRecipientName = User::where('account', $match->c_account)->first()->u_name;
-                    $st_letter->lTitle = '面試接受與否';
-                    $st_letter->lContent = '接受面試';
-                    $st_letter->lNotes =  $user->u_name.'願意接受面試\n';
+                    $st_letter->lTitle =$user->u_name. '面試意願結果';
+                    $st_letter->lNotes ='';
+                    $st_letter->lContent =  $user->u_name.'願意接受面試\n';
                     $st_letter->save();
                     return '接受面試成功';
                 } elseif ($status == 5) {
@@ -239,7 +239,7 @@ class MatchServices
                     $st_letter->lStatus = $status;
                     $st_letter->lRecipient = $match->c_account;
                     $st_letter->lRecipientName = User::where('account', $match->c_account)->first()->u_name;
-                    $st_letter->lTitle = '面試接受與否';
+                    $st_letter->lTitle = $user->u_name.'面試意願結果';
                     $st_letter->lContent = $user->u_name.'不願意接受面試\n';
                     $st_letter->lNotes = '';
                     $st_letter->save();
@@ -284,7 +284,7 @@ class MatchServices
                 $st_letter->lStatus = 8;
                 $st_letter->lRecipient = $user->account;
                 $st_letter->lRecipientName = $user->u_name;
-                $st_letter->lTitle = '面試結果通知';
+                $st_letter->lTitle = $com->u_name.'面試結果';
                 $comb=Com_basic::where('c_account',$com->account)->first();
                 $st_letter->lContent = '您未通過面試，未被'.$com->u_name.'錄取\n
                                         '.$com->u_name.'聯絡資訊如下:\n
@@ -325,7 +325,7 @@ class MatchServices
                 $st_letter->lStatus = 7;
                 $st_letter->lRecipient = $user->account;
                 $st_letter->lRecipientName = $user->u_name;
-                $st_letter->lTitle = '面試結果通知';
+                $st_letter->lTitle =  $com->u_name.'面試結果';
                 $st_letter->lContent = '您已通過面試，被'.$com->u_name.'錄取\n
                                         請點選下列按鈕回覆該企業是否到職\n';
                 $st_letter->lNotes = '';
@@ -366,7 +366,7 @@ class MatchServices
                     $st_letter->lStatus = $status;
                     $st_letter->lRecipient = $match->c_account;
                     $st_letter->lRecipientName = User::where('account', $match->c_account)->first()->u_name;
-                    $st_letter->lTitle = '應徵與否';
+                    $st_letter->lTitle = $stu->u_name.'到職意願結果';
                     $st_letter->lContent = $stu->u_name.'已接受您的到職邀請\n';
                     $st_letter->lNotes = '';
                     $st_letter->save();
@@ -376,7 +376,7 @@ class MatchServices
                     $st_letter->lStatus = $status;
                     $st_letter->lRecipient = $match->c_account;
                     $st_letter->lRecipientName = User::where('account', $match->c_account)->first()->u_name;
-                    $st_letter->lTitle = '應徵與否';
+                    $st_letter->lTitle = $stu->u_name.'到職意願結果';
                     $st_letter->lContent = $stu->u_name.'已拒絕您的到職邀請\n';
                     $st_letter->lNotes = '';
                     $st_letter->save();

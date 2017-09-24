@@ -5,13 +5,15 @@ use App\Journal as JournalEloquent;
 use App\Station_Letter;
 use App\Stu_course;
 use Carbon\Carbon;
+use JWTAuth;
 
 
 class JournalServices{
 
     public function studentEditJournal_ser($re)
     {
-
+        $token = JWTAuth::getToken();
+        $stu = JWTAuth::toUser($token);
         $journal=JournalEloquent::where('journalID',$re['journalID'])->first();
         $course=Stu_course::find($journal->SCid)->courses()->first();
         $student=Stu_course::find($journal->SCid)->user_stu()->first();
@@ -29,7 +31,7 @@ class JournalServices{
             if($journal->journalDetail_1==null){
                 $st_letter=new Station_Letter();
                 $st_letter->lStatus=13;
-                $st_letter->lTitle='學生有新的週誌';
+                $st_letter->lTitle=$stu->u_name.' 完成週誌填寫';
                 $st_letter->lRecipient=$company->account;
                 $st_letter->lRecipientName=$company->u_name;
                 $st_letter->lContent=$student->u_name.'已填寫完週誌，請至學生管理頁面查看';
@@ -37,7 +39,7 @@ class JournalServices{
                 $st_letter->save();
 
                 $st_letter->lStatus=13;
-                $st_letter->lTitle='學生有新的週誌';
+                $st_letter->lTitle=$stu->u_name.' 完成週誌填寫';
                 $st_letter->lRecipient=$teacher->account;
                 $st_letter->lRecipientName=$teacher->u_name;
                 $st_letter->lContent=$student->u_name.'已填寫完週誌，請至學生管理頁面查看';

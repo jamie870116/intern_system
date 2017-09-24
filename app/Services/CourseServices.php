@@ -100,7 +100,7 @@ class CourseServices
 
                         $st_letter=new Station_Letter();
                         $st_letter->lStatus=11;
-                        $st_letter->lTitle='有學生加入實習課程';
+                        $st_letter->lTitle='媒合成功通知信';
                         $st_letter->lRecipient=$teacher->account;
                         $st_letter->lRecipientName=$teacher->u_name;
                         $st_letter->lContent='您的學生 '.$student->u_name.'成為您的指導實習生';
@@ -109,7 +109,7 @@ class CourseServices
 
                         $st_letter=new Station_Letter();
                         $st_letter->lStatus=11;
-                        $st_letter->lTitle='實習老師為';
+                        $st_letter->lTitle='媒合成功通知信';
                         $st_letter->lRecipient=$student->account;
                         $st_letter->lRecipientName=$student->u_name;
                         $st_letter->lContent='您已加入'.$course->courseName.'課程，'.'該課程的實習指導老師為 '.$teacher->u_name;
@@ -118,10 +118,10 @@ class CourseServices
 
                         $st_letter=new Station_Letter();
                         $st_letter->lStatus=11;
-                        $st_letter->lTitle='有學生加入實習課程';
+                        $st_letter->lTitle='媒合成功通知信';
                         $st_letter->lRecipient=$company->account;
                         $st_letter->lRecipientName=$company->u_name;
-                        $st_letter->lContent='您的學生 '.$student->u_name.'成為您的指導實習生';
+                        $st_letter->lContent=$student->u_name.'已成為'.$company->u_name.'的實習生';
                         $st_letter->lNotes='';
                         $st_letter->save();
 

@@ -46,10 +46,10 @@ class Kernel extends ConsoleKernel
                             $student=Stu_course::find($stu_c->SCid)->user_stu()->first();
                             $st_letter=new Station_Letter();
                             $st_letter->lStatus=14;
-                            $st_letter->lTitle='學生可以考核了';
+                            $st_letter->lTitle='成績考核通知';
                             $st_letter->lRecipient=$company->account;
                             $st_letter->lRecipientNmae=$company->u_name;
-                            $st_letter->lContent='您的學生'.$student->u_name.'已經可以考核了';
+                            $st_letter->lContent='已經可以對'.$student->u_name.'進行成績考核，請至學生管理頁面操作\n';
                             $st_letter->lNotes='';
                             $st_letter->save();
                         }
