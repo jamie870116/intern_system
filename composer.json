@@ -8,6 +8,7 @@
         "php": ">=5.6.4",
         "barryvdh/laravel-ide-helper": "v2.4.0",
         "guzzlehttp/guzzle": "^6.2",
+        "intervention/image": "^2.4",
         "jenssegers/agent": "v2.5.1",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",

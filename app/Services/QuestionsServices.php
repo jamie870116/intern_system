@@ -46,7 +46,7 @@ class QuestionsServices
             $newQ->insAnswerType = $question['insAnswerType'];
             $newQ->save();
 
-            return '學生訪談題目新增成功';
+            return $newQ->insQId;
         } else {
             return array('找不到題目');
         }
@@ -72,7 +72,7 @@ class QuestionsServices
 
             $newQ->save();
 
-            return '企業訪談題目新增成功';
+            return $newQ->insCQId;
         } else {
             return array('找不到題目');
         }

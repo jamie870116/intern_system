@@ -122,10 +122,10 @@ class InterviewQuestionsController extends Controller
             return response()->json($error, 400);//422
         } else {
             $responses = $this->QuestionsServices->createNewStuQuestion_ser($re);
-            if ($responses == '學生訪談題目新增成功') {
-                return response()->json(array($responses), 200, [], JSON_UNESCAPED_UNICODE);
-            } else {
+            if ($responses == '找不到題目') {
                 return response()->json(array($responses), 400, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json(array($responses), 200, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -153,10 +153,10 @@ class InterviewQuestionsController extends Controller
             return response()->json($error, 400);//422
         } else {
             $responses = $this->QuestionsServices->createNewComQuestion_ser($re);
-            if ($responses == '企業訪談題目新增成功') {
-                return response()->json(array($responses), 200, [], JSON_UNESCAPED_UNICODE);
-            } else {
+            if ($responses == '找不到題目') {
                 return response()->json(array($responses), 400, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json(array($responses), 200, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -245,7 +245,7 @@ class InterviewQuestionsController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
-            $responses = $this->QuestionsServices->editNewComQuestion_ser($re);
+            $responses = $this->QuestionsServices->deleteComQuestion_ser($re);
             if ($responses == '企業訪談題目刪除成功') {
                 return response()->json(array($responses), 200, [], JSON_UNESCAPED_UNICODE);
             } else {
