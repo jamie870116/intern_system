@@ -38,13 +38,14 @@ class JournalServices{
                 $st_letter->lNotes='';
                 $st_letter->save();
 
-                $st_letter->lStatus=13;
-                $st_letter->lTitle=$stu->u_name.' 完成週誌填寫';
-                $st_letter->lRecipient=$teacher->account;
-                $st_letter->lRecipientName=$teacher->u_name;
-                $st_letter->lContent=$student->u_name.'已填寫完週誌，請至學生管理頁面查看';
-                $st_letter->lNotes='';
-                $st_letter->save();
+                $st_letter2=new Station_Letter();
+                $st_letter2->lStatus=13;
+                $st_letter2->lTitle=$stu->u_name.' 完成週誌填寫';
+                $st_letter2->lRecipient=$teacher->account;
+                $st_letter2->lRecipientName=$teacher->u_name;
+                $st_letter2->lContent=$student->u_name.'已填寫完週誌，請至學生管理頁面查看';
+                $st_letter2->lNotes='';
+                $st_letter2->save();
             }
             $journal->journalDetail_1=$re['journalDetail_1'];
             $journal->journalDetail_2=$re['journalDetail_2'];

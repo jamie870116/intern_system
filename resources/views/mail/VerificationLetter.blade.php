@@ -103,7 +103,7 @@
         <h2><i class="fa fa-handshake-o" aria-hidden="true"></i></h2>
         <h2 style="font-weight:bold;">感謝您的註冊</h2>
         <h2>請點擊下方連結進行驗證</h2>
-        <h3><a href="">http://tsaiweb.southeastasia.cloudapp.azure.com/aa9453aa/#Page=Login?code={{$code}}</a></h3>
+        <h3><a href="http://tsaiweb.southeastasia.cloudapp.azure.com/aa9453aa/#Page=Login?code={{$code}}">http://tsaiweb.southeastasia.cloudapp.azure.com/aa9453aa/#Page=Login?code={{$code}}</a></h3>
     </div>
 </div>
 

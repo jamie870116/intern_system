@@ -133,7 +133,7 @@ class AuthController extends Controller
             'account' => 'required|unique:users',
             'password' => 'required|max:20|min:6',
             'conf_pass' => 'required',
-            'email' => 'email',
+            'email' => 'email|required',
             'u_status' => 'required'
         ), array(
             'u_name.required' => '請輸入姓名',
@@ -158,7 +158,8 @@ class AuthController extends Controller
             $error[] = '兩次密碼不一致';
             return response()->json($error, 400, $headers, JSON_UNESCAPED_UNICODE);
         } else if ($status == 0) { //學生
-            $email = $account . '@nutc.edu.tw';
+//            $email = $account . '@nutc.edu.tw';
+            $email = $re['email'];
             userEloquent::create([
                 'u_name' => $u_name,
                 'email' => $email,
@@ -172,7 +173,8 @@ class AuthController extends Controller
             Log::error($m);
             return response()->json(['去收驗證信s'], 200, $headers, JSON_UNESCAPED_UNICODE);
         } else if ($status == 1) {//teacher
-            $email = $account . '@nutc.edu.tw';
+//            $email = $account . '@nutc.edu.tw';
+            $email = $re['email'];
             userEloquent::create([
                 'u_name' => $u_name,
                 'email' => $email,

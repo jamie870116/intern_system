@@ -8,6 +8,7 @@ use App\Job_opening;
 use App\Journal;
 use App\Match as MatchEloquent;
 use App\MatchLog as MatchLogEloquent;
+use App\Reviews;
 use App\Station_Letter;
 use App\Stu_course as StuCourseEloquent;
 use App\Stu_course;
@@ -128,35 +129,42 @@ class CourseServices
 
                         if ($course) {
                             $first = $f;
-                            for ($i = 0; $i < $course->courseJournal; $i++) {
-                                $type=$jobOp->jtypes;
-                                if ($type == 0) {  //暑期
-                                    $journal = new Journal();
-                                    $journal->SCid = $stu_c->SCid;
-                                    $journal->journalOrder = $i;
-                                    if ($i == 0) {
-                                        $journal->journalStart = Carbon::parse($first);
-                                        $journal->journalEnd = Carbon::parse($first)->addWeeks(1)->subDay();
+                            for ($i = 0; $i <= $course->courseJournal; $i++) {
+                                if( $i == $course->courseJournal){
+                                    $review=new Reviews();
+                                    $review->reContent='';
+                                    $review->SCid=$stu_c->SCid;
+                                    $review->save();
+                                }else{
+                                    $type=$jobOp->jtypes;
+                                    if ($type == 0) {  //暑期
+                                        $journal = new Journal();
+                                        $journal->SCid = $stu_c->SCid;
+                                        $journal->journalOrder = $i;
+                                        if ($i == 0) {
+                                            $journal->journalStart = Carbon::parse($first);
+                                            $journal->journalEnd = Carbon::parse($first)->addWeeks(1)->subDay();
 
-                                    } else {
-                                        $journal->journalStart = Carbon::parse($first)->addWeeks($i);
-                                        $journal->journalEnd = Carbon::parse($first)->addWeeks($i + 1)->subDay();
+                                        } else {
+                                            $journal->journalStart = Carbon::parse($first)->addWeeks($i);
+                                            $journal->journalEnd = Carbon::parse($first)->addWeeks($i + 1)->subDay();
+                                        }
+                                        $journal->save();
+
+                                    } elseif ($type == 1) { //學期
+                                        $journal = new Journal();
+                                        $journal->SCid = $stu_c->SCid;
+                                        $journal->journalOrder = $i;
+                                        if ($i == 0) {
+                                            $journal->journalStart = Carbon::parse($first);
+                                            $journal->journalEnd = Carbon::parse($first)->addWeeks(2)->subDay();
+
+                                        } else {
+                                            $journal->journalStart = Carbon::parse($first)->addWeeks($i + 2);
+                                            $journal->journalEnd = Carbon::parse($first)->addWeeks($i + 4)->subDay();
+                                        }
+                                        $journal->save();
                                     }
-                                    $journal->save();
-
-                                } elseif ($type == 1) { //學期
-                                    $journal = new Journal();
-                                    $journal->SCid = $stu_c->SCid;
-                                    $journal->journalOrder = $i;
-                                    if ($i == 0) {
-                                        $journal->journalStart = Carbon::parse($first);
-                                        $journal->journalEnd = Carbon::parse($first)->addWeeks(2)->subDay();
-
-                                    } else {
-                                        $journal->journalStart = Carbon::parse($first)->addWeeks($i + 2);
-                                        $journal->journalEnd = Carbon::parse($first)->addWeeks($i + 4)->subDay();
-                                    }
-                                    $journal->save();
                                 }
 
                             }

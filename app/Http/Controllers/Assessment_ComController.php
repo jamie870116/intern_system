@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Assessment_Com;
+use App\Journal;
 use App\Stu_course as Stu_courseEloquent;
 use App\Services\Assessment_ComServices;
 use App\Course as CourseEloquent;
@@ -245,7 +246,9 @@ class Assessment_ComController extends Controller
             return response()->json($error, 400);//422
         } else {
             $Assessment_Com=Assessment_Com::where('SCid',$re['SCid'])->get();
+            $journal=Journal::where('SCid',$re['SCid'])->first();
             foreach ($Assessment_Com as $a){
+                $a->journalInstructor=$journal->journalInstructor;
                 $a->totalGrade_Com=$a->asGrade1+$a->asGrade2+$a->asGrade3+$a->asGrade4+$a->asGrade5;
             }
             if ($Assessment_Com) {
