@@ -110,7 +110,11 @@ class JobopeningServices
                         if($user->u_status==0){
                             $match=Match::where('joid',$j->joid)->where('sid',$user->id)->first();
                             if($match){
-                                $j->jResume_submitted=true;
+                                if($match->mstatus==2){
+                                    $j->jResume_submitted=false;
+                                }else{
+                                    $j->jResume_submitted=true;
+                                }
                             }else{
                                 $j->jResume_submitted=false;
                             }
@@ -134,7 +138,11 @@ class JobopeningServices
                         if($user->u_status==0){
                             $match=Match::where('joid',$j->joid)->where('sid',$user->id)->first();
                             if($match){
-                                $j->jResume_submitted=true;
+                                if($match->mstatus==2){
+                                    $j->jResume_submitted=false;
+                                }else{
+                                    $j->jResume_submitted=true;
+                                }
                             }else{
                                 $j->jResume_submitted=false;
                             }
@@ -160,7 +168,11 @@ class JobopeningServices
                         if($user->u_status==0){
                             $match=Match::where('joid',$j->joid)->where('sid',$user->id)->first();
                             if($match){
-                                $j->jResume_submitted=true;
+                                if($match->mstatus==2){
+                                    $j->jResume_submitted=false;
+                                }else{
+                                    $j->jResume_submitted=true;
+                                }
                             }else{
                                 $j->jResume_submitted=false;
                             }
@@ -183,7 +195,11 @@ class JobopeningServices
                         if($user->u_status==0){
                             $match=Match::where('joid',$j->joid)->where('sid',$user->id)->first();
                             if($match){
-                                $j->jResume_submitted=true;
+                                if($match->mstatus==2){
+                                    $j->jResume_submitted=false;
+                                }else{
+                                    $j->jResume_submitted=true;
+                                }
                             }else{
                                 $j->jResume_submitted=false;
                             }
@@ -220,7 +236,11 @@ class JobopeningServices
                         if($user->u_status==0){
                             $match=Match::where('joid',$j->joid)->where('sid',$user->id)->first();
                             if($match){
-                                $j->jResume_submitted=true;
+                                if($match->mstatus==2){
+                                    $j->jResume_submitted=false;
+                                }else{
+                                    $j->jResume_submitted=true;
+                                }
                             }else{
                                 $j->jResume_submitted=false;
                             }
@@ -244,7 +264,11 @@ class JobopeningServices
                         if($user->u_status==0){
                             $match=Match::where('joid',$j->joid)->where('sid',$user->id)->first();
                             if($match){
-                                $j->jResume_submitted=true;
+                                if($match->mstatus==2){
+                                    $j->jResume_submitted=false;
+                                }else{
+                                    $j->jResume_submitted=true;
+                                }
                             }else{
                                 $j->jResume_submitted=false;
                             }
@@ -269,7 +293,11 @@ class JobopeningServices
                         if($user->u_status==0){
                             $match=Match::where('joid',$j->joid)->where('sid',$user->id)->first();
                             if($match){
-                                $j->jResume_submitted=true;
+                                if($match->mstatus==2){
+                                    $j->jResume_submitted=false;
+                                }else{
+                                    $j->jResume_submitted=true;
+                                }
                             }else{
                                 $j->jResume_submitted=false;
                             }
@@ -292,7 +320,11 @@ class JobopeningServices
                         if($user->u_status==0){
                             $match=Match::where('joid',$j->joid)->where('sid',$user->id)->first();
                             if($match){
-                                $j->jResume_submitted=true;
+                                if($match->mstatus==2){
+                                    $j->jResume_submitted=false;
+                                }else{
+                                    $j->jResume_submitted=true;
+                                }
                             }else{
                                 $j->jResume_submitted=false;
                             }
@@ -329,7 +361,11 @@ class JobopeningServices
                         if($user->u_status==0){
                             $match=Match::where('joid',$j->joid)->where('sid',$user->id)->first();
                             if($match){
-                                $j->jResume_submitted=true;
+                                if($match->mstatus==2){
+                                    $j->jResume_submitted=false;
+                                }else{
+                                    $j->jResume_submitted=true;
+                                }
                             }else{
                                 $j->jResume_submitted=false;
                             }
@@ -353,7 +389,11 @@ class JobopeningServices
                         if($user->u_status==0){
                             $match=Match::where('joid',$j->joid)->where('sid',$user->id)->first();
                             if($match){
-                                $j->jResume_submitted=true;
+                                if($match->mstatus==2){
+                                    $j->jResume_submitted=false;
+                                }else{
+                                    $j->jResume_submitted=true;
+                                }
                             }else{
                                 $j->jResume_submitted=false;
                             }
@@ -378,7 +418,11 @@ class JobopeningServices
                         if($user->u_status==0){
                             $match=Match::where('joid',$j->joid)->where('sid',$user->id)->first();
                             if($match){
-                                $j->jResume_submitted=true;
+                                if($match->mstatus==2){
+                                    $j->jResume_submitted=false;
+                                }else{
+                                    $j->jResume_submitted=true;
+                                }
                             }else{
                                 $j->jResume_submitted=false;
                             }
@@ -401,7 +445,11 @@ class JobopeningServices
                         if($user->u_status==0){
                             $match=Match::where('joid',$j->joid)->where('sid',$user->id)->first();
                             if($match){
-                                $j->jResume_submitted=true;
+                                if($match->mstatus==2){
+                                    $j->jResume_submitted=false;
+                                }else{
+                                    $j->jResume_submitted=true;
+                                }
                             }else{
                                 $j->jResume_submitted=false;
                             }
@@ -438,7 +486,11 @@ class JobopeningServices
                         if($user->u_status==0){
                             $match=Match::where('joid',$j->joid)->where('sid',$user->id)->first();
                             if($match){
-                                $j->jResume_submitted=true;
+                                if($match->mstatus==2){
+                                    $j->jResume_submitted=false;
+                                }else{
+                                    $j->jResume_submitted=true;
+                                }
                             }else{
                                 $j->jResume_submitted=false;
                             }
@@ -462,7 +514,11 @@ class JobopeningServices
                         if($user->u_status==0){
                             $match=Match::where('joid',$j->joid)->where('sid',$user->id)->first();
                             if($match){
-                                $j->jResume_submitted=true;
+                                if($match->mstatus==2){
+                                    $j->jResume_submitted=false;
+                                }else{
+                                    $j->jResume_submitted=true;
+                                }
                             }else{
                                 $j->jResume_submitted=false;
                             }
@@ -487,7 +543,11 @@ class JobopeningServices
                         if($user->u_status==0){
                             $match=Match::where('joid',$j->joid)->where('sid',$user->id)->first();
                             if($match){
-                                $j->jResume_submitted=true;
+                                if($match->mstatus==2){
+                                    $j->jResume_submitted=false;
+                                }else{
+                                    $j->jResume_submitted=true;
+                                }
                             }else{
                                 $j->jResume_submitted=false;
                             }
@@ -510,7 +570,11 @@ class JobopeningServices
                         if($user->u_status==0){
                             $match=Match::where('joid',$j->joid)->where('sid',$user->id)->first();
                             if($match){
-                                $j->jResume_submitted=true;
+                                if($match->mstatus==2){
+                                    $j->jResume_submitted=false;
+                                }else{
+                                    $j->jResume_submitted=true;
+                                }
                             }else{
                                 $j->jResume_submitted=false;
                             }

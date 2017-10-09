@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Match;
 use App\SendMailBC;
 use App\Services\MailServices;
 use App\Station_Letter;
@@ -40,6 +41,21 @@ class MailController extends Controller
                 $m->favourite=false;
             }else{
                 $m->favourite=true;
+            }
+            $ms=$m->lStatus;
+            if($m->lNotes!=null){
+                $mid=(int)$m->lNotes;
+                $match=Match::where('mid',$mid)->first();
+                if($match){
+                    if($match->mstatus==$ms){
+                        $m->expired=false;
+                    }else{
+                        $m->expired=true;
+                    }
+                }
+
+            }else{
+                $m->expired=false;
             }
         }
         if($mail){

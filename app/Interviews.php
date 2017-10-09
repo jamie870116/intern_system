@@ -11,7 +11,7 @@ class Interviews extends Model
     public  $timestamps=true;
 
     protected $fillable = [
-        'mid','inadress','intime',
+        'mid','inaddress','intime',
         'jcontact_name' ,'jcontact_phone','jcontact_email','innotice'
     ];
 }

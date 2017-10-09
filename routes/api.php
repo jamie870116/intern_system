@@ -61,6 +61,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::post('studentAcceptInterview', 'MatchController@studentAcceptInterview'); //學生是否接受面試
     Route::post('companyFailedInterview', 'MatchController@companyFailedInterview'); //廠商回應-面試失敗
     Route::post('companyPassInterview', 'MatchController@companyPassInterview'); //廠商回應-面試成功
+    Route::post('companyResponseInterview', 'MatchController@companyResponseInterview'); //廠商回應面試(上面兩個API合而為一)
     Route::post('studentAcceptJob', 'MatchController@studentAcceptJob'); //學生是否接受入職
 
     //履歷新增相關

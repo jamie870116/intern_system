@@ -61,21 +61,22 @@ class MatchController extends Controller
     //廠商取得投遞的履歷
     public function companyGetResumeByAccount()
     {
-
         $token = JWTAuth::getToken();
         $user = JWTAuth::toUser($token);
         $match = MatchEloquent::where('c_account', $user->account)->get();
         if ($match) {
             $response = array();
             foreach ($match as $m) {
-                $id = $m->sid;
-                $mid = $m->mid;
-                $stuBas = stuBasicEloquent::where('sid', $id)->first();
-                $stuJExp = stuJExpEloquent::where('sid', $id)->get();
-                $stuWor = stuWorksEloquent::where('sid', $id)->get();
-                $stuA=Stu_ability::where('sid', $id)->get();
-                $stdRe = array('mid'=>$mid, 'jDuties'=>$m->jduties,'stu_basic'=>$stuBas, 'stu_jobExperience'=> $stuJExp, 'stu_works'=> $stuWor,'stu_ability'=>$stuA);
-                $response[] = $stdRe;
+                if($m->mstatus==1){
+                    $id = $m->sid;
+                    $mid = $m->mid;
+                    $stuBas = stuBasicEloquent::where('sid', $id)->first();
+                    $stuJExp = stuJExpEloquent::where('sid', $id)->get();
+                    $stuWor = stuWorksEloquent::where('sid', $id)->get();
+                    $stuA=Stu_ability::where('sid', $id)->get();
+                    $stdRe = array('mid'=>$mid, 'jDuties'=>$m->jduties,'stu_basic'=>$stuBas, 'stu_jobExperience'=> $stuJExp, 'stu_works'=> $stuWor,'stu_ability'=>$stuA);
+                    $response[] = $stdRe;
+                }
             }
 //[$responses]
             return response()->json(['ResumeList'=>$response], 200, [], JSON_UNESCAPED_UNICODE);
@@ -105,9 +106,9 @@ class MatchController extends Controller
         } else {
             $responses = $this->MatchServices->companyRejectResume_ser($re);
             if ($responses == '廠商拒絕媒合成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -118,12 +119,44 @@ class MatchController extends Controller
         $re = $request->all();
         $objValidator = Validator::make($request->all(), array(
             'mid' => 'required|integer',
-            'mstatus' => 'required|integer' //傳入1==去面試，其他是直接接受
+            'mstatus' => 'required|integer', //傳入1==去面試，其他是直接接受
+            'inadress' => 'nullable',
+            'intime' => 'nullable|date',
+            'jcontact_email' => 'nullable|email',
+            'jcontact_phone' => 'nullable',
+            'innotice' => 'nullable',
+            'jcontact_name' => 'nullable'
         ), array(
             'mid.required' => '請輸入媒合ID',
             'mstatus.required' => '請回傳1，讓他來面試或回傳2直接接受',
             'integer' => '請輸入int格式',
+            'date' => '日期時間格式錯誤',
+            'email' => '信箱格式錯誤'
         ));
+
+        $objValidator2 = Validator::make($request->all(), array(
+            'mid' => 'required|integer',
+            'mstatus' => 'required|integer', //傳入1==去面試，其他是直接接受
+            'inaddress' => 'required',
+            'intime' => 'required|date',
+            'jcontact_email' => 'required|email',
+            'jcontact_phone' => 'required',
+            'innotice' => 'required',
+            'jcontact_name' => 'required'
+        ), array(
+            'mid.required' => '請輸入媒合ID',
+            'mstatus.required' => '請回傳1，讓他來面試或回傳2直接接受',
+            'inaddress.required' => '請填寫面試地點',
+            'intime.required' => '請填寫面試日期與時間',
+            'jcontact_phone.required' => '請填寫聯絡人電話',
+            'jcontact_email.required' => '請填寫聯絡人信箱',
+            'jcontact_name.required' => '請填寫聯絡人姓名',
+            'innotice.required' => '請填寫注意事項',
+            'integer' => '請輸入int格式',
+            'date' => '日期時間格式錯誤',
+            'email' => '信箱格式錯誤'
+        ));
+
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
             $error = array();
@@ -131,13 +164,32 @@ class MatchController extends Controller
                 $error[] = $message;
             }
             return response()->json($error, 400);//422
-        } else {
-            $responses = $this->MatchServices->companyAcceptResume_ser($re);
-            if ($responses == '廠商直接錄取成功' || $responses == '廠商接受面試成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
-            } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+        }else{
+            if($re['mstatus']==1){
+                if ($objValidator2->fails()) {
+                    $errors = $objValidator2->errors();
+                    $error = array();
+                    foreach ($errors->all() as $message) {
+                        $error[] = $message;
+                    }
+                    return response()->json($error, 400);//422
+                }else{
+                    $responses = $this->MatchServices->companyAcceptResume_ser($re);
+                    if ($responses == '廠商直接錄取成功' || $responses == '廠商接受面試成功') {
+                        return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
+                    } else {
+                        return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
+                    }
+                }
+            }else{
+                $responses = $this->MatchServices->companyAcceptResume_ser($re);
+                if ($responses == '廠商直接錄取成功' || $responses == '廠商接受面試成功') {
+                    return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
+                } else {
+                    return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
+                }
             }
+
         }
     }
 
@@ -171,7 +223,7 @@ class MatchController extends Controller
         }
 
     }
-
+//create_CounselingResult
     //廠商填寫面試通知並寄出
     public function companySendInterviewNotice(Request $request)
     {
@@ -207,9 +259,9 @@ class MatchController extends Controller
         } else {
             $responses = $this->MatchServices->companySendInterviewNotice_ser($re);
             if ($responses == '成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -237,11 +289,11 @@ class MatchController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
-            $responses = $this->MatchServices->studentAcceptJob_ser($re);
+            $responses = $this->MatchServices->studentAcceptInterview_ser($re);
             if ($responses == '接受面試成功' || $responses == '拒絕面試成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -269,9 +321,9 @@ class MatchController extends Controller
         } else {
             $responses = $this->MatchServices->companyFailedInterview_ser($re);
             if ($responses == '廠商通知學生未綠取成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -297,9 +349,41 @@ class MatchController extends Controller
         } else {
             $responses = $this->MatchServices->companyPassInterview_ser($re);
             if ($responses == '廠商通知學生綠取成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
+
+    //廠商回應面試
+    public function companyResponseInterview(Request $request)
+    {
+        $re = $request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'mid' => 'required|integer',
+            'mstatus' => 'required|integer',
+            'mfailedreason' => 'nullable'
+        ), array(
+            'mid.required' => '請輸入媒合ID',
+            'mstatus.required' => '請輸入1=>面試通過，2=>面試不通過',
+            'integer' => 'int格式錯誤',
+
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $responses = $this->MatchServices->companyResponseInterview_ser($re);
+            if ($responses == '廠商通知學生面試結果') {
+                return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
@@ -328,9 +412,9 @@ class MatchController extends Controller
         } else {
             $responses = $this->MatchServices->studentAcceptJob_ser($re);
             if ($responses == '接受工作成功' || $responses == '拒絕工作成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }
