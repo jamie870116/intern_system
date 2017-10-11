@@ -21,6 +21,7 @@ class CreateCourseTable extends Migration
             $table->longText('courseDetail')->nullable();//課程內容
             $table->dateTime('courseStart');//課程開始日期
             $table->dateTime('courseEnd');//課程結束日期
+            $table->integer('courseSchoolSystem')->default(0);//課程學制
             $table->timestamps();
             $table->softDeletes();
 

@@ -7,6 +7,7 @@ use App\Journal;
 use App\Stu_course;
 use App\Teacher_profile_pic;
 use Carbon\Carbon;
+use Intervention\Image\Facades\Image;
 use JWTAuth;
 use Storage;
 
@@ -21,6 +22,8 @@ class GradeServices
         $teaPic = Teacher_profile_pic::where('tid', $id)->first();
         if($teaPic){
             if ($file) {
+                $img = Image::make($file);
+                $img->resize(400, 300);
                 $extension = $file->getClientOriginalExtension();
                 $file_name = strval(time()) . str_random(5) . '_pro.' . $extension;
 

@@ -414,7 +414,7 @@ class MatchServices
                                         請點選下列按鈕回覆該企業是否到職\n';
                     $st_letter->lNotes =$match->mid;
                     $st_letter->save();
-                    return '廠商通知學生綠取成功';
+                    return '廠商通知學生面試結果';
                 }else{
                     if (isset($re['mfailedreason']))
                         $match->mfailedreason = $re['mfailedreason'];
@@ -447,7 +447,7 @@ class MatchServices
                     $st_letter->lNotes = $match->mid;
                     $st_letter->save();
 
-                    return '廠商通知學生未綠取成功';
+                    return '廠商通知學生面試結果';
                 }
 
             } else {

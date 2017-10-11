@@ -8,6 +8,7 @@ use App\Job_opening;
 use App\User as userEloquent;
 use App\User;
 use File;
+use Intervention\Image\Facades\Image;
 use JWTAuth;
 use Log;
 use Storage;
@@ -23,6 +24,8 @@ class CompanyServices
         $user = JWTAuth::toUser($token);
         $com = comEloquent::where('c_account', $user->account)->first();
         if ($file) {
+            $img = Image::make($file);
+            $img->resize(400, 300);
 //            $size = File::size($file);
 //            $data = getimagesize($file);
 //            $height = $data[0];

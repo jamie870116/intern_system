@@ -17,7 +17,7 @@ class Course extends Model
 
     protected $fillable = [
         'courseName','courseJournal','courseDetail','courseStart',
-        'courseEnd'
+        'courseEnd','courseSchoolSystem'
     ];
 
     public function scopeGetAvailableCourse($query)

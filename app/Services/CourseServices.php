@@ -25,6 +25,7 @@ class CourseServices
         $course->courseDetail = $re['courseDetail'];
         $course->courseStart = $re['courseStart'];
         $course->courseEnd = $re['courseEnd'];
+        $course->courseSchoolSystem = $re['courseSchoolSystem'];
         $course->save();
         return '新增課程資料成功';
     }
@@ -38,6 +39,7 @@ class CourseServices
             $course->courseDetail = $re['courseDetail'];
             $course->courseStart = $re['courseStart'];
             $course->courseEnd = $re['courseEnd'];
+            $course->courseSchoolSystem = $re['courseSchoolSystem'];
             $course->save();
             return '修改課程資料成功';
         } else {

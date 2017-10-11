@@ -34,13 +34,15 @@ class CourseController extends Controller
             'courseJournal' => 'required|integer',
             'courseDetail' => 'nullable',
             'courseStart' => 'required|date',
-            'courseEnd' => 'required|date'
+            'courseEnd' => 'required|date',
+            'courseSchoolSystem' => 'required|integer'
 
         ), array(
             'courseName.required' => '請輸入課程名稱',
             'courseJournal.required' => '請輸入該課程所需填寫的週誌數量',
             'courseStart.required' => '請輸入該課程開始日期',
             'courseEnd.required' => '請輸入該課程結束日期',
+            'courseSchoolSystem.required' => '請輸入該課程之學制',
             'integer' => '請輸入數字',
             'date' => '請輸入日期',
 
@@ -75,7 +77,8 @@ class CourseController extends Controller
             'courseJournal' => 'required|integer',
             'courseDetail' => 'nullable',
             'courseStart' => 'required|date',
-            'courseEnd' => 'required|date'
+            'courseEnd' => 'required|date',
+            'courseSchoolSystem' => 'required|integer'
 
         ), array(
             'courseId.required'=>'請輸入課程編號',
@@ -83,6 +86,7 @@ class CourseController extends Controller
             'courseJournal.required' => '請輸入該課程所需填寫的週誌數量',
             'courseStart.required' => '請輸入該課程開始日期',
             'courseEnd.required' => '請輸入該課程結束日期',
+            'courseSchoolSystem.required' => '請輸入該課程之學制',
             'integer' => '請輸入數字',
             'date' => '請輸入日期',
 

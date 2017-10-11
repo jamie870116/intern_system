@@ -13,9 +13,12 @@ use App\Stu_jExp as stuJExpEloquent;
 use App\Stu_works as stuWorksEloquent;
 use App\Stu_ability as stuAbilityEloquent;
 use File;
+
+use Intervention\Image\Facades\Image;
 use JWTAuth;
 use Log;
 use Storage;
+
 
 class ResumeServices
 {
@@ -78,6 +81,8 @@ class ResumeServices
         $stuBas = stuBasicEloquent::where('sid', $id)->first();
 
         if ($file) {
+            $img = Image::make($file);
+            $img->resize(400, 300);
             $extension = $file->getClientOriginalExtension();
             $file_name = strval(time()) . str_random(5) . '_pro.' . $extension;
 
@@ -178,7 +183,8 @@ class ResumeServices
         if ($file) {
             $extension = $file->getClientOriginalExtension();
             $file_name = strval(time()) . str_random(5) . '_pro.' . $extension;
-
+            $img = Image::make($file);
+            $img->resize(400, 300);
             if ($request->hasFile('profilePic')) {
                 if ($stuBas->profilePic != null) {
 
@@ -196,6 +202,7 @@ class ResumeServices
                 $path = $request->file('profilePic')->storeAs(
                     'public/user-upload/', $file_name
                 );
+
                 //<img src='storage/user-upload/1501257619SWUxK.png' >
                 $stuBas->profilePic = $file_name;
             } else {

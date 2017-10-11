@@ -45,9 +45,9 @@ class AccountServices
 
     public function searchAllUserByKeyword_ser($keyword,$u_status){
         if($u_status==3){
-            $users=User::where('u_name', 'like', $keyword)->paginate(12);
+            $users=User::where('u_name', 'like', $keyword)->get();
         }else{
-            $users=User::where('u_status',$u_status)->where('u_name', 'like', $keyword)->paginate(12);
+            $users=User::where('u_status',$u_status)->where('u_name', 'like', $keyword)->get();
         }
 
         if($users)
@@ -58,10 +58,10 @@ class AccountServices
 
 
     public function searchAllCompanyByKeyword_ser($keyword){
-        $companies=User::where('u_status',2)->where('u_name', 'like', $keyword)->paginate(12);
+        $companies=User::where('u_status',2)->where('u_name', 'like', $keyword)->get();
         if($companies){
-            foreach ($companies as $$c) {
-               $basic=Com_basic::where('c_account',$c->c_account)->first;
+            foreach ($companies as $c) {
+               $basic=Com_basic::where('c_account',$c->account)->first();
                $c->address=$basic->caddress;
                $c->ctypes=$basic->ctypes;
             }
@@ -71,12 +71,12 @@ class AccountServices
     }
 
     public function searchReviewedCompanyByKeyword_ser($keyword){
-        $companies=User::where('u_status',2)->where('started',1)->where('u_name', 'like', $keyword)->paginate(12);
+        $companies=User::where('u_status',2)->where('started',1)->where('u_name', 'like', $keyword)->get();
         if($companies){
-            foreach ($companies as $$c) {
-               $basic=Com_basic::where('c_account',$c->c_account)->first;
-               $c->address=$basic->caddress;
-               $c->ctypes=$basic->ctypes;
+            foreach ($companies as $c) {
+               $basic=Com_basic::where('c_account',$c->account)->first();
+                $c->address=$basic->caddress;
+                $c->ctypes=$basic->ctypes;
             }
             return $companies;
         }else
@@ -84,10 +84,10 @@ class AccountServices
     }
 
     public function searchNoReviewedCompanyByKeyword_ser($keyword){
-        $companies=User::where('u_status',2)->where('started',2)->where('u_name', 'like', $keyword)->paginate(12);
+        $companies=User::where('u_status',2)->where('started',2)->where('u_name', 'like', $keyword)->get();
         if($companies){
-            foreach ($companies as $$c) {
-               $basic=Com_basic::where('c_account',$c->c_account)->first;
+            foreach ($companies as $c) {
+               $basic=Com_basic::where('c_account',$c->account)->first();
                $c->address=$basic->caddress;
                $c->ctypes=$basic->ctypes;
             }

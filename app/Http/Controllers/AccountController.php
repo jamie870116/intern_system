@@ -58,7 +58,7 @@ class AccountController extends Controller
 
     //取得所有學生資料
     public function getAllStudentList(){
-        $students=User::where('u_status',0)->paginate(12);
+        $students=User::where('u_status',0)->get();
         if($students)
             return response()->json(['studentsList'=>$students], 200, [], JSON_UNESCAPED_UNICODE);
         else
@@ -68,7 +68,7 @@ class AccountController extends Controller
 
     //取得所有老師資料
     public function getAllTeacherList(){
-        $teachers=User::where('u_status',1)->paginate(12);
+        $teachers=User::where('u_status',1)->get();
         if($teachers)
             return response()->json(['teachersList'=>$teachers], 200, [], JSON_UNESCAPED_UNICODE);
         else
@@ -78,7 +78,7 @@ class AccountController extends Controller
 
     //取得所有廠商資料
     public function getAllCompanyList(){
-        $companies=User::where('u_status',2)->paginate(12);
+        $companies=User::where('u_status',2)->get();
         if($companies)
             return response()->json(['companiesList'=>$companies], 200, [], JSON_UNESCAPED_UNICODE);
         else
@@ -87,7 +87,7 @@ class AccountController extends Controller
 
     //取得已審核的廠商資料
     public function getReviewedCompanyList(){
-        $companies=User::where('u_status',2)->where('started',1)->paginate(12);
+        $companies=User::where('u_status',2)->where('started',1)->get();
         if($companies)
             return response()->json(['companiesList'=>$companies], 200, [], JSON_UNESCAPED_UNICODE);
         else
@@ -96,7 +96,7 @@ class AccountController extends Controller
 
     //取得已通過驗證未審核的廠商資料
     public function getNoReviewedCompanyList(){
-        $companies=User::where('u_status',2)->where('started',2)->paginate(12);
+        $companies=User::where('u_status',2)->where('started',2)->get();
         if($companies)
             return response()->json(['companiesList'=>$companies], 200, [], JSON_UNESCAPED_UNICODE);
         else
