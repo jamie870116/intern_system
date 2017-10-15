@@ -10,6 +10,7 @@ use App\Match as MatchEloquent;
 use App\MatchLog as MatchLogEloquent;
 use App\Reviews;
 use App\Station_Letter;
+use App\Stu_basic;
 use App\Stu_course as StuCourseEloquent;
 use App\Stu_course;
 use Carbon\Carbon;
@@ -27,7 +28,7 @@ class CourseServices
         $course->courseEnd = $re['courseEnd'];
         $course->courseSchoolSystem = $re['courseSchoolSystem'];
         $course->save();
-        return '新增課程資料成功';
+        return $course->courseId;
     }
 
     public function adminEditCourseByCourseID_ser($re)
@@ -69,111 +70,118 @@ class CourseServices
     {
         $h=0;
         $f=$re['firstDay'];
+        $error=array();
         foreach ($re['mid'] as $mid){
             $match = MatchEloquent::where('mid', $mid)->first();
 
             if ($match) {
                 if ($match->mstatus == 9 || $match->mstatus == 11) {
                     $c = StuCourseEloquent::where('courseId', $re['courseId'])->where('sid', $match->sid)->first();
+                    $std=Stu_basic::where('sid', $match->sid)->first();
                     if (!$c) {
                         $course = Course::where('courseId', $re['courseId'])->first();
+                        $schoolSystem=$course->courseSchoolSystem;
+                        if($schoolSystem==$std->eTypes){
+                            $match->mstatus = 11;
+                            $match->tid = $re['tid'];
+                            $jobOp = Job_opening::withTrashed()->where('joid', $match->joid)->first();
+                            $jobOp->jNOP -= 1;
+                            $jobOp->save();
+                            $match->save();
+                            $log = new MatchLogEloquent();//給企業信件->none
+                            $log->mstatus = 11;
+                            $log->mid = $mid;
+                            $log->save();
 
-                        $match->mstatus = 11;
-                        $match->tid = $re['tid'];
-                        $jobOp = Job_opening::withTrashed()->where('joid', $match->joid)->first();
-                        $jobOp->jNOP -= 1;
-                        $jobOp->save();
-                        $match->save();
-                        $log = new MatchLogEloquent();//給企業信件->none
-                        $log->mstatus = 11;
-                        $log->mid = $mid;
-                        $log->save();
+                            $stu_c = new StuCourseEloquent();
+                            $stu_c->c_account = $match->c_account;
+                            $stu_c->sid = $match->sid;
+                            $stu_c->tid = $re['tid'];
+                            $stu_c->mid = $mid;
+                            $stu_c->courseId = $re['courseId'];
+                            $stu_c->save();
 
-                        $stu_c = new StuCourseEloquent();
-                        $stu_c->c_account = $match->c_account;
-                        $stu_c->sid = $match->sid;
-                        $stu_c->tid = $re['tid'];
-                        $stu_c->mid = $mid;
-                        $stu_c->courseId = $re['courseId'];
-                        $stu_c->save();
+                            $student=Stu_course::find($stu_c->SCid)->user_stu()->first();
+                            $company=Stu_course::find($stu_c->SCid)->user_com()->first();
+                            $teacher=Stu_course::find($stu_c->SCid)->user_tea()->first();
 
-                        $student=Stu_course::find($stu_c->SCid)->user_stu()->first();
-                        $company=Stu_course::find($stu_c->SCid)->user_com()->first();
-                        $teacher=Stu_course::find($stu_c->SCid)->user_tea()->first();
+                            if ($course) {
+                                $first = $f;
+                                for ($i = 0; $i <= $course->courseJournal; $i++) {
+                                    if( $i == $course->courseJournal){
+                                        $review=new Reviews();
+                                        $review->reContent='';
+                                        $review->SCid=$stu_c->SCid;
+                                        $review->save();
+                                    }else{
+                                        $type=$jobOp->jtypes;
+                                        if ($type == 0) {  //暑期
+                                            $journal = new Journal();
+                                            $journal->SCid = $stu_c->SCid;
+                                            $journal->journalOrder = $i;
+                                            if ($i == 0) {
+                                                $journal->journalStart = Carbon::parse($first);
+                                                $journal->journalEnd = Carbon::parse($first)->addWeeks(1)->subDay();
 
-                        $st_letter=new Station_Letter();
-                        $st_letter->lStatus=11;
-                        $st_letter->lTitle='媒合成功通知信';
-                        $st_letter->lRecipient=$teacher->account;
-                        $st_letter->lRecipientName=$teacher->u_name;
-                        $st_letter->lContent='您的學生 '.$student->u_name.'成為您的指導實習生';
-                        $st_letter->lNotes='';
-                        $st_letter->save();
+                                            } else {
+                                                $journal->journalStart = Carbon::parse($first)->addWeeks($i);
+                                                $journal->journalEnd = Carbon::parse($first)->addWeeks($i + 1)->subDay();
+                                            }
+                                            $journal->save();
 
-                        $st_letter=new Station_Letter();
-                        $st_letter->lStatus=11;
-                        $st_letter->lTitle='媒合成功通知信';
-                        $st_letter->lRecipient=$student->account;
-                        $st_letter->lRecipientName=$student->u_name;
-                        $st_letter->lContent='您已加入'.$course->courseName.'課程，'.'該課程的實習指導老師為 '.$teacher->u_name;
-                        $st_letter->lNotes='';
-                        $st_letter->save();
+                                        } elseif ($type == 1||$type == 3) { //學期 工讀生
+                                            $journal = new Journal();
+                                            $journal->SCid = $stu_c->SCid;
+                                            $journal->journalOrder = $i;
+                                            if ($i == 0) {
+                                                $journal->journalStart = Carbon::parse($first);
+                                                $journal->journalEnd = Carbon::parse($first)->addWeeks(2)->subDay();
 
-                        $st_letter=new Station_Letter();
-                        $st_letter->lStatus=11;
-                        $st_letter->lTitle='媒合成功通知信';
-                        $st_letter->lRecipient=$company->account;
-                        $st_letter->lRecipientName=$company->u_name;
-                        $st_letter->lContent=$student->u_name.'已成為'.$company->u_name.'的實習生';
-                        $st_letter->lNotes='';
-                        $st_letter->save();
-
-
-                        if ($course) {
-                            $first = $f;
-                            for ($i = 0; $i <= $course->courseJournal; $i++) {
-                                if( $i == $course->courseJournal){
-                                    $review=new Reviews();
-                                    $review->reContent='';
-                                    $review->SCid=$stu_c->SCid;
-                                    $review->save();
-                                }else{
-                                    $type=$jobOp->jtypes;
-                                    if ($type == 0) {  //暑期
-                                        $journal = new Journal();
-                                        $journal->SCid = $stu_c->SCid;
-                                        $journal->journalOrder = $i;
-                                        if ($i == 0) {
-                                            $journal->journalStart = Carbon::parse($first);
-                                            $journal->journalEnd = Carbon::parse($first)->addWeeks(1)->subDay();
-
-                                        } else {
-                                            $journal->journalStart = Carbon::parse($first)->addWeeks($i);
-                                            $journal->journalEnd = Carbon::parse($first)->addWeeks($i + 1)->subDay();
+                                            } else {
+                                                $journal->journalStart = Carbon::parse($first)->addWeeks($i + 2);
+                                                $journal->journalEnd = Carbon::parse($first)->addWeeks($i + 4)->subDay();
+                                            }
+                                            $journal->save();
                                         }
-                                        $journal->save();
-
-                                    } elseif ($type == 1) { //學期
-                                        $journal = new Journal();
-                                        $journal->SCid = $stu_c->SCid;
-                                        $journal->journalOrder = $i;
-                                        if ($i == 0) {
-                                            $journal->journalStart = Carbon::parse($first);
-                                            $journal->journalEnd = Carbon::parse($first)->addWeeks(2)->subDay();
-
-                                        } else {
-                                            $journal->journalStart = Carbon::parse($first)->addWeeks($i + 2);
-                                            $journal->journalEnd = Carbon::parse($first)->addWeeks($i + 4)->subDay();
-                                        }
-                                        $journal->save();
                                     }
-                                }
 
+                                }
+                                $st_letter=new Station_Letter();
+                                $st_letter->lStatus=11;
+                                $st_letter->lTitle='媒合成功通知信';
+                                $st_letter->lRecipient=$teacher->account;
+                                $st_letter->lRecipientName=$teacher->u_name;
+                                $st_letter->lContent='您的學生 '.$student->u_name.'成為您的指導實習生';
+                                $st_letter->lNotes='';
+                                $st_letter->save();
+
+                                $st_letter=new Station_Letter();
+                                $st_letter->lStatus=11;
+                                $st_letter->lTitle='媒合成功通知信';
+                                $st_letter->lRecipient=$student->account;
+                                $st_letter->lRecipientName=$student->u_name;
+                                $st_letter->lContent='您已加入'.$course->courseName.'課程，'.'該課程的實習指導老師為 '.$teacher->u_name;
+                                $st_letter->lNotes='';
+                                $st_letter->save();
+
+                                $st_letter=new Station_Letter();
+                                $st_letter->lStatus=11;
+                                $st_letter->lTitle='媒合成功通知信';
+                                $st_letter->lRecipient=$company->account;
+                                $st_letter->lRecipientName=$company->u_name;
+                                $st_letter->lContent=$student->u_name.'已成為'.$company->u_name.'的實習生';
+                                $st_letter->lNotes='';
+                                $st_letter->save();
+                                $error[]= '加入成功';
+                            } else {
+//                            return '查不到課程';
+                                $error[]='查不到課程';
                             }
-                        } else {
-                            return '查不到課程';
+                            $h++;
+                        }else{
+                            $error[]='學生 '.$std->chiName.' 學制錯誤';
                         }
-                        $h++;
+
                     } else {
 //                        $c->c_account = $match->c_account;
 //                        $c->sid = $match->sid;
@@ -228,19 +236,22 @@ class CourseServices
 //                        } else {
 //                            return '查不到課程';
 //                        }
-                        return '學生已在此課程之中';
+//                        return '學生已在此課程之中';
+                        $error[]='學生 '.$std->chiName.' 已在此課程之中';
                     }
 
                 } else {
-                    return '流程錯誤';
+                    $error[]='媒合編號 '. $mid.' 流程錯誤';
+//                    return '流程錯誤';
                 }
 
             } else {
-                return '查無此媒合資料';
+                $error[]='媒合編號 '. $mid.' 查無此媒合資料';
+//                return '查無此媒合資料';
             }
 
         }
-        return '加入學生成功';
+        return $error;
 
     }
 

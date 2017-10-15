@@ -11,6 +11,7 @@ use App\Stu_course as StuCourseEloquent;
 
 use App\Services\CourseServices;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -57,7 +58,7 @@ class CourseController extends Controller
         } else {
             $responses = $this->CourseServices->adminCreateCourse_ser($re);
             $r=array($responses);
-            if ($responses == '新增課程資料成功') {
+            if ($responses != '新增課程資料成功') {
                 return response()->json($r, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json($r, 400, [], JSON_UNESCAPED_UNICODE);
@@ -140,11 +141,13 @@ class CourseController extends Controller
     public function adminGetSuccessMatchByStudent(Request $request)
     {
         $re = $request->all();
-
         $objValidator = Validator::make($request->all(), array(
             'student' => 'required',
+//            'years' => 'required|integer',
         ), array(
             'student.required' => '請輸入學生姓名或學號',
+//            'years.required' => '請選擇年份 0 => 全部, 1 => 一年內 , 2 => 兩年內',
+            'integer' => '請輸入int',
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
@@ -162,17 +165,80 @@ class CourseController extends Controller
                 foreach ($stu as $s){
                     $match = MatchEloquent::where('mstatus', 9)->where('sid',$s->id)->get();
                     if($match){
+                        $passOneYear=Carbon::now()->subYear();
+                        $passTwoYear=Carbon::now()->subYear(2);
                         foreach ($match as $m){
+                            $dt = Carbon::parse($m->updated_at);
                             $m->stu_name=$s->u_name;
                             $m->stu_num=$s->account;
                             $m->eTypes=Stu_basic::where('sid',$s->id)->first()->eTypes;
                             $m->com_name=User::where('account',$m->c_account)->first()->u_name;
                             $m->com_num=$m->c_account;
+                            if($dt->lte($passTwoYear) && $dt->gt($passOneYear)){
+                                $m->years=2; //一年以上，兩年內
+                            }elseif ($dt->lte($passOneYear)){
+                                $m->years=1; //一年內
+                            }else{
+                                $m->years=3; //兩年以上
+                            }
                             $student[]=$m;
                         }
 
                     }
                 }
+//                if($re['years']==0){ //全部
+//                    $student=array();
+//                    foreach ($stu as $s){
+//                        $match = MatchEloquent::where('mstatus', 9)->where('sid',$s->id)->get();
+//                        if($match){
+//                            foreach ($match as $m){
+//                                $m->stu_name=$s->u_name;
+//                                $m->stu_num=$s->account;
+//                                $m->eTypes=Stu_basic::where('sid',$s->id)->first()->eTypes;
+//                                $m->com_name=User::where('account',$m->c_account)->first()->u_name;
+//                                $m->com_num=$m->c_account;
+//                                $student[]=$m;
+//                            }
+//
+//                        }
+//                    }
+//                }else if($re['years']==1){ //一年內
+//                    $student=array();
+//
+//                    $passOneYear=Carbon::now()->subYear();
+//                    foreach ($stu as $s){
+//                        $match = MatchEloquent::where('mstatus', 9)->where('sid',$s->id)->where('updated_at','<',$passOneYear)->get();
+//                        if($match){
+//                            foreach ($match as $m){
+//                                $m->stu_name=$s->u_name;
+//                                $m->stu_num=$s->account;
+//                                $m->eTypes=Stu_basic::where('sid',$s->id)->first()->eTypes;
+//                                $m->com_name=User::where('account',$m->c_account)->first()->u_name;
+//                                $m->com_num=$m->c_account;
+//                                $student[]=$m;
+//                            }
+//
+//                        }
+//                    }
+//                }else{ //兩年內
+//                    $student=array();
+//                    $passTwoYear=Carbon::now()->subYear(2);
+//                    foreach ($stu as $s){
+//                        $match = MatchEloquent::where('mstatus', 9)->where('sid',$s->id)->where('updated_at','<',$passTwoYear)->get();
+//                        if($match){
+//                            foreach ($match as $m){
+//                                $m->stu_name=$s->u_name;
+//                                $m->stu_num=$s->account;
+//                                $m->eTypes=Stu_basic::where('sid',$s->id)->first()->eTypes;
+//                                $m->com_name=User::where('account',$m->c_account)->first()->u_name;
+//                                $m->com_num=$m->c_account;
+//                                $student[]=$m;
+//                            }
+//
+//                        }
+//                    }
+//                }
+
                 return response()->json(['SuccessMatchList'=>$student], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
                 $r=array('取得資料失敗');
@@ -267,9 +333,14 @@ class CourseController extends Controller
                 return response()->json($error, 400);//422
             } else {
             $responses = $this->CourseServices->adminAddStudentToCourse_ser($re);
-            $r=array($responses);
-            if ($responses == '加入學生成功') {
-                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+            $c = count($responses);
+            $i=0;
+            foreach ($responses as $r){
+                if($r=='加入成功')
+                    $i++;
+            }
+            if ($i==$c) {
+                return response()->json('成功', 200, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json($responses, 400, [], JSON_UNESCAPED_UNICODE);
             }

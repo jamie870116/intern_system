@@ -120,7 +120,7 @@ class AccountServices
                         dispatch(new sendResultmail($data));
                         return '審核通過成功';
                     } else {
-                        $com->starded = 3;
+                        $com->started = 3;
                         $com->save();
                         $data = ['mail' => $com->email, 'u_name' => $com->u_name];
                         dispatch(new sendResultmail_faild($data));
