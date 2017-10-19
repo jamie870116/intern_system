@@ -2,8 +2,12 @@
 
 namespace App\Services;
 
+use App\Assessment_Com;
+use App\Assessment_Teach;
 use App\Course as courseEloquent;
 use App\Course;
+use App\Interviews_com;
+use App\Interviews_stu;
 use App\Job_opening;
 use App\Journal;
 use App\Match as MatchEloquent;
@@ -71,7 +75,8 @@ class CourseServices
         $h=0;
         $f=$re['firstDay'];
         $error=array();
-        foreach ($re['mid'] as $mid){
+        $m = explode(",", $re['mid']);
+        foreach ($m as $mid){
             $match = MatchEloquent::where('mid', $mid)->first();
 
             if ($match) {
@@ -257,11 +262,28 @@ class CourseServices
 
     public function adminDeleteStudentFromCourse_ser($SCId)
     {
-        $stu_c = StuCourseEloquent::where('courseId', $SCId)->first();
+        $stu_c = StuCourseEloquent::where('SCId', $SCId)->first();
         if ($stu_c) {
             $match = MatchEloquent::where('mid', $stu_c->mid)->first();
             $match->mstatus = 9;
             $match->save();
+            $journal=Journal::where('SCId', $SCId)->first();
+            $journal->delete();
+            $ac=Assessment_Com::where('SCId', $SCId)->first();
+            if($ac)
+                $ac->delete();
+            $at=Assessment_Teach::where('SCId', $SCId)->first();
+            if($at)
+            $at->delete();
+            $it=Interviews_com::where('SCId', $SCId)->first();
+            if($it)
+            $it->delete();
+            $is=Interviews_stu::where('SCId', $SCId)->first();
+            if($is)
+            $is->delete();
+            $re=Reviews::where('SCId', $SCId)->first();
+            if($re)
+            $re->delete();
             $stu_c->delete();
 
             return '刪除課程資料成功';

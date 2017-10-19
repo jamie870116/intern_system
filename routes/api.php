@@ -21,7 +21,7 @@ Route::post('Register', 'AuthController@register');//註冊
 Route::post('Logout', 'AuthController@getLogout');//登出
 Route::get('Check_code', 'AuthController@check_code');//驗證信
 Route::post('forgetPassword', 'AuthController@forgetPassword');//忘記密碼
-Route::post('resetPassword', 'AuthController@resetPassword');//重設密碼
+Route::post('resetPassword', 'AuthController@resetPassword');//忘記密碼後，重設密碼
 
 Route::get('getAnnouncement','AnnouncementController@getAnnouncement');//取得公告
 Route::get('getAnnouncementByKeywords','AnnouncementController@getAnnouncementByKeywords');//關鍵字搜尋公告
@@ -34,6 +34,8 @@ Route::group(['middleware' => 'jwt'], function () {
 
     //取得使用者資料
     Route::get('findUserDetailsByToken', 'AuthController@findUserDetailsByToken');
+    //使用者自主重設密碼
+    Route::put('userResetPassword', 'AuthController@userResetPassword');
 
     //職缺相關
     Route::post('createJobOpening', 'Job_openingController@createJobOpening');//新增職缺
@@ -149,6 +151,8 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('getReviewByReId','ReviewsController@getReviewByReId');//顯示實習心得ByReId
     Route::get('getReviewBySCid','ReviewsController@getReviewBySCid');//顯示實習心得BySCid
 
+    Route::get('teacherAccessReviewBySCid','ReviewsController@teacherAccessReviewBySCid');//老師查閱實習心得
+
     //訪談紀錄之問題管理-系辦
     Route::get('getInterviewsStuQuestions','InterviewQuestionsController@getInterviewsStuQuestions');//取得最新版本之學生訪談題目
     Route::get('getInterviewsStuQuestionsByVer','InterviewQuestionsController@getInterviewsStuQuestionsByVer');//取得某版本之學生訪談題目
@@ -206,5 +210,10 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::post('createAnnouncement','AnnouncementController@createAnnouncement');//新增公告
     Route::post('editAnnouncement','AnnouncementController@editAnnouncement');//修改公告
     Route::delete('deleteAnnouncement','AnnouncementController@deleteAnnouncement');//刪除公告
+
+    //業師輔導成果
+    Route::get('getCounselingResultBySCid','Counseling_resultController@getCounselingResultBySCid');//以SCid取得業師輔導成果表，如果沒填寫過則傳回帶預設值表單
+    Route::post('createCounselingResultBySCid','Counseling_resultController@createCounselingResultBySCid');//以SCid新增業師輔導成果表
+    Route::put('editCounselingResultBySCid','Counseling_resultController@editCounselingResultBySCid');//以SCid編輯業師輔導成果表
 
 });

@@ -18,6 +18,7 @@ class CreateReviewsTable extends Migration
             $table->increments('reId');//AI
             $table->integer('SCid');//課程老師學生廠商連結
             $table->longText('reContent');//心得內容
+            $table->tinyInteger('reRead')->default(0);//是否查閱 0，否；1，是
 
             $table->timestamps();
         });

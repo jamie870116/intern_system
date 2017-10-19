@@ -10,6 +10,7 @@ use JWTAuth;
 use Log;
 use Validator;
 
+use App\Reviews;
 use App\Stu_course as Stu_courseEloquent;
 use App\User as UserEloquent;
 use App\Course as CourseEloquent;
@@ -94,7 +95,18 @@ class JournalController extends Controller
                     $j->journalEnd=Carbon::parse($j->journalEnd)->format('Y-m-d');
                     $j->passDeadLine=$passDeadLine;
                 }
-                return response()->json(['journalList'=>$journal], 200, [], JSON_UNESCAPED_UNICODE);
+                $reviews=Reviews::where('SCid',$re['SCid'])->first();
+                $googleFrom='https://docs.google.com/forms/d/1E_AN52T7SrulZC3l29RhdWpohyDjAkDn76M3kmrKSZs/viewform?edit_requested=true';
+                if($reviews){
+                    $reviews->googleFrom=$googleFrom;
+                    if($reviews->reRead==0)
+                        $reviews->reRead=false;
+                    else
+                        $reviews->reRead=true;
+                    return response()->json(['journalList'=>$journal,'reviews'=>$reviews], 200, [], JSON_UNESCAPED_UNICODE);
+                }else{
+                    return response()->json(['journalList'=>$journal,'googleFrom'=>$googleFrom], 200, [], JSON_UNESCAPED_UNICODE);
+                }
             }
         }
 

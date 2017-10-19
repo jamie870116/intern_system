@@ -311,13 +311,13 @@ class CourseController extends Controller
         $re = $request->all();
 
         $objValidator = Validator::make($request->all(), array(
-            'mid.*' => 'required',//陣列
+            'mid' => 'required',//,隔開
             'tid' => 'required',
             'courseId' => 'required',
             'firstDay' => 'required|date',
 
         ), array(
-            'mid.*.required' => '請輸入媒合ID',
+            'mid.required' => '請輸入媒合ID',
             'tid.required' => '請回傳老師ID',
             'courseId.required' => '請回傳課程ID',
             'firstDay.required' => '請輸入開始實習的日期',
@@ -369,8 +369,12 @@ class CourseController extends Controller
             $stu_c=StuCourseEloquent::where('courseId',$re['courseId'])->get();
             foreach ($stu_c as $s){
                 $stu=Stu_basic::where('sid',$s->sid)->first();
+                $st=User::where('id',$s->sid)->first();
+                $com=User::where('account',$s->c_account)->first();
                 $s->stuName=$stu->chiName;
+                $s->stuNum=$st->account;
                 $s->profilePic=$stu->profilePic;
+                $s->comName=$com->u_name;
             }
 
            if($stu_c){
@@ -402,7 +406,7 @@ class CourseController extends Controller
         } else {
             $responses = $this->CourseServices->adminDeleteStudentFromCourse_ser($re['SCid']);
             $r=array($responses);
-            if ($responses == '選擇實習老師成功') {
+            if ($responses == '刪除課程資料成功') {
                 return response()->json($r, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json($r, 400, [], JSON_UNESCAPED_UNICODE);

@@ -30,8 +30,8 @@ class AuthController extends Controller
     public function __construct(registerService $registerService)
     {
         $this->registerService = $registerService;
-        $this->middleware('guest', ['except' => ['getLogout', 'findUserDetailsByToken', 'resetPassword']]);
-        $this->middleware('jwt', ['only' => ['findUserDetailsByToken', 'getLogout', 'resetPassword']]);
+        $this->middleware('guest', ['except' => ['getLogout', 'findUserDetailsByToken','userResetPassword']]);
+        $this->middleware('jwt', ['only' => ['findUserDetailsByToken', 'getLogout','userResetPassword']]);
     }
 
     public function postLogin(Request $request)
@@ -133,7 +133,7 @@ class AuthController extends Controller
             'account' => 'required|unique:users',
             'password' => 'required|max:20|min:6',
             'conf_pass' => 'required',
-            'email' => 'email|required',
+            'email' => 'email|required|unique:users',
             'u_status' => 'required'
         ), array(
             'u_name.required' => '請輸入姓名',
@@ -205,34 +205,48 @@ class AuthController extends Controller
 
     public function check_code(Request $request)
     {
-        $c_code = $request['code'];
-        $headers = array('Content-Type' => 'application/json; <a href="http://superlevin.ifengyuan.tw/tag/charset/">charset</a>=utf-8');
-        $user = userEloquent::where('check_code', $c_code)->first();
-        if ($user) {
-            if ($user->started == 0) {
-                $user->started = 1;
-                $user->save();
-                if ($user->u_status == 0) {
-                    $stu_basic = new stuBasicEloquent();
-                    $stu_basic->sid = $user->id;
-                    $stu_basic->chiName = $user->u_name;
-                    $stu_basic->contact = $user->u_tel;
-                    $stu_basic->email = $user->email;
-                    $stu_basic->save();
-                } elseif ($user->u_status == 2) {
-                    $user->started = 2;//等待系辦審核
-                    $user->save();
-                    $com = new comEloquent();
-                    $com->c_account = $user->account;
-                    $com->c_name = $user->u_name;
-                    $com->save();
-                }
-                return response()->json(["帳號開通囉"], 200, $headers, JSON_UNESCAPED_UNICODE);
-            } else {
-                return response()->json(["帳號已開通"], 200, $headers, JSON_UNESCAPED_UNICODE);
+        $objValidator = Validator::make($request->all(), array(
+            'code' => 'required',
+        ), array(
+            'code.required' => '請輸入驗證碼',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
             }
-        } else {
-            return response()->json(["用戶不存在"], 400, $headers, JSON_UNESCAPED_UNICODE);
+            return response()->json($error, 400);//422
+        }else{
+            $c_code = $request['code'];
+            $headers = array('Content-Type' => 'application/json; <a href="http://superlevin.ifengyuan.tw/tag/charset/">charset</a>=utf-8');
+            $user = userEloquent::where('check_code', $c_code)->first();
+            if ($user) {
+                if ($user->started == 0) {
+                    $user->started = 1;
+                    $user->save();
+                    if ($user->u_status == 0) {
+                        $stu_basic = new stuBasicEloquent();
+                        $stu_basic->sid = $user->id;
+                        $stu_basic->chiName = $user->u_name;
+                        $stu_basic->contact = $user->u_tel;
+                        $stu_basic->email = $user->email;
+                        $stu_basic->save();
+                    } elseif ($user->u_status == 2) {
+                        $user->started = 2;//等待系辦審核
+                        $user->save();
+                        $com = new comEloquent();
+                        $com->c_account = $user->account;
+                        $com->c_name = $user->u_name;
+                        $com->save();
+                    }
+                    return response()->json(["帳號開通囉"], 200, $headers, JSON_UNESCAPED_UNICODE);
+                } else {
+                    return response()->json(["帳號已開通"], 200, $headers, JSON_UNESCAPED_UNICODE);
+                }
+            } else {
+                return response()->json(["用戶不存在"], 400, $headers, JSON_UNESCAPED_UNICODE);
+            }
         }
 
     }
@@ -290,6 +304,7 @@ class AuthController extends Controller
                 for($i=0;$i<15;$i++){
                     $key .= $pattern{rand(0,35)};
                 }
+                $user->check_code=$key;
                 $user->save();
                 $data = ['mail' => $user->email, 'token' => $key];
                 dispatch(new resetPasswordMail($data));
@@ -337,6 +352,45 @@ class AuthController extends Controller
                     return response()->json(['密碼重設失敗'], 400, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json(['查無此帳號'], 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
+
+//重設密碼
+    public function userResetPassword(Request $request)
+    {
+        $re = $request->all();
+        $token = JWTAuth::getToken();
+        $user = JWTAuth::toUser($token);
+        $objValidator = Validator::make($request->all(), array(
+            'oldPassword' => 'required',
+            'newPassword' => 'required|max:20|min:6',
+            'conf_pass' => 'required'
+        ), array(
+            'password.required' => '請輸入密碼',
+            'conf_pass.required' => '請再次輸入密碼',
+            'max' => '字數請介於6~20位元',
+            'min' => '字數請介於6~20位元',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else if ($re['newPassword'] != $re['conf_pass']) {
+            return response()->json(['兩次密碼不一致'], 400, [], JSON_UNESCAPED_UNICODE);
+        } else {
+            if (password_verify($re['oldPassword'], $user->password)) {
+                $user->password = bcrypt($re['newPassword']);
+                $user->save();
+                if (UserEloquent::count() != 0)
+                    return response()->json(['密碼重設成功'], 200, [], JSON_UNESCAPED_UNICODE);
+                else
+                    return response()->json(['密碼重設失敗'], 400, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json(['原本密碼錯誤'], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }

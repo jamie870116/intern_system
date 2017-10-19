@@ -23,11 +23,13 @@ class ReviewsController extends Controller
 
         $objValidator = Validator::make($request->all(), array(
             'SCid' => 'required|integer|unique:reviews,SCid',
-            'reContent' => 'required|max:1000|'
+            'reContent' => 'required|max:1000|min:700'
         ), array(
             'SCid.required' => '請輸入SCid',
             'reContent.required' => '請輸入實習心得',
             'integer' => 'int格式錯誤',
+            'max' => '字數過多，800字為原則',
+            'min' => '字數過少，800字為原則',
             'unique' => '心得已存在',
         ));
         if ($objValidator->fails()) {
@@ -54,10 +56,12 @@ class ReviewsController extends Controller
 
         $objValidator = Validator::make($request->all(), array(
             'reId' => 'required|integer',
-            'reContent' => 'required|max:1000|'
+            'reContent' => 'required|max:1000|min:700'
         ), array(
             'reId.required' => '請輸入reId',
             'reContent.required' => '請輸入實習心得',
+            'max' => '字數過多，800字為原則',
+            'min' => '字數過少，800字為原則',
             'integer' => 'int格式錯誤',
         ));
         if ($objValidator->fails()) {
@@ -129,6 +133,33 @@ class ReviewsController extends Controller
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json(array($responses), 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
+
+    //老師查閱實習心得
+    public function teacherAccessReviewBySCid(Request $request){
+        $re = $request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'SCid' => 'required|integer',
+        ), array(
+            'SCid.required' => '請輸入SCid',
+            'integer' => 'int格式錯誤',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $responses = $this->ReviewsServices->teacherAccessReviewBySCid_ser($re['SCid']);
+            if ($responses == '已查閱'||$responses == '更改為未查閱') {
+                return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
     }

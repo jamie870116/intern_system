@@ -19,10 +19,15 @@ class ReviewsServices
     public function editReview_ser($re){
         $review=Reviews::where('reId',$re['reId'])->first();
         if($review){
-            $review->reContent=$re['reContent'];
-            $review->save();
+            if($review->reRead==0){
+                $review->reContent=$re['reContent'];
+                $review->save();
 
-            return '新增心得成功';
+                return '修改心得成功';
+            }else{
+                return '老師已查閱，不能再作修改';
+            }
+
         }else{
             return '找不到此心得';
         }
@@ -35,7 +40,11 @@ class ReviewsServices
             $sc=Stu_course::where('SCid',$SCid)->first();
             $stu=User::where('id',$sc->sid)->first();
             $review->stu_name=$stu->u_name;
-                return $review;
+            if($review->reRead==0)
+                $review->reRead=false;
+            else
+                $review->reRead=true;
+            return $review;
         }else{
             return '找不到此心得';
         }
@@ -47,9 +56,31 @@ class ReviewsServices
             $sc=Stu_course::where('SCid',$SCid)->first();
             $stu=User::where('id',$sc->sid)->first();
             $review->stu_name=$stu->u_name;
+            if($review->reRead==0)
+                $review->reRead=false;
+            else
+                $review->reRead=true;
             return $review;
         }else{
             return '找不到此心得';
         }
+    }
+
+    public function teacherAccessReviewBySCid_ser($SCid){
+        $review=Reviews::where('SCid',$SCid)->first();
+        if($review){
+            if($review->reRead==0){
+                $review->reRead=1;
+                $review->save();
+                return '已查閱';
+            }else{
+                $review->reRead=0;
+                $review->save();
+                return '更改為未查閱';
+            }
+        }else{
+            return '找不到此心得';
+        }
+
     }
 }
