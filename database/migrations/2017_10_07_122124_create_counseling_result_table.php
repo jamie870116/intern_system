@@ -21,6 +21,7 @@ class CreateCounselingResultTable extends Migration
             $table->string('cTeacherName',50);//實習機構輔導老師
             $table->longText('counselingContent');//輔導內容
             $table->longText('counselingPic');//成果_照片或短述
+            $table->longText('counselingText')->nullable();//成果_照片或短述
             $table->timestamps();//時間戳
         });
     }

@@ -51,17 +51,19 @@ class Counseling_resultController extends Controller
             'counselingDate' => 'required|date',
             'cTeacherName' => 'required',
             'counselingContent' => 'required',
-            'counselingPic' => 'nullable|image',//可上傳多個
-            'counselingPicContent' => 'nullable',
+            'counselingPic' => 'nullable',
+            'counselingText' => 'nullable',
+
         ), array(
             'SCid.required' => '請輸入SCid',
             'counselingAddress.required' => '請輸入實習機構輔導地址',
             'counselingDate.required' => '請輸入日期',
             'cTeacherName.required' => '請輸入實習機構輔導老師',
             'counselingContent.required' => '請輸入輔導內容',
+            'counselingPic.required' => '請上傳圖片',
             'integer'=>'請輸入INT',
             'date'=>'請輸入日期格式',
-            'image'=>'圖檔格式錯誤(副檔名須為jpg ,jpeg, png, bmp, gif, or svg)',
+
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
@@ -81,6 +83,60 @@ class Counseling_resultController extends Controller
         }
     }
 
+    //新增業師輔導成果表的圖片
+    public function createCounselingResultPic(Request $request){
+
+        $objValidator = Validator::make($request->all(), array(
+            'counselingPic.*' => 'required|image',//可上傳多個
+        ), array(
+            'image'=>'圖檔格式錯誤(副檔名須為jpg ,jpeg, png, bmp)',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
+        } else {
+
+            $responses=$this->CounselingServices->createCounselingResultPic_ser($request);
+            if ( is_array ( $responses )) {
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
+
+ //用檔名和SCid刪除業師輔導成果表的圖片
+//    public function deleteCounselingResultPicByFilename(Request $request){
+//
+//        $objValidator = Validator::make($request->all(), array(
+//            'SCid' => 'required|integer',
+//            'filename' => 'required',//可上傳多個
+//        ), array(
+//            'SCid.required' => '請輸入SCid',
+//
+//        ));
+//        if ($objValidator->fails()) {
+//            $errors = $objValidator->errors();
+//            $error=array();
+//            foreach ($errors->all() as $message) {
+//                $error[]=$message;
+//            }
+//            return response()->json($error,400);//422
+//        } else {
+//
+//            $responses=$this->CounselingServices->createCounselingResultPicBySCid_ser($request);
+//            if ( is_array ( $responses )) {
+//                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+//            } else {
+//                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
+//            }
+//        }
+//    }
+
     //以SCid編輯業師輔導成果表
     public function editCounselingResultBySCid(Request $request){
         $re=$request->all();
@@ -91,7 +147,7 @@ class Counseling_resultController extends Controller
             'cTeacherName' => 'required',
             'counselingContent' => 'required',
             'counselingPic' => 'nullable|image',//可上傳多個
-            'counselingPicContent' => 'nullable',
+            'counselingText' => 'nullable',
         ), array(
             'SCid.required' => '請輸入SCid',
             'counselingAddress.required' => '請輸入實習機構輔導地址',

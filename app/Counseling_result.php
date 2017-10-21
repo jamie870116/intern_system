@@ -12,6 +12,6 @@ class Counseling_result extends Model
 
     protected $fillable = [
         'SCid','counselingAddress','counselingDate','cTeacherName',
-        'counselingContent','counselingPic'
+        'counselingContent','counselingPic','counselingText'
     ];
 }

@@ -92,6 +92,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::delete('adminDeleteCourse', 'CourseController@adminDeleteCourse');//系辦刪除課程
     Route::get('adminGetSuccessMatch', 'CourseController@adminGetSuccessMatch'); //系辦取得全部已成功的媒合資料
     Route::get('adminGetSuccessMatchByStudent', 'CourseController@adminGetSuccessMatchByStudent'); //系辦以學生姓名或學號取得已成功的媒合資料
+    Route::get('adminGetSuccessMatchByCourseId', 'CourseController@adminGetSuccessMatchByCourseId'); //系辦依照課程取得符合學制且已成功的媒合資料
     Route::get('adminGetTeacherData', 'CourseController@adminGetTeacherData'); //系辦取得所有老師資訊
     Route::get('adminGetAllCourse', 'CourseController@adminGetAllCourse'); //系辦取得全部課程資料
     Route::get('adminGetCourse', 'CourseController@adminGetCourse'); //系辦取得時限內課程資料
@@ -214,6 +215,13 @@ Route::group(['middleware' => 'jwt'], function () {
     //業師輔導成果
     Route::get('getCounselingResultBySCid','Counseling_resultController@getCounselingResultBySCid');//以SCid取得業師輔導成果表，如果沒填寫過則傳回帶預設值表單
     Route::post('createCounselingResultBySCid','Counseling_resultController@createCounselingResultBySCid');//以SCid新增業師輔導成果表
+    Route::post('createCounselingResultPic','Counseling_resultController@createCounselingResultPic');//新增業師輔導成果表的圖片
     Route::put('editCounselingResultBySCid','Counseling_resultController@editCounselingResultBySCid');//以SCid編輯業師輔導成果表
+
+    //實習計劃書相關
+    Route::get('getInternProposalBySCid','Counseling_resultController@getInternProposalBySCid');//取得實習計畫書
+    Route::post('createProposalBySCid','Counseling_resultController@createProposalBySCid');//新增實習計畫書
+    Route::put('editProposalBySCid','Counseling_resultController@editProposalBySCid');//修改實習計畫書
+
 
 });

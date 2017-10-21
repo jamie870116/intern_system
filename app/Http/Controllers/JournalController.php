@@ -98,7 +98,7 @@ class JournalController extends Controller
                 $reviews=Reviews::where('SCid',$re['SCid'])->first();
                 $googleFrom='https://docs.google.com/forms/d/1E_AN52T7SrulZC3l29RhdWpohyDjAkDn76M3kmrKSZs/viewform?edit_requested=true';
                 if($reviews){
-                    $reviews->googleFrom=$googleFrom;
+                    $reviews->googleForm=$googleFrom;
                     if($reviews->reRead==0)
                         $reviews->reRead=false;
                     else

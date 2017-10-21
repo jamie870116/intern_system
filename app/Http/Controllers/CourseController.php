@@ -143,10 +143,10 @@ class CourseController extends Controller
         $re = $request->all();
         $objValidator = Validator::make($request->all(), array(
             'student' => 'required',
-//            'years' => 'required|integer',
+            'courseId' => 'required|integer',
         ), array(
             'student.required' => '請輸入學生姓名或學號',
-//            'years.required' => '請選擇年份 0 => 全部, 1 => 一年內 , 2 => 兩年內',
+            'courseId.required' => '請輸入課程編號',
             'integer' => '請輸入int',
         ));
         if ($objValidator->fails()) {
@@ -159,19 +159,22 @@ class CourseController extends Controller
         } else {
             $keyword = '%' . $re['student'] . '%';
             $stu=User::where('account','like', $keyword)->orWhere('u_name','like', $keyword)->get();
-
+            $course=Course::where('courseId',$re['courseId'])->first();
             if ($stu) {
                 $student=array();
+                $schoolSystem=$course->courseSchoolSystem;
                 foreach ($stu as $s){
                     $match = MatchEloquent::where('mstatus', 9)->where('sid',$s->id)->get();
-                    if($match){
+                    if($match && $course){
                         $passOneYear=Carbon::now()->subYear();
                         $passTwoYear=Carbon::now()->subYear(2);
                         foreach ($match as $m){
-                            $dt = Carbon::parse($m->updated_at);
-                            $m->stu_name=$s->u_name;
-                            $m->stu_num=$s->account;
-                            $m->eTypes=Stu_basic::where('sid',$s->id)->first()->eTypes;
+                            $stuB=Stu_basic::where('sid',$s->id)->first();
+                            if($schoolSystem==$stuB->eTypes){
+                                $dt = Carbon::parse($m->updated_at);
+                                $m->stu_name=$s->u_name;
+                                $m->stu_num=$s->account;
+                                $m->eTypes=$stuB->eTypes;
                             $m->com_name=User::where('account',$m->c_account)->first()->u_name;
                             $m->com_num=$m->c_account;
                             if($dt->lte($passTwoYear) && $dt->gt($passOneYear)){
@@ -182,63 +185,13 @@ class CourseController extends Controller
                                 $m->years=3; //兩年以上
                             }
                             $student[]=$m;
+                            }
+
                         }
 
                     }
                 }
-//                if($re['years']==0){ //全部
-//                    $student=array();
-//                    foreach ($stu as $s){
-//                        $match = MatchEloquent::where('mstatus', 9)->where('sid',$s->id)->get();
-//                        if($match){
-//                            foreach ($match as $m){
-//                                $m->stu_name=$s->u_name;
-//                                $m->stu_num=$s->account;
-//                                $m->eTypes=Stu_basic::where('sid',$s->id)->first()->eTypes;
-//                                $m->com_name=User::where('account',$m->c_account)->first()->u_name;
-//                                $m->com_num=$m->c_account;
-//                                $student[]=$m;
-//                            }
 //
-//                        }
-//                    }
-//                }else if($re['years']==1){ //一年內
-//                    $student=array();
-//
-//                    $passOneYear=Carbon::now()->subYear();
-//                    foreach ($stu as $s){
-//                        $match = MatchEloquent::where('mstatus', 9)->where('sid',$s->id)->where('updated_at','<',$passOneYear)->get();
-//                        if($match){
-//                            foreach ($match as $m){
-//                                $m->stu_name=$s->u_name;
-//                                $m->stu_num=$s->account;
-//                                $m->eTypes=Stu_basic::where('sid',$s->id)->first()->eTypes;
-//                                $m->com_name=User::where('account',$m->c_account)->first()->u_name;
-//                                $m->com_num=$m->c_account;
-//                                $student[]=$m;
-//                            }
-//
-//                        }
-//                    }
-//                }else{ //兩年內
-//                    $student=array();
-//                    $passTwoYear=Carbon::now()->subYear(2);
-//                    foreach ($stu as $s){
-//                        $match = MatchEloquent::where('mstatus', 9)->where('sid',$s->id)->where('updated_at','<',$passTwoYear)->get();
-//                        if($match){
-//                            foreach ($match as $m){
-//                                $m->stu_name=$s->u_name;
-//                                $m->stu_num=$s->account;
-//                                $m->eTypes=Stu_basic::where('sid',$s->id)->first()->eTypes;
-//                                $m->com_name=User::where('account',$m->c_account)->first()->u_name;
-//                                $m->com_num=$m->c_account;
-//                                $student[]=$m;
-//                            }
-//
-//                        }
-//                    }
-//                }
-
                 return response()->json(['SuccessMatchList'=>$student], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
                 $r=array('取得資料失敗');
@@ -249,23 +202,89 @@ class CourseController extends Controller
     }
 
     //系辦取得全部已成功的媒合資料
-    public function adminGetSuccessMatch()
+    public function adminGetSuccessMatch(Request $request)
     {
-        $match = MatchEloquent::where('mstatus', 9)->SortByUpdates_DESC()->get();
-        if ($match) {
-            foreach ($match as $m){
-                $stu=User::where('id',$m->sid)->first();
-                $m->stu_name=$stu->u_name;
-                $m->stu_num=$stu->account;
-                $m->eTypes=Stu_basic::where('sid',$stu->id)->first()->eTypes;
-                $m->com_name=User::where('account',$m->c_account)->first()->u_name;
-                $m->com_num=$m->c_account;
+        $re = $request->all();
+        $objValidator = Validator::make($request->all(), array(
+            'courseId' => 'required|integer',
+        ), array(
+            'courseId.required' => '請輸入課程編號',
+            'integer' => '請輸入int',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
             }
-            return response()->json(['SuccessMatchList'=>$match], 200, [], JSON_UNESCAPED_UNICODE);
+            return response()->json($error, 400);//422
         } else {
-            $r=array('取得資料失敗');
-            return response()->json($r, 400, [], JSON_UNESCAPED_UNICODE);
+            $course=Course::where('courseId',$re['courseId'])->first();
+            $match = MatchEloquent::where('mstatus', 9)->SortByUpdates_DESC()->get();
+            if ($match && $course) {
+                $successMatch=array();
+                $schoolSystem=$course->courseSchoolSystem;
+                foreach ($match as $m){
+                    $stuB=Stu_basic::where('sid',$m->sid)->first();
+                    if($stuB->eTypes==$schoolSystem){
+                        $stu=User::where('id',$m->sid)->first();
+                        $m->stu_name=$stu->u_name;
+                        $m->stu_num=$stuB->eTypes;
+                        $m->com_name=User::where('account',$m->c_account)->first()->u_name;
+                        $m->com_num=$m->c_account;
+                        $successMatch[]=$m;
+                    }
+
+                }
+                return response()->json(['SuccessMatchList'=>$successMatch], 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json(array('取得資料失敗'), 400, [], JSON_UNESCAPED_UNICODE);
+            }
         }
+
+    }
+
+    //系辦依照課程取得符合學制且已成功的媒合資料
+    public function adminGetSuccessMatchByCourseId(Request $request)
+    {
+        $re = $request->all();
+        $objValidator = Validator::make($request->all(), array(
+            'courseId' => 'required|integer',
+        ), array(
+            'courseId.required' => '請輸入課程編號',
+            'integer' => '請輸入int',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $course=Course::where('courseId',$re['courseId'])->first();
+            $match = MatchEloquent::where('mstatus', 9)->SortByUpdates_DESC()->get();
+            if ($match && $course) {
+                $successMatch=array();
+                $schoolSystem=$course->courseSchoolSystem;
+                foreach ($match as $m){
+                    $stuB=Stu_basic::where('sid',$m->sid)->first();
+                    if($stuB->eTypes==$schoolSystem){
+                        $stu=User::where('id',$m->sid)->first();
+                        $m->stu_name=$stu->u_name;
+                        $m->stu_num=$stuB->eTypes;
+                        $m->com_name=User::where('account',$m->c_account)->first()->u_name;
+                        $m->com_num=$m->c_account;
+                        $successMatch[]=$m;
+                    }
+
+                }
+                return response()->json(['SuccessMatchList'=>$successMatch], 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json(array('取得資料失敗'), 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+
     }
 
 

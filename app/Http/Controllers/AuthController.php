@@ -367,8 +367,9 @@ class AuthController extends Controller
             'newPassword' => 'required|max:20|min:6',
             'conf_pass' => 'required'
         ), array(
-            'password.required' => '請輸入密碼',
+            'newPassword.required' => '請輸入新密碼',
             'conf_pass.required' => '請再次輸入密碼',
+            'oldPassword.required' => '請輸入舊密碼',
             'max' => '字數請介於6~20位元',
             'min' => '字數請介於6~20位元',
         ));

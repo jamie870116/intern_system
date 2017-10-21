@@ -35,33 +35,56 @@ class CounselingServices
     public function createCounselingResultBySCid_ser($request){
 
         $re=$request->all();
-        $CR= new Counseling_result();
-        if ($request->file('counselingPic')) {
-            if ($request->hasFile('counselingPic')) {
-                foreach ($request->file('counselingPic') as $file){
-                    $extension = $file->getClientOriginalExtension();
-                    $file_name = strval(time()) . str_random(5) . '_cr.' . $extension;
-                    $path = $file->storeAs(
-                        'public/CounselingResult/', $file_name
-                    );
-                    //<img src='storage/CounselingResult/1501257619SWUxK.png' >
-                    $CR->counselingPic .= $file_name.',';
+        $CRs=Counseling_result::where('SCid',$re['SCid'])->first();
+        if(!$CRs){
+            $ff='';
+            if(isset( $re['counselingText'])&&isset( $re['counselingPic']))
+                return '請擇一填寫';
+            $CR= new Counseling_result();
+            $CR->SCid=$re['SCid'];
+            $CR->counselingAddress=$re['counselingAddress'];
+            $CR->counselingDate=$re['counselingDate'];
+            $CR->cTeacherName=$re['cTeacherName'];
+            $CR->counselingContent=$re['counselingContent'];
+            if(isset( $re['counselingPic']))
+                foreach ($re['counselingPic'] as $f){
+                    if($f!=null){
+                        $ff .= $f.',';
+                    }
                 }
-            } else {
-                return "附檔上傳失敗";
-            }
-        }
-        $CR->SCid=$re['SCid'];
-        $CR->counselingAddress=$re['counselingAddress'];
-        $CR->counselingDate=$re['counselingDate'];
-        $CR->cTeacherName=$re['cTeacherName'];
-        $CR->counselingContent=$re['counselingContent'];
-        if(isset($re['counselingPicContent'])){
-            $CR->counselingPic .= $re['counselingPicContent'].',';
+            $CR->counselingPic=$ff;
+            if(isset( $re['counselingText']))
+                $CR->counselingPic=$re['counselingText'];
+
+
+            $CR->save();
+            return '新增業師輔導成果表成功';
+        }else{
+            return '已有業師輔導成果表資料';
         }
 
-        $CR->save();
-        return '新增業師輔導成果表成功';
+    }
+
+    public function createCounselingResultPic_ser($request){
+
+            $fn=array();
+            if ($request->file('counselingPic')) {
+                if ($request->hasFile('counselingPic')) {
+                    foreach ($request->file('counselingPic') as $file){
+                        $extension = $file->getClientOriginalExtension();
+                        $file_name = strval(time()) . str_random(5) . '_cr.' . $extension;
+                        $path = $file->storeAs(
+                            'public/user-upload/CounselingResult/'. $file_name
+                        );
+                        $fn[]='/user-upload/CounselingResult/'. $file_name;
+                        //<img src='storage/CounselingResult/1501257619SWUxK.png' >
+                    }
+                } else {
+                    return "附檔上傳失敗";
+                }
+            }
+
+            return $fn;
     }
 
     public function editCounselingResultBySCid($request){
@@ -69,47 +92,25 @@ class CounselingServices
         $re=$request->all();
         $CR=Counseling_result::where('SCid',$re['SCid'])->first();
         if($CR){
-            if ($request->file('counselingPic')) {
-                if ($request->hasFile('counselingPic')) {
-                    if ($CR->anFile!=null) {
-                        $files=explode(",",$CR->counselingPic);
-                        foreach ($files as $f){
-                            if($f!=null){
-                                $file_path = 'public/CounselingResult/' . $f;
-                                $l_file = Storage::exists('public/CounselingResult/' . $f);
+            $ff='';
+            if(isset( $re['counselingText'])&&isset( $re['counselingPic']))
+                return '請擇一填寫';
 
-//                                Log::error($f);
 
-                                if ($l_file) {
-                                    Storage::delete($file_path);
-                                } else {
-                                    return 'failed';
-                                }
-                            }
-                        }
-                    }
-                    $CR->counselingPic="";
-                    $CR->save();
-                    foreach ($request->file('counselingPic') as $file){
-                        $extension = $file->getClientOriginalExtension();
-                        $file_name = strval(time()) . str_random(5) . '_cr.' . $extension;
-                        $path = $file->storeAs(
-                            'public/CounselingResult/', $file_name
-                        );
-                        //<img src='storage/user-upload/1501257619SWUxK.png' >
-                        $CR->counselingPic .= $file_name.',';
-                    }
-                } else {
-                    return "附檔上傳失敗";
-                }
-            }
             $CR->counselingAddress=$re['counselingAddress'];
             $CR->counselingDate=$re['counselingDate'];
             $CR->cTeacherName=$re['cTeacherName'];
             $CR->counselingContent=$re['counselingContent'];
-            if(isset($re['counselingPicContent'])){
-                $CR->counselingPic .= $re['counselingPicContent'].',';
-            }
+            $CR->counselingPic = $ff;
+            if(isset( $re['counselingPic']))
+                foreach ($re['counselingPic'] as $f){
+                    if($f!=null){
+                        $ff .= $f.',';
+                    }
+                }
+                $CR->counselingPic=$ff;
+            if(isset( $re['counselingText']))
+                $CR->counselingPic=$re['counselingText'];
             $CR->save();
 
             return '修改業師輔導成果表成功';
