@@ -21,6 +21,35 @@ class Com_basicController extends Controller
 	}
 
 
+    //上傳圖片
+    public function uploadPhoto(Request $request){
+
+        $objValidator = Validator::make($request->all(), array(
+            'filename.*' => 'required|file|image',//可上傳多個
+        ), array(
+            'image'=>'圖檔格式錯誤(副檔名須為jpg ,jpeg, png, bmp)',
+            'filename.required'=>'請選擇欲上傳之檔案',
+            'file'=>'請上傳檔案',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error=array();
+            foreach ($errors->all() as $message) {
+                $error[]=$message;
+            }
+            return response()->json($error,400);//422
+        } else {
+
+            $responses=$this->CompanyServices->uploadPhoto_ser($request);
+            if ( is_array ( $responses )) {
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
+
+
     // 取得廠商自己的簡介
     public function getCompanyDetailsByToken(){
         $token = JWTAuth::getToken();
@@ -46,7 +75,9 @@ class Com_basicController extends Controller
     		'u_tel' => 'required',
             'cintroduction' =>'nullable',
             'cempolyee_num' =>'nullable|integer',
-            'profilePic' =>'nullable|image'
+            'profilePic' =>'nullable|image',
+            'introductionPic' =>'nullable|image',
+            'introductionPicFilenameOnly' =>'nullable',
     		), array(
             'ctypes.required' => '請輸入行業類別',
             'c_name.required' => '請輸入廠商名稱',

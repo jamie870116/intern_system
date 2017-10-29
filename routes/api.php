@@ -37,6 +37,9 @@ Route::group(['middleware' => 'jwt'], function () {
     //使用者自主重設密碼
     Route::put('userResetPassword', 'AuthController@userResetPassword');
 
+    //上傳檔案--多檔
+    Route::put('uploadPhoto', 'Com_basicController@uploadPhoto');
+
     //職缺相關
     Route::post('createJobOpening', 'Job_openingController@createJobOpening');//新增職缺
     Route::put('editJobOpening', 'Job_openingController@editJobOpening');//修改職缺
@@ -208,6 +211,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('adminGetMatchStatusByC_account','TrackController@adminGetMatchStatusByC_account');
 
     //公告
+    Route::post('uploadAnnouncementFile','AnnouncementController@uploadAnnouncementFile');//上傳公告檔案
     Route::post('createAnnouncement','AnnouncementController@createAnnouncement');//新增公告
     Route::post('editAnnouncement','AnnouncementController@editAnnouncement');//修改公告
     Route::delete('deleteAnnouncement','AnnouncementController@deleteAnnouncement');//刪除公告

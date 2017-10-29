@@ -23,6 +23,7 @@ class CreateComBasicTable extends Migration
             $table->integer('cempolyee_num')->nullable(); //員工人數
             $table->longText('cdeleteReason')->nullable();//刪除理由
             $table->string('profilePic',100)->nullable();//頭貼
+            $table->longText('introductionPic')->nullable();//簡介圖片
             $table->timestamps();//時間戳
             $table->softDeletes();//軟刪除
         });

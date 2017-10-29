@@ -15,26 +15,43 @@ use Storage;
 
 class AnnouncementServices
 {
+
+    public function uploadAnnouncementFile_ser($request){
+        $fn=array();
+        if ($request->file('anFile')) {
+            if ($request->hasFile('anFile')) {
+                foreach ($request->file('anFile') as $file){
+                    $extension = $file->getClientOriginalExtension();
+                    $file_name = strval(time()) . str_random(5) . '_an.' . $extension;
+                    $path = $file->storeAs(
+                        'public/announcement/'. $file_name
+                    );
+                    $fn[]='/announcement/'. $file_name;
+                    //<img src='storage/CounselingResult/1501257619SWUxK.png' >
+                }
+            } else {
+                return "附檔上傳失敗";
+            }
+        }
+
+        return $fn;
+    }
+
     public function createAnnouncement_ser($request){
 
         $re = $request->all();
 
         $announcement=new Announcement();
-        if ($request->file('anFile')) {
-            if ($request->hasFile('anFile')) {
-               foreach ($request->file('anFile') as $file){
-                   $extension = $file->getClientOriginalExtension();
-                   $file_name = strval(time()) . str_random(5) . '_an.' . $extension;
-                   $path = $file->storeAs(
-                       'public/announcement/', $file_name
-                   );
-                   //<img src='storage/user-upload/1501257619SWUxK.png' >
-                   $announcement->anFile .= $file_name.',';
-               }
-            } else {
-                return "附檔上傳失敗";
+        $ff='';
+        if(isset($re['anFile'] )){
+            foreach ($re['anFile'] as $f){
+                if($f!=null){
+                    $ff .= $f.',';
+                }
             }
+            $announcement->anFile=$ff;
         }
+
         str_replace(array("\r", "\n", "\r\n", "\n\r"), '',$re['anTittle']);
         $announcement->anTittle = $re['anTittle'];
         $announcement->anContent = $re['anContent'];
@@ -48,43 +65,53 @@ class AnnouncementServices
 
         $announcement=Announcement::where('anId',$re['anId'])->first();
         if($announcement){
-            if ($request->file('anFile')) {
-                if ($request->hasFile('anFile')) {
-                    if ($announcement->anFile!=null) {
-                        $files=explode(",",$announcement->anFile);
-                        foreach ($files as $f){
-                            if($f!=null){
-                                $file_path = 'public/announcement/' . $f;
-                                $l_file = Storage::exists('public/announcement/' . $f);
-
-                                Log::error($f);
-
-                                if ($l_file) {
-                                    Storage::delete($file_path);
-                                } else {
-                                    return 'failed';
-                                }
-                            }
-                        }
-                    }
-                    $announcement->anFile="";
-                    $announcement->save();
-                    foreach ($request->file('anFile') as $file){
-                        $extension = $file->getClientOriginalExtension();
-                        $file_name = strval(time()) . str_random(5) . '_an.' . $extension;
-                        $path = $file->storeAs(
-                            'public/announcement/', $file_name
-                        );
-                        //<img src='storage/user-upload/1501257619SWUxK.png' >
-                        $announcement->anFile .= $file_name.',';
-                    }
-                } else {
-                    return "附檔上傳失敗";
-                }
-            }
+//            if ($request->file('anFile')) {
+//                if ($request->hasFile('anFile')) {
+//                    if ($announcement->anFile!=null) {
+//                        $files=explode(",",$announcement->anFile);
+//                        foreach ($files as $f){
+//                            if($f!=null){
+//                                $file_path = 'public/announcement/' . $f;
+//                                $l_file = Storage::exists('public/announcement/' . $f);
+//
+//                                Log::error($f);
+//
+//                                if ($l_file) {
+//                                    Storage::delete($file_path);
+//                                } else {
+//                                    return 'failed';
+//                                }
+//                            }
+//                        }
+//                    }
+//                    $announcement->anFile="";
+//                    $announcement->save();
+//                    foreach ($request->file('anFile') as $file){
+//                        $extension = $file->getClientOriginalExtension();
+//                        $file_name = strval(time()) . str_random(5) . '_an.' . $extension;
+//                        $path = $file->storeAs(
+//                            'public/announcement/', $file_name
+//                        );
+//                        //<img src='storage/user-upload/1501257619SWUxK.png' >
+//                        $announcement->anFile .= $file_name.',';
+//                    }
+//                } else {
+//                    return "附檔上傳失敗";
+//                }
+//            }
             str_replace(array("\r", "\n", "\r\n", "\n\r"), '',$re['anTittle']);
             $announcement->anTittle = $re['anTittle'];
             $announcement->anContent = $re['anContent'];
+            $ff='';
+            if(isset($re['anFile'] )){
+                foreach ($re['anFile'] as $f){
+                    if($f!=null){
+                        $ff .= $f.',';
+                    }
+                }
+                $announcement->anFile=$ff;
+            }
+
             $announcement->save();
             return '修改公告成功';
         }else{

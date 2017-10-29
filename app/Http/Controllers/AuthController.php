@@ -169,7 +169,7 @@ class AuthController extends Controller
                 'password' => bcrypt($password),
                 'check_code' => $key
             ]);
-            $m = $this->registerService->sendmail($email, $key);
+            $m = $this->registerService->sendmail($email, $key,$u_name,$account);
             Log::error($m);
             return response()->json(['去收驗證信s'], 200, $headers, JSON_UNESCAPED_UNICODE);
         } else if ($status == 1) {//teacher
@@ -184,7 +184,7 @@ class AuthController extends Controller
                 'password' => bcrypt($password),
                 'check_code' => $key
             ]);
-            $this->registerService->sendmail($email, $key);
+            $this->registerService->sendmail($email, $key,$u_name,$account);
             return response()->json(['去收驗證信t'], 200, $headers, JSON_UNESCAPED_UNICODE);
         } else if ($status == 2) {//company
             $email = $re['email'];
@@ -197,7 +197,7 @@ class AuthController extends Controller
                 'password' => bcrypt($password),
                 'check_code' => $key
             ]);
-            $this->registerService->sendmail($email, $key);
+            $this->registerService->sendmail($email, $key,$u_name,$account);
             return response()->json(['去收驗證信c'], 200, $headers, JSON_UNESCAPED_UNICODE);
         }
 
@@ -306,7 +306,7 @@ class AuthController extends Controller
                 }
                 $user->check_code=$key;
                 $user->save();
-                $data = ['mail' => $user->email, 'token' => $key];
+                $data = ['mail' => $user->email, 'token' => $key,'time'=>Carbon::now(),'userName'=>$user->u_name];
                 dispatch(new resetPasswordMail($data));
 
                 return response()->json(['去重設密碼'], 200, [], JSON_UNESCAPED_UNICODE);

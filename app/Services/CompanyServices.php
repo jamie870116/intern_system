@@ -16,6 +16,26 @@ use Storage;
 class CompanyServices
 {
 
+    public function uploadPhoto_ser($request){
+        $fn=array();
+        if ($request->file('filename')) {
+            if ($request->hasFile('filename')) {
+                foreach ($request->file('filename') as $file){
+                    $extension = $file->getClientOriginalExtension();
+                    $file_name = strval(time()) . str_random(5) . '_up.' . $extension;
+                    $path = $file->storeAs(
+                        'public/user-upload/'. $file_name
+                    );
+                    $fn[]='/user-upload/'. $file_name;
+                }
+            } else {
+                return "附檔上傳失敗";
+            }
+        }
+
+        return $fn;
+    }
+
 
     public function editCompanyDetails_ser($request, $file)
     {
@@ -64,6 +84,38 @@ class CompanyServices
 
 
         }
+
+        $fn=array();
+        if ($request->file('introductionPic')) {
+            if ($request->hasFile('introductionPic')) {
+                foreach ($request->file('introductionPic') as $file){
+                    $extension = $file->getClientOriginalExtension();
+                    $file_name = strval(time()) . str_random(5) . '_up.' . $extension;
+                    $path = $file->storeAs(
+                        'public/user-upload/'. $file_name
+                    );
+                    $fn[]='/user-upload/'. $file_name;
+                }
+                $in='';
+                foreach($fn as $f){
+                    $in.=$f.',';
+                }
+                $com->introductionPic = $in;
+            } else {
+                return "附檔上傳失敗";
+            }
+        }elseif(isset($re['introductionPicFilenameOnly'])){
+            $i='';
+            foreach($re['introductionPicFilenameOnly'] as $f){
+                $i.=$f.',';
+            }
+            $com->introductionPic = $i;
+        }
+
+
+
+//        return $fn;
+
         $jobs=Job_opening::where('c_account',$user->account)->get();
         foreach ($jobs as $j){
             $jobs->c_name=$re['c_name'];

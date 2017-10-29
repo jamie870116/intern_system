@@ -14,8 +14,8 @@ class registerService
         return $key;
     }
 
-    public static  function sendmail($mail,$code){
-        $data = ['mail'=>$mail, 'code'=>$code];
+    public static  function sendmail($mail,$code,$u_name,$account){
+        $data = ['mail'=>$mail, 'code'=>$code,'userName'=>$u_name,'account'=>$account];
         dispatch(new SendEmail($data));
 
         return response()->json('sended',200);

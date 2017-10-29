@@ -24,7 +24,7 @@
 {{--</body>--}}
 
 {{--</html>--}}
-!DOCTYPE html>
+<!DOCTYPE html>
 <html >
 
 <head>
@@ -34,76 +34,19 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link href="http://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 </head>
-<style>
-    * {
-        font-family: Arial, Microsoft Jhenghei;
-        margin: 0px;
-        padding: 0px;
-    }
-    html{
-        font-size: 18px;
-    }
-    ::selection {
-        background: #000;
-        color: #fff;
-    }
-    body{
-        background-image: url(../images/homebg.png);
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-attachment: fixed;
-        background-position: center center;
-    }
-    a {
-        color:#3085d6;
-        text-decoration: none;
-    }
 
-    a:hover {
-        text-decoration: none;
-        color: #aaa;
-    }
-
-    .wrapper {
-        width: 500px;
-        margin: 250px auto 0px auto;
-        padding: 50px;
-        text-align: center;
-        border: 2px solid #ccc;
-        box-shadow: 3px 3px 3px #999;
-        word-break: break-all;
-        background-color:#fff;
-    }
-    .wrapper i{
-        color:#337ab7;
-        font-size:5rem;
-    }
-    @media screen and (max-width: 750px){
-        .wrapper {
-            width:400px;
-            padding: 40px;
-        }
-    }
-    @media screen and (max-width: 550px){
-        .wrapper {
-            width:300px;
-        }
-    }
-    @media screen and (max-width: 450px){
-        .wrapper {
-            width:270px;
-            padding: 20px;
-
-        }
-    }
-</style>
 <body>
 <div class="container">
-    <div class="wrapper">
-        <h2><i class="fa fa-handshake-o" aria-hidden="true"></i></h2>
-        <h2 style="font-weight:bold;">感謝您的註冊</h2>
-        <h2>請點擊下方連結進行驗證</h2>
-        <h3><a href="http://tsaiweb.southeastasia.cloudapp.azure.com/aa9453aa/#Page=Login?code={{$code}}">http://tsaiweb.southeastasia.cloudapp.azure.com/aa9453aa/#Page=Login?code={{$code}}</a></h3>
+    <div class="wrapper" style="">
+        <h3><i class="fa fa-handshake-o" aria-hidden="true"></i></h3>
+        <h3 style="font-weight:bold;">{{$code}}您好</h3>
+        <h3 style="font-weight:bold;">感謝您的註冊</h3>
+        <h3 style="font-weight:bold;">歡迎加入IM Internship System實習管理系統</h3>
+        <h3 style="font-weight:bold;">請確認帳號是否正確</h3>
+        <h3 style="font-weight:bold;">您的帳號為:{{$userName}}</h3>
+        <h3 style="font-weight:bold;">請點擊下方連結完成驗證程序以啟用您的帳號</h3>
+        <h3><a href="http://tsaiweb.southeastasia.cloudapp.azure.com/jamie/public/api/check_code?code={{$code}}" style="a{color:#337ab7;} a:hover{color:#0b5a9e;}">http://tsaiweb.southeastasia.cloudapp.azure.com/jamie/public/api/check_code?code={{$code}}</a></h3>
+        <h4 style="color:#888;">請勿直接回覆此郵件，台中科技大學資訊管理系敬上</h4>
     </div>
 </div>
 

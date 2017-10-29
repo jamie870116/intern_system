@@ -18,6 +18,31 @@ class AnnouncementController extends Controller
         $this->AnnouncementServices = $AnnouncementServices;
     }
 
+    public function uploadAnnouncementFile(Request $request){
+        $objValidator = Validator::make($request->all(), array(
+            'anFile' => 'required|file',
+        ), array(
+            'anFile.required' => '請上傳檔案',
+            'file' => '檔案有誤',
+
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $responses = $this->AnnouncementServices->uploadAnnouncementFile_ser($request);
+            if (is_array ( $responses )) {
+                return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
+
     //新增公告
     public function createAnnouncement(Request $request)
     {

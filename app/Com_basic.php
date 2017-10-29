@@ -15,7 +15,7 @@ class Com_basic extends Model
 
     protected $fillable = [
         'c_account','ctypes','caddress','c_name',
-        'cfax','cdeleteReason','cintroduction','cempolyee_num','profilePic'
+        'cfax','cdeleteReason','cintroduction','cempolyee_num','profilePic','introductionPic'
     ];
 
     public function user(){
