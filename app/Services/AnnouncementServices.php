@@ -24,10 +24,10 @@ class AnnouncementServices
                     $extension = $file->getClientOriginalExtension();
                     $file_name = strval(time()) . str_random(5) . '_an.' . $extension;
                     $path = $file->storeAs(
-                        'public/announcement/'. $file_name
+                        'public/announcement/', $file_name
                     );
-                    $fn[]='/announcement/'. $file_name;
-                    //<img src='storage/CounselingResult/1501257619SWUxK.png' >
+                    $fn[]=$file_name;
+                    //<img src='storage/announcement/1501257619SWUxK.png' >
                 }
             } else {
                 return "附檔上傳失敗";
@@ -124,23 +124,23 @@ class AnnouncementServices
 
         $announcement=Announcement::where('anId',$re['anId'])->first();
         if($announcement){
-            if ($announcement->anFile != null) {
-                $files=explode(",",$announcement->anFile);
-                foreach ($files as $f){
-                    if($f!=null){
-                        $file_path = 'public/announcement/' . $f;
-                        $l_file = Storage::exists('public/announcement/' . $f);
-
-                        Log::error($f);
-
-                        if ($l_file) {
-                            Storage::delete($file_path);
-                        } else {
-                            return 'failed';
-                        }
-                    }
-                }
-            }
+//            if ($announcement->anFile != null) {
+//                $files=explode(",",$announcement->anFile);
+//                foreach ($files as $f){
+//                    if($f!=null){
+//                        $file_path = 'public/announcement/' . $f;
+//                        $l_file = Storage::exists('public/announcement/' . $f);
+//
+//                        Log::error($f);
+//
+//                        if ($l_file) {
+//                            Storage::delete($file_path);
+//                        } else {
+//                            return 'failed';
+//                        }
+//                    }
+//                }
+//            }
             $announcement->delete();
             return '刪除公告成功';
         }else{

@@ -251,7 +251,7 @@ class GradeController extends Controller
         } else {
             $responses = $this->GradeServices->teacherGetStudentJournalList_ser($re);
             if ($responses != '取得週誌列表失敗') {
-                return response()->json(['studentJournalList' => $responses], 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json(array('$responses'), 400, [], JSON_UNESCAPED_UNICODE);
             }
@@ -347,7 +347,7 @@ class GradeController extends Controller
         } else {
             $responses = $this->GradeServices->companyGetStudentJournalListBySCid_ser($re);
             if ($responses != '取得週誌列表失敗') {
-                return response()->json(['studentJournalList' => $responses], 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json(array('$responses'), 400, [], JSON_UNESCAPED_UNICODE);
             }
@@ -493,7 +493,7 @@ class GradeController extends Controller
         } else {
             $responses = $this->GradeServices->adminGetStudentJournalListBySCid_ser($re);
             if ($responses != '取得週誌列表失敗') {
-                return response()->json(['studentJournalList' => $responses], 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json(array('$responses'), 400, [], JSON_UNESCAPED_UNICODE);
             }

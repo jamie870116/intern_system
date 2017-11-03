@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Intern_proposal;
 use App\Services\JournalServices;
 use App\Stu_course;
 use Carbon\Carbon;
@@ -103,9 +104,35 @@ class JournalController extends Controller
                         $reviews->reRead=false;
                     else
                         $reviews->reRead=true;
-                    return response()->json(['journalList'=>$journal,'reviews'=>$reviews], 200, [], JSON_UNESCAPED_UNICODE);
+                    $inP=Intern_proposal::where('SCid',$re['SCid'])->first();
+                    if($inP) {
+                        $stu = Stu_course::find($re['SCid'])->user_stu()->first();
+                        $com = Stu_course::find($re['SCid'])->user_com()->first();
+                        $tea = Stu_course::find($re['SCid'])->user_tea()->first();
+                        $inP->stuName = $stu->u_name;
+                        $inP->stuNum = $stu->account;
+                        $inP->teaName = $tea->u_name;
+                        $inP->comName = $com->u_name;
+                        return response()->json(['journalList'=>$journal,'reviews'=>$reviews,'internProposal'=>$inP], 200, [], JSON_UNESCAPED_UNICODE);
+                    }else{
+                        return response()->json(['journalList'=>$journal,'reviews'=>$reviews], 200, [], JSON_UNESCAPED_UNICODE);
+                    }
+
                 }else{
-                    return response()->json(['journalList'=>$journal,'googleFrom'=>$googleFrom], 200, [], JSON_UNESCAPED_UNICODE);
+                    $inP=Intern_proposal::where('SCid',$re['SCid'])->first();
+                    if($inP) {
+                        $stu = Stu_course::find($re['SCid'])->user_stu()->first();
+                        $com = Stu_course::find($re['SCid'])->user_com()->first();
+                        $tea = Stu_course::find($re['SCid'])->user_tea()->first();
+                        $inP->stuName = $stu->u_name;
+                        $inP->stuNum = $stu->account;
+                        $inP->teaName = $tea->u_name;
+                        $inP->comName = $com->u_name;
+                        return response()->json(['journalList'=>$journal,'googleFrom'=>$googleFrom,'internProposal'=>$inP], 200, [], JSON_UNESCAPED_UNICODE);
+                    }else{
+                        return response()->json(['journalList'=>$journal,'googleFrom'=>$googleFrom], 200, [], JSON_UNESCAPED_UNICODE);
+                    }
+
                 }
             }
         }
@@ -223,10 +250,10 @@ class JournalController extends Controller
         ), array(
             'journalDetail_1.required' => '請輸入重要事件紀錄與觀察',
             'journalID.required' => '請輸入週誌ID',
-            'journalDetail_2.required' => '請選擇觀察心得與個人看法',
+            'journalDetail_2.required' => '請輸入觀察心得與個人看法',
             'journalStart.required' => '請選擇日誌開始日期',
             'journalEnd.required' => '請選擇日誌結束日期',
-            'journalInstructor.required' => '請選擇企業指導員姓名',
+            'journalInstructor.required' => '請輸入企業指導員姓名',
             'date' => '請輸入日期',
 
         ));

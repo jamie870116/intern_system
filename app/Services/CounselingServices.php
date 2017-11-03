@@ -74,7 +74,7 @@ class CounselingServices
                         $extension = $file->getClientOriginalExtension();
                         $file_name = strval(time()) . str_random(5) . '_cr.' . $extension;
                         $path = $file->storeAs(
-                            'public/user-upload/CounselingResult/'. $file_name
+                            'public/user-upload/CounselingResult/', $file_name
                         );
                         $fn[]='/user-upload/CounselingResult/'. $file_name;
                         //<img src='storage/CounselingResult/1501257619SWUxK.png' >
@@ -87,14 +87,16 @@ class CounselingServices
             return $fn;
     }
 
-    public function editCounselingResultBySCid($request){
+    public function editCounselingResultBySCid_ser($request){
 
         $re=$request->all();
         $CR=Counseling_result::where('SCid',$re['SCid'])->first();
         if($CR){
             $ff='';
-            if(isset( $re['counselingText'])&&isset( $re['counselingPic']))
+            if((($re['counselingText']!="") && ($re['counselingPic']!=""))||(($re['counselingText']=="") && ($re['counselingPic'][0]==null))){
                 return '請擇一填寫';
+            }
+
 
 
             $CR->counselingAddress=$re['counselingAddress'];
@@ -114,6 +116,7 @@ class CounselingServices
             $CR->save();
 
             return '修改業師輔導成果表成功';
+//            return $re['counselingPic'][0];
         }else{
             return '找不到業師輔導成果表';
         }

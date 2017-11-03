@@ -6,6 +6,7 @@ use App\Assessment_Com;
 use App\Assessment_Teach;
 use App\Course as courseEloquent;
 use App\Course;
+use App\Intern_proposal;
 use App\Interviews_com;
 use App\Interviews_stu;
 use App\Job_opening;
@@ -118,6 +119,9 @@ class CourseServices
                                         $review->reContent='';
                                         $review->SCid=$stu_c->SCid;
                                         $review->save();
+                                        $in=new Intern_proposal();
+                                        $in->SCid=$stu_c->SCid;
+                                        $in->save();
                                     }else{
                                         $type=$jobOp->jtypes;
                                         if ($type == 0) {  //暑期

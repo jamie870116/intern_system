@@ -146,7 +146,7 @@ class Counseling_resultController extends Controller
             'counselingDate' => 'required|date',
             'cTeacherName' => 'required',
             'counselingContent' => 'required',
-            'counselingPic' => 'nullable|image',//可上傳多個
+            'counselingPic' => 'nullable',//可上傳多個
             'counselingText' => 'nullable',
         ), array(
             'SCid.required' => '請輸入SCid',
@@ -166,7 +166,7 @@ class Counseling_resultController extends Controller
             }
             return response()->json($error,400);//422
         } else {
-            $responses=$this->CounselingServices->createCounselingResultBySCid_ser($re);
+            $responses=$this->CounselingServices->editCounselingResultBySCid_ser($request);
             if ($responses=='修改業師輔導成果表成功') {
                 return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
             } else {

@@ -3,7 +3,9 @@
 namespace App\Services;
 
 
+use App\Intern_proposal;
 use App\Journal;
+use App\Reviews;
 use App\Stu_course;
 use App\Teacher_profile_pic;
 use Carbon\Carbon;
@@ -28,22 +30,24 @@ class GradeServices
                 $file_name = strval(time()) . str_random(5) . '_pro.' . $extension;
 
                 if ($request->hasFile('profilePic')) {
-                    if ($teaPic->profilePic != null) {
-
-                        $file_path = 'public/user-upload/' . $teaPic->profilePic;
-                        $file = Storage::exists('public/user-upload/' . $teaPic->profilePic);
-
-//                    Log::error(Storage::exists('public/user-upload/' . $teaPic->profilePic));
-
-                        if ($file) {
-                            Storage::delete($file_path);
-                        } else {
-                            return 'failed';
-                        }
-                    }
-                    $path = $request->file('profilePic')->storeAs(
-                        'public/user-upload/', $file_name
-                    );
+//                    if ($teaPic->profilePic != null) {
+//
+//                        $file_path = 'public/user-upload/' . $teaPic->profilePic;
+//                        $file = Storage::exists('public/user-upload/' . $teaPic->profilePic);
+//
+////                    Log::error(Storage::exists('public/user-upload/' . $teaPic->profilePic));
+//
+//                        if ($file) {
+//                            Storage::delete($file_path);
+//                        } else {
+//                            return 'failed';
+//                        }
+//                    }
+                    $path = public_path('storage/user-upload/' . $file_name);
+                    Image::make($file->getRealPath())->resize(400, 300)->save($path);
+//                    $path = $request->file('profilePic')->storeAs(
+//                        'public/user-upload/', $file_name
+//                    );
                     //<img src='storage/user-upload/1501257619SWUxK.png' >
                     $teaPic->tid=$id;
                     $teaPic->profilePic = $file_name;
@@ -112,14 +116,57 @@ class GradeServices
                 $j->journalStart=Carbon::parse($j->journalStart)->format('Y/m/d');
                 $j->journalEnd=Carbon::parse($j->journalEnd)->format('Y/m/d');
             }
-            return $journal;
+            $reviews=Reviews::where('SCid',$stu_course->SCid)->first();
+            $googleFrom='https://docs.google.com/forms/d/1E_AN52T7SrulZC3l29RhdWpohyDjAkDn76M3kmrKSZs/viewform?edit_requested=true';
+            if($reviews) {
+                $reviews->googleForm = $googleFrom;
+                if ($reviews->reRead == 0)
+                    $reviews->reRead = false;
+                else
+                    $reviews->reRead = true;
+                $inP=Intern_proposal::where('SCid',$re['SCid'])->first();
+                if($inP) {
+                    $stu = Stu_course::find($re['SCid'])->user_stu()->first();
+                    $com = Stu_course::find($re['SCid'])->user_com()->first();
+                    $tea = Stu_course::find($re['SCid'])->user_tea()->first();
+                    $inP->stuName = $stu->u_name;
+                    $inP->stuNum = $stu->account;
+                    $inP->teaName = $tea->u_name;
+                    $inP->comName = $com->u_name;
+
+                    $res=['journalList'=>$journal,'reviews'=>$reviews,'internProposal'=>$inP];
+                    return $res;
+                    }else{
+                    $res=['journalList'=>$journal,'reviews'=>$reviews];
+                    return $res;
+                }
+
+            }else{
+                $inP=Intern_proposal::where('SCid',$re['SCid'])->first();
+                if($inP) {
+                    $stu = Stu_course::find($re['SCid'])->user_stu()->first();
+                    $com = Stu_course::find($re['SCid'])->user_com()->first();
+                    $tea = Stu_course::find($re['SCid'])->user_tea()->first();
+                    $inP->stuName = $stu->u_name;
+                    $inP->stuNum = $stu->account;
+                    $inP->teaName = $tea->u_name;
+                    $inP->comName = $com->u_name;
+                    $res=['journalList'=>$journal,'reviews'=>'','internProposal'=>$inP,'googleFrom'=>$googleFrom];
+                    return $res;
+                }else{
+                    $res=['journalList'=>$journal,'reviews'=>'','googleFrom'=>$googleFrom];
+                    return $res;
+                }
+
+            }
+
         }else{
             return '取得週誌列表失敗';
         }
     }
 
     public function teacherScoreStudentJournal_ser($re){
-        $journal=Journal::find($re['journalID'])->first();
+        $journal=Journal::where('journalID',$re['journalID'])->first();
         if($journal){
             $journal->journalComments_teacher=$re['journalComments_teacher'];
             $journal->grade_teacher=$re['grade_teacher'];
@@ -139,7 +186,48 @@ class GradeServices
                 $j->journalStart=Carbon::parse($j->journalStart)->format('Y/m/d');
                 $j->journalEnd=Carbon::parse($j->journalEnd)->format('Y/m/d');
             }
-            return $journal;
+            $reviews=Reviews::where('SCid',$re['SCid'])->first();
+            $googleFrom='https://docs.google.com/forms/d/1E_AN52T7SrulZC3l29RhdWpohyDjAkDn76M3kmrKSZs/viewform?edit_requested=true';
+            if($reviews) {
+                $reviews->googleForm = $googleFrom;
+                if ($reviews->reRead == 0)
+                    $reviews->reRead = false;
+                else
+                    $reviews->reRead = true;
+                $inP=Intern_proposal::where('SCid',$re['SCid'])->first();
+                if($inP) {
+                    $stu = Stu_course::find($re['SCid'])->user_stu()->first();
+                    $com = Stu_course::find($re['SCid'])->user_com()->first();
+                    $tea = Stu_course::find($re['SCid'])->user_tea()->first();
+                    $inP->stuName = $stu->u_name;
+                    $inP->stuNum = $stu->account;
+                    $inP->teaName = $tea->u_name;
+                    $inP->comName = $com->u_name;
+                    $res=['journalList'=>$journal,'reviews'=>$reviews,'internProposal'=>$inP];
+                    return $res;
+                }else{
+                    $res=['journalList'=>$journal,'reviews'=>$reviews];
+                    return $res;
+                }
+
+            }else{
+                $inP=Intern_proposal::where('SCid',$re['SCid'])->first();
+                if($inP) {
+                    $stu = Stu_course::find($re['SCid'])->user_stu()->first();
+                    $com = Stu_course::find($re['SCid'])->user_com()->first();
+                    $tea = Stu_course::find($re['SCid'])->user_tea()->first();
+                    $inP->stuName = $stu->u_name;
+                    $inP->stuNum = $stu->account;
+                    $inP->teaName = $tea->u_name;
+                    $inP->comName = $com->u_name;
+                    $res=['journalList'=>$journal,'reviews'=>'','internProposal'=>$inP,'googleFrom'=>$googleFrom];
+                    return $res;
+                }else{
+                    $res=['journalList'=>$journal,'reviews'=>'','googleFrom'=>$googleFrom];
+                    return $res;
+                }
+            }
+
         }else{
             return '取得週誌列表失敗';
         }
@@ -153,14 +241,55 @@ class GradeServices
                 $j->journalStart=Carbon::parse($j->journalStart)->format('Y/m/d');
                 $j->journalEnd=Carbon::parse($j->journalEnd)->format('Y/m/d');
             }
-            return $journal;
+            $reviews=Reviews::where('SCid',$re['SCid'])->first();
+            $googleFrom='https://docs.google.com/forms/d/1E_AN52T7SrulZC3l29RhdWpohyDjAkDn76M3kmrKSZs/viewform?edit_requested=true';
+            if($reviews) {
+                $reviews->googleForm = $googleFrom;
+                if ($reviews->reRead == 0)
+                    $reviews->reRead = false;
+                else
+                    $reviews->reRead = true;
+                $inP=Intern_proposal::where('SCid',$re['SCid'])->first();
+                if($inP) {
+                    $stu = Stu_course::find($re['SCid'])->user_stu()->first();
+                    $com = Stu_course::find($re['SCid'])->user_com()->first();
+                    $tea = Stu_course::find($re['SCid'])->user_tea()->first();
+                    $inP->stuName = $stu->u_name;
+                    $inP->stuNum = $stu->account;
+                    $inP->teaName = $tea->u_name;
+                    $inP->comName = $com->u_name;
+                    $res=['journalList'=>$journal,'reviews'=>$reviews,'internProposal'=>$inP];
+                    return $res;
+                }else{
+                    $res=['journalList'=>$journal,'reviews'=>$reviews];
+                    return $res;
+                }
+
+            }else{
+                $inP=Intern_proposal::where('SCid',$re['SCid'])->first();
+                if($inP) {
+                    $stu = Stu_course::find($re['SCid'])->user_stu()->first();
+                    $com = Stu_course::find($re['SCid'])->user_com()->first();
+                    $tea = Stu_course::find($re['SCid'])->user_tea()->first();
+                    $inP->stuName = $stu->u_name;
+                    $inP->stuNum = $stu->account;
+                    $inP->teaName = $tea->u_name;
+                    $inP->comName = $com->u_name;
+                    $res=['journalList'=>$journal,'reviews'=>'','internProposal'=>$inP,'googleFrom'=>$googleFrom];
+                    return $res;
+                }else{
+                    $res=['journalList'=>$journal,'reviews'=>'','googleFrom'=>$googleFrom];
+                    return $res;
+                }
+            }
+
         }else{
             return '取得週誌列表失敗';
         }
     }
 
     public function companyScoreStudentJournal_ser($re){
-        $journal=Journal::find($re['journalID'])->first();
+        $journal=Journal::where('journalID',$re['journalID'])->first();
         if($journal){
             $journal->journalComments_ins=$re['journalComments_ins'];
             $journal->grade_ins=$re['grade_ins'];

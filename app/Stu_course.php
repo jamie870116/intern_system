@@ -35,7 +35,7 @@ class Stu_course extends Model
     //取得實習心得
     public function reviews()
     {
-        return $this->hasOne('App\Reviews','','SCid');
+        return $this->hasOne('App\Reviews','SCid','SCid');
     }
 
     //取得學生使用者資料

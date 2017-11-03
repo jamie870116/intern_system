@@ -24,7 +24,7 @@ class CompanyServices
                     $extension = $file->getClientOriginalExtension();
                     $file_name = strval(time()) . str_random(5) . '_up.' . $extension;
                     $path = $file->storeAs(
-                        'public/user-upload/'. $file_name
+                        'public/user-upload/', $file_name
                     );
                     $fn[]='/user-upload/'. $file_name;
                 }
@@ -46,6 +46,7 @@ class CompanyServices
         if ($file) {
             $img = Image::make($file);
             $img->resize(400, 300);
+
 //            $size = File::size($file);
 //            $data = getimagesize($file);
 //            $height = $data[0];
@@ -62,20 +63,25 @@ class CompanyServices
             $extension = $file->getClientOriginalExtension();
             $file_name = strval(time()) . str_random(5) . '_pro.' . $extension;
             if ($request->hasFile('profilePic')) {
-                if ($com->profilePic != null) {
+                // if ($com->profilePic != null) {
 
-                    $file_path = 'public/user-upload/' . $com->profilePic;
-                    $file = Storage::exists('public/user-upload/' . $com->profilePic);
-                    Log::error($com->profilePic);
-                    if ($file) {
-                        Storage::delete($file_path);
-                    } else {
-                        return 'failed';
-                    }
-                }
-                $path = $request->file('profilePic')->storeAs(
-                    'public/user-upload/', $file_name
-                );
+                //     $file_path = 'public/user-upload/' . $com->profilePic;
+                //     $file = Storage::exists('public/user-upload/' . $com->profilePic);
+                //     Log::error($com->profilePic);
+                //     if ($file) {
+                //         Storage::delete($file_path);
+                //     } else {
+                //         return 'failed';
+                //     }
+                // }
+                $path = public_path('storage/user-upload/' . $file_name);
+                Image::make($file->getRealPath())->resize(400, 300)->save($path);
+//                $fn='public/user-upload/'.$file_name;
+//                $img->save($fn);
+//                $store = Storage::put($fn,file_get_contents($request->file('profilePic')->getRealPath()));
+                // $path = $img->storeAs(
+                //     'public/user-upload/', $file_name
+                // );
                 //<img src='storage/user-upload/1501257619SWUxK.png' >
                 $com->profilePic = $file_name;
             } else {
@@ -85,6 +91,7 @@ class CompanyServices
 
         }
 
+
         $fn=array();
         if ($request->file('introductionPic')) {
             if ($request->hasFile('introductionPic')) {
@@ -92,7 +99,7 @@ class CompanyServices
                     $extension = $file->getClientOriginalExtension();
                     $file_name = strval(time()) . str_random(5) . '_up.' . $extension;
                     $path = $file->storeAs(
-                        'public/user-upload/'. $file_name
+                        'public/user-upload/', $file_name
                     );
                     $fn[]='/user-upload/'. $file_name;
                 }

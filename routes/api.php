@@ -182,6 +182,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::post('replyMailById', 'MailController@replyMailById');//回覆信件
     Route::post('favouriteMail', 'MailController@favouriteMail');//加到最愛信件
     Route::get('getFavouriteFolder', 'MailController@getFavouriteFolder');//取得我的最愛
+    Route::get('getCompanyByNameOrAccount', 'MailController@getCompanyByNameOrAccount');//關鍵字用以查詢廠商名稱或帳號
 
     //系辦帳號管理相關
     Route::get('getAllUserList','AccountController@getAllUserList');//取得所有使用者資料

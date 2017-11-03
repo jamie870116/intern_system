@@ -20,7 +20,7 @@ class AnnouncementController extends Controller
 
     public function uploadAnnouncementFile(Request $request){
         $objValidator = Validator::make($request->all(), array(
-            'anFile' => 'required|file',
+            'anFile' => 'required',
         ), array(
             'anFile.required' => '請上傳檔案',
             'file' => '檔案有誤',

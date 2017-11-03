@@ -13,7 +13,7 @@ class AccountController extends Controller
 
     public function __construct(AccountServices $AccountServices)
     {
-        $this->middleware('admin');
+        $this->middleware('admin',['except'=>'searchReviewedCompanyByKeyword']);
         $this->AccountServices = $AccountServices;
     }
 

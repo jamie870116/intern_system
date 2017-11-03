@@ -88,22 +88,26 @@ class QuestionsServices
         $insAnswerTypes = explode(',', $re['insAnswerType']);
         $c = count($insQIds);
         $q=array();
+
         if ($in && $inSQ) {
+
             $ver = $in->insQuestionVer + 1;
 //            foreach ($inSQ as $i) {
-//                for ($j = 0; $j > $c; $j++) {
+//                for ($j = 0; $j < $c; $j++) {
 //                    if ($i->insQId == $insQIds[$j]) {
+//
 //                        $newQ = new Interviews_stu_questions();
 //                        $newQ->insQuestion =  $insQuestions[$j];
 //                        $newQ->insAnswerType =  $insAnswerTypes[$j];
 //                        $newQ->insQuestionVer = $ver;
 //                        $newQ->save();
 //                    } else {
+//
 //                       $q[]=$i->insQId;
 //                    }
 //                }
 //            }
-            for ($j = 0; $j > $c; $j++) {
+            for ($j = 0; $j < $c; $j++) {
                 foreach ($inSQ as $i) {
                     if ($i->insQId == $insQIds[$j]) {
                         $newQ = new Interviews_stu_questions();
@@ -117,11 +121,11 @@ class QuestionsServices
                 }
             }
             foreach ($q as $qu){
-                $inq=Interviews_stu_questions::where('insQId',$qu)->first();
-                $newQ = new Interviews_com_questions();
-                $newQ->insCQuestion = $inq->insCQuestion;
-                $newQ->insCQuestionVer = $ver;
-                $newQ->save();
+                    $inq=Interviews_stu_questions::where('insQId',$qu)->first();
+                    $newQ = new Interviews_stu_questions();
+                    $newQ->insQuestion = $inq->insQuestion;
+                    $newQ->insQuestionVer = $ver;
+                    $newQ->save();
             }
 
             return '學生訪談題目修改成功';
@@ -165,28 +169,31 @@ class QuestionsServices
         $q=array();
         if ($in && $inSQ) {
             $ver = $in->insCQuestionVer + 1;
-            for ($j = 0; $j > $c; $j++) {
+            for ($j = 0; $j < $c; $j++) {
                 foreach ($inSQ as $i) {
-                    if ($i->insQId == $insCQId[$j]) {
+                    if ($i->insCQId == $insCQId[$j]) {
                         $newQ = new Interviews_com_questions();
-                        $newQ->insQuestion = $insCQuestion[$j];
-                        $newQ->insAnswerType = $insCAnswerType[$j];
-                        $newQ->insQuestionVer = $ver;
+                        $newQ->insCQuestion = $insCQuestion[$j];
+                        $newQ->insCAnswerType = $insCAnswerType[$j];
+                        $newQ->insCQuestionVer = $ver;
                         $newQ->save();
                     } else {
-                        $q[] = $i->insQId;
+                        $q[] = $i->insCQId;
                     }
                 }
             }
             foreach ($q as $qu){
-                $inq=Interviews_com_questions::where('insQId',$qu)->first();
-                $newQ = new Interviews_com_questions();
-                $newQ->insCQuestion = $inq->insCQuestion;
-                $newQ->insCQuestionVer = $ver;
-                $newQ->save();
+                $inq=Interviews_com_questions::where('insCQId',$qu)->first();
+                if($inq){
+                    $newQ = new Interviews_com_questions();
+                    $newQ->insCQuestion = $inq->insCQuestion;
+                    $newQ->insCQuestionVer = $ver;
+                    $newQ->save();
+                }
+
             }
 
-            return '企業訪談題目修改成功';
+            return "企業訪談題目修改成功";
         } else {
             return array('找不到題目');
         }
