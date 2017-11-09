@@ -116,7 +116,7 @@ class Assessment_TeachController extends Controller
             if ($Assessment_c) {
                 return response()->json($Assessment_c, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json('尚未填寫成績資料', 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json('廠商尚未填寫成績資料', 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
 
@@ -165,7 +165,7 @@ class Assessment_TeachController extends Controller
 
                 return response()->json($Assessment_Teach, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json('尚未填寫成績資料', 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json('無資料', 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
 

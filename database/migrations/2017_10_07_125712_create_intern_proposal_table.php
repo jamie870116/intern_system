@@ -54,6 +54,7 @@ class CreateInternProposalTable extends Migration
             $table->longText('IPIndicators')->nullable();//實習成效考核指標或項目
             $table->longText('IPAssessment')->nullable();//實習成效與教學評核方式
             $table->longText('IPFeedback')->nullable();//實習課後回饋計畫
+            $table->tinyInteger('IPRead')->default(0);//是否查閱
 
             $table->timestamps();//時間戳
         });

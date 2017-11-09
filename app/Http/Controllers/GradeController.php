@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Assessment_Teach;
+use App\Course;
 use App\Journal;
 use App\Services\GradeServices;
 
@@ -68,8 +69,15 @@ class GradeController extends Controller
         if ($user->u_status == 1) {
             $TeaCourse = Stu_course::where('tid', $user->id)->get();
             $courses = array();
+            $co=array();
             foreach ($TeaCourse as $t) {
                 $course = Stu_course::find($t->SCid)->courses()->distinct()->first();
+                if(!in_array($course->courseId,$co)){
+                    $co[]=$course->courseId;
+                }
+            }
+            foreach ($co as $c){
+                $course = Course::where('courseId',$c)->first();
                 $course->courseStart = Carbon::parse($course->courseStart)->format('Y/m/d');
                 $course->courseEnd = Carbon::parse($course->courseEnd)->format('Y/m/d');
                 $now = Carbon::now();
@@ -78,13 +86,18 @@ class GradeController extends Controller
                 } else {
                     $course->passDeadLine = true;
                 }
+
                 $stu_c = Stu_course::where('courseId', $course->courseId)->where('tid', $user->id)->get();
                 foreach ($stu_c as $s) {
                     $stu = Stu_course::find($s->SCid)->user_stu()->first();
-                    $stu_b = Stu_course::find($s->SCid)->stu_basic()->first();
+                    if (Carbon::now() > $course->courseEnd && $s->assessmentStatus = 0) {
+                        $s->assessmentStatus = 1;
+                        $s->save();
+                    }
                     $s->stuName = $stu->u_name;
                     $s->stuId = $stu->id;
                     $s->stuAccount = $stu->account;
+                    $stu_b = Stu_course::find($s->SCid)->stu_basic()->first();
                     $s->profilePic = $stu_b->profilePic;
                 }
                 $course->studentList = $stu_c;
@@ -94,8 +107,16 @@ class GradeController extends Controller
         } elseif ($user->u_status == 2) {
             $TeaCourse = Stu_course::where('c_account', $user->account)->get();
             $courses = array();
+            $co=array();
             foreach ($TeaCourse as $t) {
                 $course = Stu_course::find($t->SCid)->courses()->distinct()->first();
+                if(!in_array($course->courseId,$co)){
+                    $co[]=$course->courseId;
+                }
+            }
+
+            foreach ($co as $c){
+                $course = Course::where('courseId',$c)->first();
                 $course->courseStart = Carbon::parse($course->courseStart)->format('Y/m/d');
                 $course->courseEnd = Carbon::parse($course->courseEnd)->format('Y/m/d');
                 $now = Carbon::now();
@@ -125,33 +146,39 @@ class GradeController extends Controller
         } elseif ($user->u_status == 3) {
             $TeaCourse = Stu_course::all();
             $courses = array();
+            $co=array();
             foreach ($TeaCourse as $t) {
                 $course = Stu_course::find($t->SCid)->courses()->distinct()->first();
+                if(!in_array($course->courseId,$co)){
+                    $co[]=$course->courseId;
+                }
+            }
+            foreach ($co as $c){
+                $course = Course::where('courseId',$c)->first();
                 $course->courseStart = Carbon::parse($course->courseStart)->format('Y/m/d');
-                $course->courseEnd = Carbon::parse($course->courseEnd)->format('Y/m/d');
-                $now = Carbon::now();
-                if ($now < $course->courseEnd) {
-                    $course->passDeadLine = false;
-                } else {
-                    $course->passDeadLine = true;
-                }
-
-                $stu_c = Stu_course::where('courseId', $course->courseId)->get();
-                foreach ($stu_c as $s) {
-                    $stu = Stu_course::find($s->SCid)->user_stu()->first();
-                    if (Carbon::now() > $course->courseEnd && $s->assessmentStatus = 0) {
-                        $s->assessmentStatus = 1;
-                        $s->save();
+                    $course->courseEnd = Carbon::parse($course->courseEnd)->format('Y/m/d');
+                    $now = Carbon::now();
+                    if ($now < $course->courseEnd) {
+                        $course->passDeadLine = false;
+                    } else {
+                        $course->passDeadLine = true;
                     }
-                    $s->stuName = $stu->u_name;
-                    $s->stuId = $stu->id;
-                    $s->stuAccount = $stu->account;
-                    $stu_b = Stu_course::find($s->SCid)->stu_basic()->first();
-                    $s->profilePic = $stu_b->profilePic;
-                }
-                $course->studentList = $stu_c;
-                $courses[] = $course;
 
+                    $stu_c = Stu_course::where('courseId', $course->courseId)->get();
+                    foreach ($stu_c as $s) {
+                        $stu = Stu_course::find($s->SCid)->user_stu()->first();
+                        if (Carbon::now() > $course->courseEnd && $s->assessmentStatus = 0) {
+                            $s->assessmentStatus = 1;
+                            $s->save();
+                        }
+                        $s->stuName = $stu->u_name;
+                        $s->stuId = $stu->id;
+                        $s->stuAccount = $stu->account;
+                        $stu_b = Stu_course::find($s->SCid)->stu_basic()->first();
+                        $s->profilePic = $stu_b->profilePic;
+                    }
+                    $course->studentList = $stu_c;
+                $courses[] = $course;
             }
             return response()->json(['CourseList' => $courses], 200, [], JSON_UNESCAPED_UNICODE);
         } else {
@@ -235,11 +262,10 @@ class GradeController extends Controller
     {
         $re = $request->all();
         $objValidator = Validator::make($request->all(), array(
-            'sid' => 'required|integer',
-            'courseId' => 'required|integer',
+            'SCid' => 'required|integer',
         ), array(
-            'sid.required' => '請輸入學生ID',
-            'courseId.required' => '請輸入課程ID',
+            'SCid.required' => '請輸入學生ID',
+            'integer' => '請輸入整數',
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();

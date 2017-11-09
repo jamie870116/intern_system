@@ -45,13 +45,14 @@ class Assessment_ComServices{
         $teacher=Stu_courseEloquent::find($re['SCid'])->user_tea()->first();
         $student=Stu_courseEloquent::find($re['SCid'])->user_stu()->first();
         $com=Stu_courseEloquent::find($re['SCid'])->user_com()->first();
+        $sc=Stu_courseEloquent::find($re['SCid'])->first();
         $st_letter=new Station_Letter();
         $st_letter->lStatus=15;
         $st_letter->lTitle=$com->u_name.' 已經批改實習課程，請至學生管理頁面查看\n';
         $st_letter->lRecipient=$teacher->account;
         $st_letter->lRecipientName=$teacher->u_name;
         $st_letter->lContent='';
-        $st_letter->lNotes='';
+        $st_letter->lNotes=$sc->courseId;
         $st_letter->save();
         $Stu_c=Stu_courseEloquent::where('SCid',$Assessment_Com->SCid)->first();
         if(Carbon::now() > $Stu_c->courseEnd){

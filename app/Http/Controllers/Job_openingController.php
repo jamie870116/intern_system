@@ -69,7 +69,7 @@ class Job_openingController extends Controller
             return response()->json($error, 400);//422
         } else {
             $responses = $this->JobopeningServices->createJobOpening_ser($re);
-            if ($responses == '新增職缺資料失敗') {
+            if ($responses == '新增職缺資料失敗'||$responses=='日期錯誤') {
                 return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);

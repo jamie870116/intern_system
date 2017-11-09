@@ -27,6 +27,9 @@ Route::get('getAnnouncement','AnnouncementController@getAnnouncement');//取得�
 Route::get('getAnnouncementByKeywords','AnnouncementController@getAnnouncementByKeywords');//關鍵字搜尋公告
 Route::get('getCompanyList', 'Com_basicController@getCompanyList');//取得所有廠商列表
 Route::get('downloadAnnouncementFileByFileName','AnnouncementController@downloadAnnouncementFileByFileName');//下載公告附檔
+
+Route::get('getCompanyProfilePictureByC_account', 'Com_basicController@getCompanyProfilePictureByC_account');//依帳號取得廠商相片
+Route::get('getCompanyProfilePicture', 'Com_basicController@getCompanyProfilePicture');//取得所有廠商相片
 //以上是不需登入即可使用之api
 
 
@@ -37,7 +40,7 @@ Route::group(['middleware' => 'jwt'], function () {
     //使用者自主重設密碼
     Route::put('userResetPassword', 'AuthController@userResetPassword');
 
-    //上傳檔案--多檔
+    //上傳檔案
     Route::put('uploadPhoto', 'Com_basicController@uploadPhoto');
 
     //職缺相關
@@ -54,6 +57,7 @@ Route::group(['middleware' => 'jwt'], function () {
     //廠商基本資料相關
     Route::get('getCompanyDetailsByToken', 'Com_basicController@getCompanyDetailsByToken');//取得廠商自己的簡介
     Route::post('editCompanyDetails', 'Com_basicController@editCompanyDetails');//修改廠商資料
+    Route::post('companyUploadProfilePic', 'Com_basicController@companyUploadProfilePic');//廠商上傳頭貼
     Route::get('getCompanyDetailsByAccount', 'Com_basicController@getCompanyDetailsByAccount');//依帳號查詢廠商介紹
 
     //媒合相關-學生與廠商
@@ -155,7 +159,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::get('getReviewByReId','ReviewsController@getReviewByReId');//顯示實習心得ByReId
     Route::get('getReviewBySCid','ReviewsController@getReviewBySCid');//顯示實習心得BySCid
 
-    Route::get('teacherAccessReviewBySCid','ReviewsController@teacherAccessReviewBySCid');//老師查閱實習心得
+    Route::post('teacherAccessReviewBySCid','ReviewsController@teacherAccessReviewBySCid');//老師查閱實習心得
 
     //訪談紀錄之問題管理-系辦
     Route::get('getInterviewsStuQuestions','InterviewQuestionsController@getInterviewsStuQuestions');//取得最新版本之學生訪談題目
@@ -224,9 +228,10 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::put('editCounselingResultBySCid','Counseling_resultController@editCounselingResultBySCid');//以SCid編輯業師輔導成果表
 
     //實習計劃書相關
-    Route::get('getInternProposalBySCid','Counseling_resultController@getInternProposalBySCid');//取得實習計畫書
-    Route::post('createProposalBySCid','Counseling_resultController@createProposalBySCid');//新增實習計畫書
-    Route::put('editProposalBySCid','Counseling_resultController@editProposalBySCid');//修改實習計畫書
+    Route::get('getInternProposalBySCid','Intern_proposalController@getInternProposalBySCid');//取得實習計畫書
+    Route::post('createProposalBySCid','Intern_proposalController@createProposalBySCid');//新增實習計畫書
+    Route::put('editProposalBySCid','Intern_proposalController@editProposalBySCid');//修改實習計畫書
+    Route::post('teacherAccessInternProposalBySCid','Intern_proposalController@teacherAccessInternProposalBySCid');//老師查閱實習計畫
 
 
 });

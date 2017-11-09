@@ -113,6 +113,7 @@ class CourseServices
 
                             if ($course) {
                                 $first = $f;
+                                $cc=0;
                                 for ($i = 0; $i <= $course->courseJournal; $i++) {
                                     if( $i == $course->courseJournal){
                                         $review=new Reviews();
@@ -147,8 +148,9 @@ class CourseServices
                                                 $journal->journalEnd = Carbon::parse($first)->addWeeks(2)->subDay();
 
                                             } else {
-                                                $journal->journalStart = Carbon::parse($first)->addWeeks($i + 2);
-                                                $journal->journalEnd = Carbon::parse($first)->addWeeks($i + 4)->subDay();
+                                                $journal->journalStart = Carbon::parse($first)->addWeeks($i + 1 +$cc);
+                                                $journal->journalEnd = Carbon::parse($first)->addWeeks($i + 3 +$cc)->subDay();
+                                                $cc++;
                                             }
                                             $journal->save();
                                         }
@@ -161,7 +163,7 @@ class CourseServices
                                 $st_letter->lRecipient=$teacher->account;
                                 $st_letter->lRecipientName=$teacher->u_name;
                                 $st_letter->lContent='您的學生 '.$student->u_name.'成為您的指導實習生';
-                                $st_letter->lNotes='';
+                                $st_letter->lNotes=$stu_c->SCid;
                                 $st_letter->save();
 
                                 $st_letter=new Station_Letter();
@@ -170,7 +172,7 @@ class CourseServices
                                 $st_letter->lRecipient=$student->account;
                                 $st_letter->lRecipientName=$student->u_name;
                                 $st_letter->lContent='您已加入'.$course->courseName.'課程，'.'該課程的實習指導老師為 '.$teacher->u_name;
-                                $st_letter->lNotes='';
+                                $st_letter->lNotes=$stu_c->SCid;
                                 $st_letter->save();
 
                                 $st_letter=new Station_Letter();
@@ -179,7 +181,7 @@ class CourseServices
                                 $st_letter->lRecipient=$company->account;
                                 $st_letter->lRecipientName=$company->u_name;
                                 $st_letter->lContent=$student->u_name.'已成為'.$company->u_name.'的實習生';
-                                $st_letter->lNotes='';
+                                $st_letter->lNotes=$stu_c->SCid;
                                 $st_letter->save();
                                 $error[]= '加入成功';
                             } else {
@@ -271,20 +273,31 @@ class CourseServices
             $match = MatchEloquent::where('mid', $stu_c->mid)->first();
             $match->mstatus = 9;
             $match->save();
-            $journal=Journal::where('SCId', $SCId)->first();
-            $journal->delete();
+            $journal=Journal::where('SCId', $SCId)->get();
+            foreach ($journal as $j){
+                $j->delete();
+            }
+
             $ac=Assessment_Com::where('SCId', $SCId)->first();
             if($ac)
                 $ac->delete();
             $at=Assessment_Teach::where('SCId', $SCId)->first();
             if($at)
             $at->delete();
-            $it=Interviews_com::where('SCId', $SCId)->first();
-            if($it)
-            $it->delete();
-            $is=Interviews_stu::where('SCId', $SCId)->first();
-            if($is)
-            $is->delete();
+            $it=Interviews_com::where('SCId', $SCId)->get();
+            if($it){
+                foreach ($it as $itt){
+                    $itt->delete();
+                }
+            }
+
+            $is=Interviews_stu::where('SCId', $SCId)->get();
+            if($is){
+                foreach ($is as $iss){
+                    $iss->delete();
+                }
+            }
+
             $re=Reviews::where('SCId', $SCId)->first();
             if($re)
             $re->delete();

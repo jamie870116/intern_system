@@ -30,7 +30,7 @@ class Assessment_TeachServices{
             $Stu_c->save();
             return $Assessment_Teach->asTId;
         }else{
-            return '流程錯誤';
+            return '廠商尚未填寫資料，故無法進行評量';
         }
 
     }

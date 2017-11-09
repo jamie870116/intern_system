@@ -7,6 +7,7 @@ use App\Journal;
 use App\Stu_course as Stu_courseEloquent;
 use App\Services\Assessment_ComServices;
 use App\Course as CourseEloquent;
+use App\Stu_course;
 use App\User as UserEloquent;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -248,6 +249,8 @@ class Assessment_ComController extends Controller
             $Assessment_Com=Assessment_Com::where('SCid',$re['SCid'])->get();
             $journal=Journal::where('SCid',$re['SCid'])->first();
             foreach ($Assessment_Com as $a){
+                $stu = Stu_course::find($re['SCid'])->user_stu()->first();
+                $a->stuName=$stu->u_name;
                 $a->journalInstructor=$journal->journalInstructor;
                 $a->totalGrade_Com=$a->asGrade1+$a->asGrade2+$a->asGrade3+$a->asGrade4+$a->asGrade5;
             }

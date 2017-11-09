@@ -69,15 +69,20 @@ class ReviewsServices
     public function teacherAccessReviewBySCid_ser($SCid){
         $review=Reviews::where('SCid',$SCid)->first();
         if($review){
-            if($review->reRead==0){
-                $review->reRead=1;
-                $review->save();
-                return '已查閱';
+            if($review->reContent==null||$review->reContent==""){
+
+                return '學生尚未填寫，不能查閱';
             }else{
-                $review->reRead=0;
-                $review->save();
-                return '更改為未查閱';
+                if($review->reRead==0){
+                    $review->reRead=1;
+                    $review->save();
+                    return '已查閱';
+                }else{
+
+                    return '已經查閱過了，不得重複';
+                }
             }
+
         }else{
             return '找不到此心得';
         }

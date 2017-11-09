@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Com_basic;
 use App\Match;
 use App\SendMailBC;
 use App\Services\MailServices;
 use App\Station_Letter;
+use App\Stu_basic;
+use App\Teacher_profile_pic;
+use App\User;
 use Illuminate\Http\Request;
 
 use JWTAuth;
@@ -29,34 +33,87 @@ class MailController extends Controller
     {
         $token = JWTAuth::getToken();
         $users = JWTAuth::toUser($token);
-
-        $mail=Station_Letter::where('lRecipient',$users->account)->SortByUpdates_DESC()->paginate(12);
-        foreach ($mail as $m){
-            if($m->read==0){
-                $m->read=false;
-            }else{
-                $m->read=true;
+//lSender lRecipient
+        $mail = Station_Letter::where('lRecipient', $users->account)->SortByUpdates_DESC()->paginate(12);
+        foreach ($mail as $m) {
+            if ($m->read == 0) {
+                $m->read = false;
+            } else {
+                $m->read = true;
             }
-            if($m->favourite==0){
-                $m->favourite=false;
-            }else{
-                $m->favourite=true;
+            if ($m->favourite == 0) {
+                $m->favourite = false;
+            } else {
+                $m->favourite = true;
             }
-            $ms=$m->lStatus;
-            if($m->lNotes!=null){
-                $mid=(int)$m->lNotes;
-                $match=Match::where('mid',$mid)->first();
-                if($match){
-                    if($match->mstatus==$ms){
-                        $m->expired=false;
-                    }else{
-                        $m->expired=true;
+            $ms = $m->lStatus;
+            if ($m->lNotes != null) {
+                $mid = (int)$m->lNotes;
+                $match = Match::where('mid', $mid)->first();
+                if ($match) {
+                    if ($match->mstatus == $ms) {
+                        $m->expired = false;
+                    } else {
+                        $m->expired = true;
                     }
                 }
 
-            }else{
-                $m->expired=false;
+            } else {
+                $m->expired = false;
             }
+            $sender = User::where('account', $m->lSender)->first();
+            $recipient = User::where('account', $m->lRecipient)->first();
+
+            if ($sender->u_status == 0) {//stu
+                $stub = Stu_basic::where('sid', $sender->id)->first();
+                if ($stub) {
+                    $m->senderPic = $stub->profilePic;
+                } else {
+                    $m->senderPic = null;
+                }
+            } elseif ($sender->u_status == 1) {//tea
+                $teaP = Teacher_profile_pic::where('tid', $sender->id)->first();
+                if ($teaP) {
+                    $m->senderPic = $teaP->profilePic;
+                } else {
+                    $m->senderPic = null;
+                }
+            } elseif ($sender->u_status == 2) {//com
+                $comb = Com_basic::where('c_account', $sender->account)->first();
+                if ($comb) {
+                    $m->senderPic = $comb->profilePic;
+                } else {
+                    $m->senderPic = null;
+                }
+            } else {
+                $m->senderPic = "imlogo.png";//imlogo.png
+            }
+
+            if ($recipient->u_status == 0) {//stu
+                $stub = Stu_basic::where('sid', $recipient->id)->first();
+                if ($stub) {
+                    $m->recipientPic = $stub->profilePic;
+                } else {
+                    $m->recipientPic = null;
+                }
+            } elseif ($recipient->u_status == 1) {//tea
+                $teaP = Teacher_profile_pic::where('tid', $recipient->id)->first();
+                if ($teaP) {
+                    $m->recipientPic = $teaP->profilePic;
+                } else {
+                    $m->recipientPic = null;
+                }
+            } elseif ($recipient->u_status == 2) {//com
+                $comb = Com_basic::where('c_account', $recipient->account)->first();
+                if ($comb) {
+                    $m->recipientPic = $comb->profilePic;
+                } else {
+                    $m->recipientPic = null;
+                }
+            } else {
+                $m->recipientPic = "imlogo.png";
+            }
+
         }
         if($mail){
             return response()->json($mail, 200, [], JSON_UNESCAPED_UNICODE);
@@ -64,6 +121,7 @@ class MailController extends Controller
             return response()->json(['取得失敗'], 400, [], JSON_UNESCAPED_UNICODE);
         }
     }
+
 
     //取得送件
     public function getSentMailByToken(){
@@ -74,6 +132,59 @@ class MailController extends Controller
          foreach ($mail as $m){
              $m->read=true;
             $m->favourite=false;
+
+             $sender = User::where('account', $m->lSender)->first();
+             $recipient = User::where('account', $m->lRecipient)->first();
+
+             if ($sender->u_status == 0) {//stu
+                 $stub = Stu_basic::where('sid', $sender->id)->first();
+                 if ($stub) {
+                     $m->senderPic = $stub->profilePic;
+                 } else {
+                     $m->senderPic = null;
+                 }
+             } elseif ($sender->u_status == 1) {//tea
+                 $teaP = Teacher_profile_pic::where('tid', $sender->id)->first();
+                 if ($teaP) {
+                     $m->senderPic = $teaP->profilePic;
+                 } else {
+                     $m->senderPic = null;
+                 }
+             } elseif ($sender->u_status == 2) {//com
+                 $comb = Com_basic::where('c_account', $sender->account)->first();
+                 if ($comb) {
+                     $m->senderPic = $comb->profilePic;
+                 } else {
+                     $m->senderPic = null;
+                 }
+             } else {
+                 $m->senderPic = "imlogo.png";//imlogo.png
+             }
+
+             if ($recipient->u_status == 0) {//stu
+                 $stub = Stu_basic::where('sid', $recipient->id)->first();
+                 if ($stub) {
+                     $m->recipientPic = $stub->profilePic;
+                 } else {
+                     $m->recipientPic = null;
+                 }
+             } elseif ($recipient->u_status == 1) {//tea
+                 $teaP = Teacher_profile_pic::where('tid', $recipient->id)->first();
+                 if ($teaP) {
+                     $m->recipientPic = $teaP->profilePic;
+                 } else {
+                     $m->recipientPic = null;
+                 }
+             } elseif ($recipient->u_status == 2) {//com
+                 $comb = Com_basic::where('c_account', $recipient->account)->first();
+                 if ($comb) {
+                     $m->recipientPic = $comb->profilePic;
+                 } else {
+                     $m->recipientPic = null;
+                 }
+             } else {
+                 $m->recipientPic = "imlogo.png";
+             }
         }
 
         if($mail){
@@ -193,7 +304,7 @@ class MailController extends Controller
         } else {
             $token = JWTAuth::getToken();
             $users = JWTAuth::toUser($token);
-            $mail=Station_Letter::where('slId',$re['slId'])->first();
+            $mail=Station_Letter::where('slId',$re['slId'])->withTrashed()->first();
 
             if($mail->lSender==$users->account||$mail->lRecipient==$users->account){
                 $mail->read=true;
@@ -289,6 +400,58 @@ class MailController extends Controller
             }else{
                 $m->favourite=true;
             }
+             $sender = User::where('account', $m->lSender)->first();
+             $recipient = User::where('account', $m->lRecipient)->first();
+
+             if ($sender->u_status == 0) {//stu
+                 $stub = Stu_basic::where('sid', $sender->id)->first();
+                 if ($stub) {
+                     $m->senderPic = $stub->profilePic;
+                 } else {
+                     $m->senderPic = null;
+                 }
+             } elseif ($sender->u_status == 1) {//tea
+                 $teaP = Teacher_profile_pic::where('tid', $sender->id)->first();
+                 if ($teaP) {
+                     $m->senderPic = $teaP->profilePic;
+                 } else {
+                     $m->senderPic = null;
+                 }
+             } elseif ($sender->u_status == 2) {//com
+                 $comb = Com_basic::where('c_account', $sender->account)->first();
+                 if ($comb) {
+                     $m->senderPic = $comb->profilePic;
+                 } else {
+                     $m->senderPic = null;
+                 }
+             } else {
+                 $m->senderPic = "imlogo.png";//imlogo.png
+             }
+
+             if ($recipient->u_status == 0) {//stu
+                 $stub = Stu_basic::where('sid', $recipient->id)->first();
+                 if ($stub) {
+                     $m->recipientPic = $stub->profilePic;
+                 } else {
+                     $m->recipientPic = null;
+                 }
+             } elseif ($recipient->u_status == 1) {//tea
+                 $teaP = Teacher_profile_pic::where('tid', $recipient->id)->first();
+                 if ($teaP) {
+                     $m->recipientPic = $teaP->profilePic;
+                 } else {
+                     $m->recipientPic = null;
+                 }
+             } elseif ($recipient->u_status == 2) {//com
+                 $comb = Com_basic::where('c_account', $recipient->account)->first();
+                 if ($comb) {
+                     $m->recipientPic = $comb->profilePic;
+                 } else {
+                     $m->recipientPic = null;
+                 }
+             } else {
+                 $m->recipientPic = "imlogo.png";
+             }
         }
         if($mail){
             return response()->json($mail, 200, [], JSON_UNESCAPED_UNICODE);
@@ -395,6 +558,58 @@ class MailController extends Controller
                 $m->favourite=false;
             }else{
                 $m->favourite=true;
+            }
+            $sender = User::where('account', $m->lSender)->first();
+            $recipient = User::where('account', $m->lRecipient)->first();
+
+            if ($sender->u_status == 0) {//stu
+                $stub = Stu_basic::where('sid', $sender->id)->first();
+                if ($stub) {
+                    $m->senderPic = $stub->profilePic;
+                } else {
+                    $m->senderPic = null;
+                }
+            } elseif ($sender->u_status == 1) {//tea
+                $teaP = Teacher_profile_pic::where('tid', $sender->id)->first();
+                if ($teaP) {
+                    $m->senderPic = $teaP->profilePic;
+                } else {
+                    $m->senderPic = null;
+                }
+            } elseif ($sender->u_status == 2) {//com
+                $comb = Com_basic::where('c_account', $sender->account)->first();
+                if ($comb) {
+                    $m->senderPic = $comb->profilePic;
+                } else {
+                    $m->senderPic = null;
+                }
+            } else {
+                $m->senderPic = "imlogo.png";//imlogo.png
+            }
+
+            if ($recipient->u_status == 0) {//stu
+                $stub = Stu_basic::where('sid', $recipient->id)->first();
+                if ($stub) {
+                    $m->recipientPic = $stub->profilePic;
+                } else {
+                    $m->recipientPic = null;
+                }
+            } elseif ($recipient->u_status == 1) {//tea
+                $teaP = Teacher_profile_pic::where('tid', $recipient->id)->first();
+                if ($teaP) {
+                    $m->recipientPic = $teaP->profilePic;
+                } else {
+                    $m->recipientPic = null;
+                }
+            } elseif ($recipient->u_status == 2) {//com
+                $comb = Com_basic::where('c_account', $recipient->account)->first();
+                if ($comb) {
+                    $m->recipientPic = $comb->profilePic;
+                } else {
+                    $m->recipientPic = null;
+                }
+            } else {
+                $m->recipientPic = "imlogo.png";
             }
         }
         if($mail){

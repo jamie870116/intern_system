@@ -17,6 +17,6 @@ class Intern_proposal extends Model
         'IPTopic4','IPTopic4Start','IPTopic4End','IPTopic5','IPTopic5Start','IPTopic5End',
         'IPTopic6','IPTopic6Start','IPTopic6End','IPTopic7','IPTopic7Start','IPTopic7End',
         'IPTopic8','IPTopic8Start','IPTopic8End','IPInstruction','IPComPlanning','IPTeaPlanning',
-        'IPIndicators','IPAssessment','IPFeedback'
+        'IPIndicators','IPAssessment','IPFeedback','IPRead'
     ];
 }

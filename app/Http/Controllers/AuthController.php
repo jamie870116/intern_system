@@ -142,9 +142,11 @@ class AuthController extends Controller
             'account.required' => '請輸入帳號',
             'password.required' => '請輸入密碼',
             'conf_pass.required' => '請再次輸入密碼',
+            'email.required' => '請輸入信箱',
             'max' => '字數請介於6~20位元',
             'min' => '字數請介於6~20位元',
-            'unique' => '帳號已存在',
+            'account.unique' => '帳號已存在',
+            'email.unique' => '信箱已重複',
             'email' => '信箱格式錯誤'
         ));
         if ($objValidator->fails()) {
@@ -306,10 +308,10 @@ class AuthController extends Controller
                 }
                 $user->check_code=$key;
                 $user->save();
-                $data = ['mail' => $user->email, 'token' => $key,'time'=>Carbon::now(),'userName'=>$user->u_name];
+                $data = ['mail' => $user->email, 'auth_code' => $key,'time'=>Carbon::now(),'userName'=>$user->u_name];
                 dispatch(new resetPasswordMail($data));
 
-                return response()->json(['去重設密碼'], 200, [], JSON_UNESCAPED_UNICODE);
+                return response()->json(['去信箱收信吧'], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json(['查無此帳號'], 400, [], JSON_UNESCAPED_UNICODE);
             }

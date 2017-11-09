@@ -35,7 +35,7 @@ class JournalServices{
                 $st_letter->lRecipient=$company->account;
                 $st_letter->lRecipientName=$company->u_name;
                 $st_letter->lContent=$student->u_name.'已填寫完週誌，請至學生管理頁面查看';
-                $st_letter->lNotes='';
+                $st_letter->lNotes=$course->courseId;
                 $st_letter->save();
 
                 $st_letter2=new Station_Letter();
@@ -44,7 +44,7 @@ class JournalServices{
                 $st_letter2->lRecipient=$teacher->account;
                 $st_letter2->lRecipientName=$teacher->u_name;
                 $st_letter2->lContent=$student->u_name.'已填寫完週誌，請至學生管理頁面查看';
-                $st_letter2->lNotes='';
+                $st_letter2->lNotes=$course->courseId;
                 $st_letter2->save();
             }
             $journal->journalDetail_1=$re['journalDetail_1'];

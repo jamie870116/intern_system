@@ -95,19 +95,15 @@ class CompanyServices
         $fn=array();
         if ($request->file('introductionPic')) {
             if ($request->hasFile('introductionPic')) {
-                foreach ($request->file('introductionPic') as $file){
-                    $extension = $file->getClientOriginalExtension();
-                    $file_name = strval(time()) . str_random(5) . '_up.' . $extension;
-                    $path = $file->storeAs(
-                        'public/user-upload/', $file_name
-                    );
-                    $fn[]='/user-upload/'. $file_name;
-                }
-                $in='';
-                foreach($fn as $f){
-                    $in.=$f.',';
-                }
-                $com->introductionPic = $in;
+                $file2=$request->file('introductionPic');
+                $extension = $file2->getClientOriginalExtension();
+                $file_name2 = strval(time()) . str_random(5) . '_up.' . $extension;
+                $path = $file2->storeAs(
+                    'public/user-upload/', $file_name2
+                );
+                $fn[]='/user-upload/'. $file_name2;
+
+                $com->introductionPic = $file_name2;
             } else {
                 return "附檔上傳失敗";
             }
@@ -165,5 +161,44 @@ class CompanyServices
         } else {
             return '取得廠商失敗';
         }
+    }
+
+    public function companyUploadProfilePic_ser($request, $file){
+        $token = JWTAuth::getToken();
+        $user = JWTAuth::toUser($token);
+        $id = $user->account;
+        $stuBas = comEloquent::where('c_account', $id)->first();
+
+        if ($file) {
+            $extension = $file->getClientOriginalExtension();
+            $file_name = strval(time()) . str_random(5) . '_pro.' . $extension;
+            $img = Image::make($file);
+            $img->resize(400, 300);
+            if ($request->hasFile('profilePic')) {
+                if ($stuBas->profilePic != null) {
+
+                    $file_path = 'public/user-upload/' . $stuBas->profilePic;
+                    $file = Storage::exists('public/user-upload/' . $stuBas->profilePic);
+
+                    Log::error(Storage::exists('public/user-upload/' . $stuBas->profilePic));
+
+                    if ($file) {
+                        Storage::delete($file_path);
+                    } else {
+                        return 'failed';
+                    }
+                }
+                $path = $request->file('profilePic')->storeAs(
+                    'public/user-upload/', $file_name
+                );
+
+                //<img src='storage/user-upload/1501257619SWUxK.png' >
+                $stuBas->profilePic = $file_name;
+            } else {
+                return "頭貼上傳失敗";
+            }
+        }
+        $stuBas->save();
+        return  $stuBas->profilePic;
     }
 }
