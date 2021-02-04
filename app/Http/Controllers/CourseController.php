@@ -291,7 +291,8 @@ class CourseController extends Controller
     //系辦取得時限內課程資料
     public function adminGetCourse()
     {
-        $course = Course::GetAvailableCourse()->get();
+//        $course = Course::GetAvailableCourse()->get();
+        $course = Course::all();
         if ($course) {
             return response()->json(['courseList'=>$course], 200, [], JSON_UNESCAPED_UNICODE);
         } else {

@@ -47,7 +47,7 @@ class MailController extends Controller
                 $m->favourite = true;
             }
             $ms = $m->lStatus;
-            if ($m->lNotes != null) {
+            if ($m->lNotes != null && $ms!=13 && $ms!=14 && $ms!=15 && $ms!=11) {
                 $mid = (int)$m->lNotes;
                 $match = Match::where('mid', $mid)->first();
                 if ($match) {
@@ -215,7 +215,7 @@ class MailController extends Controller
             $keyword = '%' . $re['comp'] . '%';
             $responses = $this->MailServices->getCompanyByNameOrAccount_ser($keyword);
             $r=array($responses);
-            if ($responses == '送出信件成功') {
+            if ($responses != '取得失敗') {
                 return response()->json($r, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json($r, 400, [], JSON_UNESCAPED_UNICODE);

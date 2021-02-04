@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Interviews_com_questions;
 use App\Interviews_stu_questions;
+use Log;
 
 class QuestionsServices
 {
@@ -83,9 +84,9 @@ class QuestionsServices
     {
         $in = Interviews_stu_questions::GetLatestVersion()->first();
         $inSQ = Interviews_stu_questions::GetLatestVersion()->get();
-        $insQIds = explode(',', $re['insQId']);
-        $insQuestions = explode(',', $re['insQuestion']);
-        $insAnswerTypes = explode(',', $re['insAnswerType']);
+        $insQIds = explode('*', $re['insQId']);
+        $insQuestions = explode('*', $re['insQuestion']);
+        $insAnswerTypes = explode('*', $re['insAnswerType']);
         $c = count($insQIds);
         $q=array();
 
@@ -107,28 +108,38 @@ class QuestionsServices
 //                    }
 //                }
 //            }
+           $id=array();
+           $eId=array();
+           foreach ($inSQ as $i) {
+            if(!in_array($i->insQId,$insQIds)){
+                $eId[]= $i->insQId;
+            }else{
+            	$id[]= $i->insQId;
+            }
+           }
+
             for ($j = 0; $j < $c; $j++) {
-                foreach ($inSQ as $i) {
-                    if ($i->insQId == $insQIds[$j]) {
+                    if (in_array( $insQIds[$j],$id)) {
                         $newQ = new Interviews_stu_questions();
                         $newQ->insQuestion = $insQuestions[$j];
                         $newQ->insAnswerType = $insAnswerTypes[$j];
                         $newQ->insQuestionVer = $ver;
                         $newQ->save();
-                    } else {
-                        $q[] = $i->insQId;
                     }
-                }
             }
-            foreach ($q as $qu){
+            foreach ($eId as $qu){
                     $inq=Interviews_stu_questions::where('insQId',$qu)->first();
                     $newQ = new Interviews_stu_questions();
                     $newQ->insQuestion = $inq->insQuestion;
+                    $newQ->insAnswerType = $inq->insAnswerType;
                     $newQ->insQuestionVer = $ver;
                     $newQ->save();
             }
+            Log::error($id);
+            Log::error($eId);
 
             return '學生訪談題目修改成功';
+            // return $id;
         } else {
             return array('找不到題目');
         }
@@ -162,35 +173,39 @@ class QuestionsServices
     {
         $in = Interviews_com_questions::GetLatestVersion()->first();
         $inSQ = Interviews_com_questions::GetLatestVersion()->get();
-        $insCQId = explode(',', $re['insCQId']);
-        $insCQuestion = explode(',', $re['insCQuestion']);
-        $insCAnswerType = explode(',', $re['insCAnswerType']);
+        $insCQId = explode('*', $re['insCQId']);
+        $insCQuestion = explode('*', $re['insCQuestion']);
+        $insCAnswerType = explode('*', $re['insCAnswerType']);
         $c = count($insCQId);
         $q=array();
         if ($in && $inSQ) {
             $ver = $in->insCQuestionVer + 1;
+
+			$id=array();
+           $eId=array();
+           foreach ($inSQ as $i) {
+            if(!in_array($i->insCQId,$insCQId)){
+                $eId[]= $i->insCQId;
+            }else{
+            	$id[]= $i->insCQId;
+            }
+           }
             for ($j = 0; $j < $c; $j++) {
-                foreach ($inSQ as $i) {
-                    if ($i->insCQId == $insCQId[$j]) {
-                        $newQ = new Interviews_com_questions();
+                    if (in_array( $insCQId[$j],$id)) {
+                       $newQ = new Interviews_com_questions();
                         $newQ->insCQuestion = $insCQuestion[$j];
                         $newQ->insCAnswerType = $insCAnswerType[$j];
                         $newQ->insCQuestionVer = $ver;
                         $newQ->save();
-                    } else {
-                        $q[] = $i->insCQId;
                     }
-                }
             }
-            foreach ($q as $qu){
-                $inq=Interviews_com_questions::where('insCQId',$qu)->first();
-                if($inq){
+            foreach ($eId as $qu){
+                    $inq=Interviews_com_questions::where('insQId',$qu)->first();
                     $newQ = new Interviews_com_questions();
                     $newQ->insCQuestion = $inq->insCQuestion;
+                    $newQ->insCAnswerType = $inq->insCAnswerType;
                     $newQ->insCQuestionVer = $ver;
                     $newQ->save();
-                }
-
             }
 
             return "企業訪談題目修改成功";

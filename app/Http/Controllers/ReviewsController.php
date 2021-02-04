@@ -16,6 +16,28 @@ class ReviewsController extends Controller
         $this->ReviewsServices = $ReviewsServices;
     }
 
+    //數字數
+    public function countText(Request $request){
+        $re = $request->all();
+
+        $objValidator = Validator::make($request->all(), array(
+            'reContent' => 'required'
+        ), array(
+            'reContent.required' => '請輸入實習心得',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $responses=mb_strlen($re['reContent']);
+                return response()->json(array($responses), 200, [], JSON_UNESCAPED_UNICODE);
+        }
+    }
+
     //新增實習心得
     public function createReview(Request $request)
     {
@@ -28,8 +50,8 @@ class ReviewsController extends Controller
             'SCid.required' => '請輸入SCid',
             'reContent.required' => '請輸入實習心得',
             'integer' => 'int格式錯誤',
-            'max' => '字數過多，800字為原則',
-            'min' => '字數過少，800字為原則',
+            'max' => '字數過多，800字為原則。',
+            'min' => '字數過少，800字為原則。',
             'unique' => '心得已存在',
         ));
         if ($objValidator->fails()) {
@@ -60,14 +82,18 @@ class ReviewsController extends Controller
         ), array(
             'reId.required' => '請輸入reId',
             'reContent.required' => '請輸入實習心得',
-            'max' => '字數過多，800字為原則',
-            'min' => '字數過少，800字為原則',
+            'max' => '字數過多，800字為原則。',
+            'min' => '字數過少，800字為原則。',
             'integer' => 'int格式錯誤',
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
             $error = array();
             foreach ($errors->all() as $message) {
+                if($message=='字數過多，800字為原則。'||$message=='字數過少，800字為原則。'){
+                    $len=mb_strlen($re['reContent']);
+                    $message .='(現在字數為:'.$len.'字)';
+                }
                 $error[] = $message;
             }
             return response()->json($error, 400);//422

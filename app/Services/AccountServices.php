@@ -21,6 +21,7 @@ use App\Stu_works as stuWorksEloquent;
 use App\Stu_ability as stuAbilityEloquent;
 
 use Log;
+use Mail;
 
 class AccountServices
 {
@@ -43,17 +44,31 @@ class AccountServices
         }
     }
 
-    public function searchAllUserByKeyword_ser($keyword,$u_status){
-        if($u_status==3){
-            $users=User::where('u_name', 'like', $keyword)->get();
-        }else{
-            $users=User::where('u_status',$u_status)->where('u_name', 'like', $keyword)->get();
+    public function searchAllUserByKeyword_ser($keyword,$u_status,$able){
+        if($able==1){ //已啟用
+            if($u_status==3){
+                $users=User::where('u_name', 'like', $keyword)->where('started',1)->get();
+            }else{
+                $users=User::where('u_status',$u_status)->where('u_name', 'like', $keyword)->where('started',1)->get();
+            }
+
+            if($users)
+                return $users;
+            else
+                return '找不到';
+        }else{ //已停用
+            if($u_status==3){
+                $users=User::where('u_name', 'like', $keyword)->where('started',3)->get();
+            }else{
+                $users=User::where('u_status',$u_status)->where('u_name', 'like', $keyword)->where('started',3)->get();
+            }
+
+            if($users)
+                return $users;
+            else
+                return '找不到';
         }
 
-        if($users)
-            return $users;
-        else
-            return '找不到';
     }
 
 
@@ -116,14 +131,20 @@ class AccountServices
                     if ($re['result'] == 1) {
                         $com->started = 1;
                         $com->save();
-                        $data = ['mail' => $com->email, 'u_name' => $com->u_name];
-                        dispatch(new sendResultmail($data));
+//                        $data = ['mail' => $com->email, 'u_name' => $com->u_name];
+//                        Mail::send('mail.CheckSuccess', $data, function($message) use($data)
+//                        {
+//                            $message->to($data['mail'], $data['content'])->subject('帳號審核結果通知');
+//                        });
                         return '審核通過成功';
                     } else {
                         $com->started = 3;
                         $com->save();
-                        $data = ['mail' => $com->email, 'u_name' => $com->u_name];
-                        dispatch(new sendResultmail_faild($data));
+//                        $data = ['mail' => $com->email, 'u_name' => $com->u_name];
+//                        Mail::send('mail.CheckFailed', $data, function($message) use($data)
+//                        {
+//                            $message->to($data['mail'], $data['content'])->subject('帳號審核結果通知');
+//                        });
                         return '審核不通過成功';
                     }
                 } elseif ($com->started == 1) {
@@ -156,9 +177,12 @@ class AccountServices
                             $j->delete();
                         }
                     }
-                    $data = ['mail' => $user->email, 'u_name' => $user->u_name];
-                    dispatch(new SendAccountDisabledMail($data));
-
+//                     $data = ['mail' => $user->email, 'u_name' => $user->u_name];
+// //                    dispatch(new SendAccountDisabledMail($data));
+//                     Mail::send('mail.AccountDisabledMail', $data, function($message) use($data)
+//                     {
+//                         $message->to($data['mail'], $data['u_name'])->subject('帳號遭停用通知信件');
+//                     });
                     return '停用成功';
                 } else {
                     return '此id已遭停用';

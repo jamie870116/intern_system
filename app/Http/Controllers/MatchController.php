@@ -120,7 +120,7 @@ class MatchController extends Controller
         $objValidator = Validator::make($request->all(), array(
             'mid' => 'required|integer',
             'mstatus' => 'required|integer', //傳入1==去面試，其他是直接接受
-            'inadress' => 'nullable',
+            'inaddress' => 'nullable',
             'intime' => 'nullable|date',
             'jcontact_email' => 'nullable|email',
             'jcontact_phone' => 'nullable',

@@ -52,7 +52,7 @@ class Assessment_ComServices{
         $st_letter->lRecipient=$teacher->account;
         $st_letter->lRecipientName=$teacher->u_name;
         $st_letter->lContent='';
-        $st_letter->lNotes=$sc->courseId;
+        $st_letter->lNotes=$re['SCid'];
         $st_letter->save();
         $Stu_c=Stu_courseEloquent::where('SCid',$Assessment_Com->SCid)->first();
         if(Carbon::now() > $Stu_c->courseEnd){

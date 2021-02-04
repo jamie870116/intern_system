@@ -22,12 +22,17 @@ class CounselingServices
 
         $CR=Counseling_result::where('SCid',$SCid)->first();
         if($CR){
+            $sc=Stu_course::where('SCid',$SCid)->first();
+            $stu=User::where('id',$sc->sid)->first();
+            $com=Com_basic::where('c_account',$sc->c_account)->first();
+            $CR->stuName=$stu->u_name;
+            $CR->comAddress=$com->caddress;
             return $CR;
         }else{
             $sc=Stu_course::where('SCid',$SCid)->first();
             $stu=User::where('id',$sc->sid)->first();
             $com=Com_basic::where('c_account',$sc->c_account)->first();
-            $cr=['stuName'=>$stu->u_name,'$comAddress'=>$com->caddress];
+            $cr=['stuName'=>$stu->u_name,'comAddress'=>$com->caddress];
             return $cr;
         }
     }
@@ -76,7 +81,7 @@ class CounselingServices
                         $path = $file->storeAs(
                             'public/user-upload/CounselingResult/', $file_name
                         );
-                        $fn[]='/user-upload/CounselingResult/'. $file_name;
+                        $fn[]='/CounselingResult/'. $file_name;
                         //<img src='storage/CounselingResult/1501257619SWUxK.png' >
                     }
                 } else {
@@ -93,29 +98,66 @@ class CounselingServices
         $CR=Counseling_result::where('SCid',$re['SCid'])->first();
         if($CR){
             $ff='';
-            if((($re['counselingText']!="") && ($re['counselingPic']!=""))||(($re['counselingText']=="") && ($re['counselingPic'][0]==null))){
-                return '請擇一填寫';
+            if(isset( $re['counselingText'])&& isset( $re['counselingPic'])){
+                if((($re['counselingText']!="") && ($re['counselingPic']!=""))||(($re['counselingText']=="") && ($re['counselingPic'][0]==null))){
+                    return '請擇一填寫';
+                }else{
+                    $CR->counselingAddress=$re['counselingAddress'];
+                    $CR->counselingDate=$re['counselingDate'];
+                    $CR->cTeacherName=$re['cTeacherName'];
+                    $CR->counselingContent=$re['counselingContent'];
+                    $CR->counselingPic = $ff;
+                    if(isset( $re['counselingPic']))
+                        foreach ($re['counselingPic'] as $f){
+                            if($f!=null){
+                                $ff .= $f.',';
+                            }
+                        }
+                    $CR->counselingPic=$ff;
+                    if(isset( $re['counselingText']))
+                        $CR->counselingPic=$re['counselingText'];
+                    $CR->save();
+
+                    return '修改業師輔導成果表成功';
+                }
+            }elseif( isset( $re['counselingPic'])){
+                $CR->counselingAddress=$re['counselingAddress'];
+                $CR->counselingDate=$re['counselingDate'];
+                $CR->cTeacherName=$re['cTeacherName'];
+                $CR->counselingContent=$re['counselingContent'];
+                $CR->counselingPic = $ff;
+                if(isset( $re['counselingPic']))
+                    foreach ($re['counselingPic'] as $f){
+                        if($f!=null){
+                            $ff .= $f.',';
+                        }
+                    }
+                $CR->counselingPic=$ff;
+                if(isset( $re['counselingText']))
+                    $CR->counselingPic=$re['counselingText'];
+                $CR->save();
+
+                return '修改業師輔導成果表成功';
+            }else{
+                $CR->counselingAddress=$re['counselingAddress'];
+                $CR->counselingDate=$re['counselingDate'];
+                $CR->cTeacherName=$re['cTeacherName'];
+                $CR->counselingContent=$re['counselingContent'];
+                $CR->counselingPic = $ff;
+                if(isset( $re['counselingPic']))
+                    foreach ($re['counselingPic'] as $f){
+                        if($f!=null){
+                            $ff .= $f.',';
+                        }
+                    }
+                $CR->counselingPic=$ff;
+                if(isset( $re['counselingText']))
+                    $CR->counselingPic=$re['counselingText'];
+                $CR->save();
+
+                return '修改業師輔導成果表成功';
             }
 
-
-
-            $CR->counselingAddress=$re['counselingAddress'];
-            $CR->counselingDate=$re['counselingDate'];
-            $CR->cTeacherName=$re['cTeacherName'];
-            $CR->counselingContent=$re['counselingContent'];
-            $CR->counselingPic = $ff;
-            if(isset( $re['counselingPic']))
-                foreach ($re['counselingPic'] as $f){
-                    if($f!=null){
-                        $ff .= $f.',';
-                    }
-                }
-                $CR->counselingPic=$ff;
-            if(isset( $re['counselingText']))
-                $CR->counselingPic=$re['counselingText'];
-            $CR->save();
-
-            return '修改業師輔導成果表成功';
 //            return $re['counselingPic'][0];
         }else{
             return '找不到業師輔導成果表';

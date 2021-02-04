@@ -50,7 +50,7 @@ class Kernel extends ConsoleKernel
                             $st_letter->lRecipient=$company->account;
                             $st_letter->lRecipientNmae=$company->u_name;
                             $st_letter->lContent='已經可以對'.$student->u_name.'進行成績考核，請至學生管理頁面操作\n';
-                            $st_letter->lNotes=$c->courseId;
+                            $st_letter->lNotes=$stu_c->SCid;
                             $st_letter->save();
                         }
 

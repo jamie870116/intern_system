@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Jobs\SendEmail;
+use Mail;
 
 class registerService
 {
@@ -16,7 +17,12 @@ class registerService
 
     public static  function sendmail($mail,$code,$u_name,$account){
         $data = ['mail'=>$mail, 'code'=>$code,'userName'=>$u_name,'account'=>$account];
-        dispatch(new SendEmail($data));
+//        dispatch(new SendEmail($data));
+
+        Mail::send('mail.VerificationLetter', $data, function($message) use($data)
+        {
+            $message->to($data['mail'], $data['code'])->subject('會員驗證信');
+        });
 
         return response()->json('sended',200);
 

@@ -223,6 +223,7 @@ class GradeController extends Controller
                         $stu = Stu_course::find($s->SCid)->user_stu()->first();
                         $stu_b = Stu_course::find($s->SCid)->stu_basic()->first();
                         $stu->profilePic = $stu_b->profilePic;
+                        $stu->SCid =$stu_c->SCid;
                         $student_list[] = $stu;
                     }
                 }
@@ -291,13 +292,15 @@ class GradeController extends Controller
         $objValidator = Validator::make($request->all(), array(
             'journalID' => 'required|integer',
             'journalComments_teacher' => 'required',
-            'grade_teacher' => 'required|numeric',
+            'grade_teacher' => 'required|numeric|max:100|min:0',
         ), array(
             'journalID.required' => '請輸入週誌ID',
             'journalComments_teacher.required' => '請輸入週誌評語',
             'grade_teacher.required' => '請輸入週誌成績',
             'integer' => '請輸入整數',
             'numeric' => '請輸入數字',
+            'max' => '請輸入最多100分',
+            'min' => '請輸入最少0分',
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
@@ -387,13 +390,15 @@ class GradeController extends Controller
         $objValidator = Validator::make($request->all(), array(
             'journalID' => 'required|integer',
             'journalComments_ins' => 'required',
-            'grade_ins' => 'required|numeric',
+            'grade_ins' => 'required|numeric|max:100|min:0',
         ), array(
             'journalID.required' => '請輸入週誌ID',
             'journalComments_ins.required' => '請輸入週誌評語',
             'grade_ins.required' => '請輸入週誌成績',
             'integer' => '請輸入整數',
             'numeric' => '請輸入數字',
+            'max' => '請輸入最多100分',
+            'min' => '請輸入最少0分',
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();

@@ -247,17 +247,19 @@ class Assessment_ComController extends Controller
             return response()->json($error, 400);//422
         } else {
             $Assessment_Com=Assessment_Com::where('SCid',$re['SCid'])->get();
-            $journal=Journal::where('SCid',$re['SCid'])->first();
-            foreach ($Assessment_Com as $a){
-                $stu = Stu_course::find($re['SCid'])->user_stu()->first();
-                $a->stuName=$stu->u_name;
-                $a->journalInstructor=$journal->journalInstructor;
-                $a->totalGrade_Com=$a->asGrade1+$a->asGrade2+$a->asGrade3+$a->asGrade4+$a->asGrade5;
-            }
-            if ($Assessment_Com) {
+            $Assessment_Com_fr=Assessment_Com::where('SCid',$re['SCid'])->first();
+
+            if ($Assessment_Com_fr) {
+                $journal=Journal::where('SCid',$re['SCid'])->first();
+                foreach ($Assessment_Com as $a){
+                    $stu = Stu_course::find($re['SCid'])->user_stu()->first();
+                    $a->stuName=$stu->u_name;
+                    $a->journalInstructor=$journal->journalInstructor;
+                    $a->totalGrade_Com=$a->asGrade1+$a->asGrade2+$a->asGrade3+$a->asGrade4+$a->asGrade5;
+                }
                 return response()->json($Assessment_Com, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json('尚未填寫成績資料', 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json('尚未填寫成績資料', 200, [], JSON_UNESCAPED_UNICODE);
             }
         }
 

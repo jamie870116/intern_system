@@ -19,7 +19,7 @@ class AccountController extends Controller
 
     //取得所有使用者資料
     public function getAllUserList(){
-        $users=User::GetAll()->get();
+        $users=User::GetAll()->where('started','<>',3)->get();
         if($users)
         return response()->json(['usersList'=>$users], 200, [], JSON_UNESCAPED_UNICODE);
         else
@@ -33,10 +33,12 @@ class AccountController extends Controller
         $objValidator = Validator::make($request->all(), array(
             'keyword' => 'required',
             'u_status' => 'required|integer',
+            'able' => 'required|integer',
         ), array(
             'keyword.required' => '請輸入關鍵字',
             'u_status.required' => '請輸入欲搜尋之角色',//0，學生 1，老師 2，企業 3，全部
-            'u_status.integer' => '請輸入int',
+            'able.required' => '請輸入欲搜尋之角色',//0，學生 1，老師 2，企業 3，全部
+            'integer' => '請輸入int',
         ));
         if ($objValidator->fails()) {
             $errors = $objValidator->errors();
@@ -47,7 +49,7 @@ class AccountController extends Controller
             return response()->json($error,400);//422
         } else {
             $keyword = '%' . $re['keyword'] . '%';
-            $responses=$this->AccountServices->searchAllUserByKeyword_ser($keyword,$re['u_status']);
+            $responses=$this->AccountServices->searchAllUserByKeyword_ser($keyword,$re['u_status'],$re['able']);
             if ($responses == '找不到') {
                 return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
             } else {
@@ -58,7 +60,7 @@ class AccountController extends Controller
 
     //取得所有學生資料
     public function getAllStudentList(){
-        $students=User::where('u_status',0)->get();
+        $students=User::where('u_status',0)->where('started','<>',3)->get();
         if($students)
             return response()->json(['studentsList'=>$students], 200, [], JSON_UNESCAPED_UNICODE);
         else
@@ -68,7 +70,7 @@ class AccountController extends Controller
 
     //取得所有老師資料
     public function getAllTeacherList(){
-        $teachers=User::where('u_status',1)->get();
+        $teachers=User::where('u_status',1)->where('started','<>',3)->get();
         if($teachers)
             return response()->json(['teachersList'=>$teachers], 200, [], JSON_UNESCAPED_UNICODE);
         else
@@ -78,7 +80,7 @@ class AccountController extends Controller
 
     //取得所有廠商資料
     public function getAllCompanyList(){
-        $companies=User::where('u_status',2)->get();
+        $companies=User::where('u_status',2)->where('started','<>',3)->get();
         if($companies)
             return response()->json(['companiesList'=>$companies], 200, [], JSON_UNESCAPED_UNICODE);
         else

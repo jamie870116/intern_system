@@ -198,7 +198,7 @@ class Stu_resumeController extends Controller
             'department' => 'nullable',//系
             'section' => 'nullable',//科(高中高職等的科)
             'profilePic'=>'nullable|image',
-            'licenceFile'=>'nullable|mimes:pdf,docx'
+            'licenceFile'=>'nullable'
         ), array(
             'chiName.required' => '請輸入中文姓名',
             'engName.required' => '請輸入英文姓名',
@@ -240,10 +240,34 @@ class Stu_resumeController extends Controller
                 return response()->json($r, 400, [], JSON_UNESCAPED_UNICODE);
             }
         }
-
+    }
+//學生上傳證照檔案
+    public function studentUploadLicenceFile(Request $request){
+        $objValidator = Validator::make($request->all(), array(
+            'licenceFile'=>'required|mimes:docx,pdf,doc'
+        ), array(
+            'mimes'=>'檔案格式錯誤(副檔名須為pdf或docx)',
+            'required'=>'請上傳圖片'
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $file=$request->file('licenceFile');
+            $responses = $this->ResumeServices->studentUploadLicenceFile_ser($request,$file);
+            if ($responses == '頭貼上傳失敗') {
+                $r=array($responses);
+                return response()->json($r, 400, [], JSON_UNESCAPED_UNICODE);
+            } else {
+                return response()->json($responses, 200, [], JSON_UNESCAPED_UNICODE);
+            }
+        }
 
     }
-
     //學生上傳頭貼
     public function studentUploadProfilePic(Request $request){
         $objValidator = Validator::make($request->all(), array(

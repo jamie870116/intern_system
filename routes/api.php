@@ -20,6 +20,7 @@ Route::post('Login', 'AuthController@postLogin');//登入
 Route::post('Register', 'AuthController@register');//註冊
 Route::post('Logout', 'AuthController@getLogout');//登出
 Route::get('Check_code', 'AuthController@check_code');//驗證信
+Route::post('resendVerificationLetter', 'AuthController@resendVerificationLetter');//重寄驗證信
 Route::post('forgetPassword', 'AuthController@forgetPassword');//忘記密碼
 Route::post('resetPassword', 'AuthController@resetPassword');//忘記密碼後，重設密碼
 
@@ -81,6 +82,7 @@ Route::group(['middleware' => 'jwt'], function () {
     //修改、刪除履歷相關
     Route::post('editBasicDataById', 'Stu_resumeController@editBasicDataById');
     Route::post('studentUploadProfilePic', 'Stu_resumeController@studentUploadProfilePic');//學生上傳頭貼
+    Route::post('studentUploadLicenceFile', 'Stu_resumeController@studentUploadLicenceFile');//學生上傳證照檔案
     Route::delete('deleteJobExperienceById', 'Stu_resumeController@deleteJobExperienceById');
     Route::delete('deleteWorksDataById', 'Stu_resumeController@deleteWorksDataById');
     Route::delete('deleteAbilityById', 'Stu_resumeController@deleteAbilityById');
@@ -158,6 +160,7 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::put('editReview','ReviewsController@editReview');//修改實習心得
     Route::get('getReviewByReId','ReviewsController@getReviewByReId');//顯示實習心得ByReId
     Route::get('getReviewBySCid','ReviewsController@getReviewBySCid');//顯示實習心得BySCid
+    Route::post('countText','ReviewsController@countText');//數字數
 
     Route::post('teacherAccessReviewBySCid','ReviewsController@teacherAccessReviewBySCid');//老師查閱實習心得
 

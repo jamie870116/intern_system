@@ -111,33 +111,34 @@ class ResumeServices
                 return "頭貼上傳失敗";
             }
         }
-        if ($l_file) {
-            $extension = $l_file->getClientOriginalExtension();
-            $file_name = strval(time()) . str_random(5) . '_lic.' . $extension;
+//        if ($l_file) {
+//            $extension = $l_file->getClientOriginalExtension();
+//            $file_name = strval(time()) . str_random(5) . '_lic.' . $extension;
+//
+//            if ($request->hasFile('licenceFile')) {
+//                if ($stuBas->licenceFile != null) {
+//
+//                    $file_path = 'public/user-upload/licences/' . $stuBas->licenceFile;
+//                    $l_file = Storage::exists('public/user-upload/licences/' . $stuBas->licenceFile);
+//
+//                    Log::error(Storage::exists('public/user-upload/licences/' . $stuBas->licenceFile));
+//
+//                    if ($l_file) {
+//                        Storage::delete($file_path);
+//                    } else {
+//                        return 'failed';
+//                    }
+//                }
+//                $path = $request->file('licenceFile')->storeAs(
+//                    'public/user-upload/licences/', $file_name
+//                );
+//                //<img src='storage/user-upload/licences/1501257619SWUxK.png' >
+//                $stuBas->licenceFile = $file_name;
+//            } else {
+//                return "證照檔案上傳失敗";
+//            }
+//        }
 
-            if ($request->hasFile('licenceFile')) {
-                if ($stuBas->licenceFile != null) {
-
-                    $file_path = 'public/user-upload/licences/' . $stuBas->licenceFile;
-                    $l_file = Storage::exists('public/user-upload/licences/' . $stuBas->licenceFile);
-
-                    Log::error(Storage::exists('public/user-upload/licences/' . $stuBas->licenceFile));
-
-                    if ($l_file) {
-                        Storage::delete($file_path);
-                    } else {
-                        return 'failed';
-                    }
-                }
-                $path = $request->file('licenceFile')->storeAs(
-                    'public/user-upload/licences/', $file_name
-                );
-                //<img src='storage/user-upload/licences/1501257619SWUxK.png' >
-                $stuBas->licenceFile = $file_name;
-            } else {
-                return "證照檔案上傳失敗";
-            }
-        }
         if (isset($re['Oname'])) {
             $stuBas->Oname = $re['Oname'];
             $stuBas->OS = $re['OS'];
@@ -170,8 +171,47 @@ class ResumeServices
             $stuBas->department = $re['department'];
         if (isset($re['section']))
             $stuBas->section = $re['section'];
+        if(isset($re['licenceFile']))
+            $stuBas->licenceFile = $re['licenceFile'];
+        
         $stuBas->save();
         return '修改基本資料成功';
+    }
+
+    public function studentUploadLicenceFile_ser($request, $file){
+        $token = JWTAuth::getToken();
+        $user = JWTAuth::toUser($token);
+        $id = $user->id;
+        $stuBas = stuBasicEloquent::where('sid', $id)->first();
+        if ($file) {
+            $extension = $file->getClientOriginalExtension();
+            $file_name = strval(time()) . str_random(5) . '_lic.' . $extension;
+
+            if ($request->hasFile('licenceFile')) {
+                // if ($stuBas->licenceFile != null) {
+
+                //     $file_path = 'public/user-upload/licences/' . $stuBas->licenceFile;
+                //     $file = Storage::exists('public/user-upload/licences/' . $stuBas->licenceFile);
+
+                //     Log::error(Storage::exists('public/user-upload/licences/' . $stuBas->licenceFile));
+
+                //     if ($file) {
+                //         Storage::delete($file_path);
+                //     } else {
+                //         return 'failed';
+                //     }
+                // }
+                $path = $request->file('licenceFile')->storeAs(
+                    'public/user-upload/licences/', $file_name
+                );
+                //<img src='storage/user-upload/licences/1501257619SWUxK.png' >
+                $stuBas->licenceFile = '/licences/'. $file_name;
+            } else {
+                return "證照檔案上傳失敗";
+            }
+        }
+        $stuBas->save();
+        return  $stuBas->licenceFile;
     }
 
     public function studentUploadProfilePic_ser($request, $file)

@@ -16,6 +16,7 @@ use App\Stu_basic as stuBasicEloquent;
 
 //use Jenssegers\Agent\Facades\Agent;
 use JWTAuth;
+use Mail;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Jenssegers\Agent\Agent;
 use Validator;
@@ -75,7 +76,7 @@ class AuthController extends Controller
                         return response()->json(['error' => 'could_not_create_token'], 500);
                     }
                     $cookie_token = 'Bearer ' . $token;
-                    return response()->json($token)->cookie('authorization', $cookie_token, 300);
+                    return response()->json($token)->cookie('authorization', $cookie_token, 200);
                 } elseif ($auth->started == 0) {
                     $error[] = '帳號未開通';
                     return response()->json($error, 400, $headers, JSON_UNESCAPED_UNICODE);
@@ -205,6 +206,44 @@ class AuthController extends Controller
 
     }
 
+    public function resendVerificationLetter(Request $request){
+        $re=$request->all();
+        $objValidator = Validator::make($request->all(), array(
+            'account' => 'required',
+        ), array(
+            'account.required' => '請輸入帳號',
+        ));
+        if ($objValidator->fails()) {
+            $errors = $objValidator->errors();
+            $error = array();
+            foreach ($errors->all() as $message) {
+                $error[] = $message;
+            }
+            return response()->json($error, 400);//422
+        } else {
+            $user=userEloquent::where('account',$re['account'])->first();
+            if($user){
+                if($user->started==0){
+                    $data = ['mail'=>$user->email, 'code'=>$user->check_code,'userName'=>$user->u_name,'account'=>$user->account];
+//        dispatch(new SendEmail($data));
+
+                    Mail::send('mail.VerificationLetter', $data, function($message) use($data)
+                    {
+                        $message->to($data['mail'], $data['code'])->subject('會員驗證信');
+                    });
+
+                    return response()->json(['去收驗證信'], 200,[] , JSON_UNESCAPED_UNICODE);
+                }else{
+                    return response()->json(['帳號已啟用'], 200,[] , JSON_UNESCAPED_UNICODE);
+                }
+
+            }else{
+                return response()->json(['沒有此使用者'], 400,[] , JSON_UNESCAPED_UNICODE);
+            }
+
+        }
+    }
+
     public function check_code(Request $request)
     {
         $objValidator = Validator::make($request->all(), array(
@@ -309,8 +348,11 @@ class AuthController extends Controller
                 $user->check_code=$key;
                 $user->save();
                 $data = ['mail' => $user->email, 'auth_code' => $key,'time'=>Carbon::now(),'userName'=>$user->u_name];
-                dispatch(new resetPasswordMail($data));
-
+//                dispatch(new resetPasswordMail($data));
+                Mail::send('mail.ResetPassword', $data, function($message) use($data)
+                {
+                    $message->to($data['mail'], $data['auth_code'])->subject('密碼重置信件');
+                });
                 return response()->json(['去信箱收信吧'], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json(['查無此帳號'], 400, [], JSON_UNESCAPED_UNICODE);

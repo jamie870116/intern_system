@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Assessment_Com;
 use App\Assessment_Teach;
+use App\Counseling_result;
 use App\Course as courseEloquent;
 use App\Course;
 use App\Intern_proposal;
@@ -110,7 +111,7 @@ class CourseServices
                             $student=Stu_course::find($stu_c->SCid)->user_stu()->first();
                             $company=Stu_course::find($stu_c->SCid)->user_com()->first();
                             $teacher=Stu_course::find($stu_c->SCid)->user_tea()->first();
-
+                            $type=$jobOp->jtypes;
                             if ($course) {
                                 $first = $f;
                                 $cc=0;
@@ -120,11 +121,51 @@ class CourseServices
                                         $review->reContent='';
                                         $review->SCid=$stu_c->SCid;
                                         $review->save();
-                                        $in=new Intern_proposal();
-                                        $in->SCid=$stu_c->SCid;
-                                        $in->save();
+                                        $cr=new Counseling_result();
+                                        $cr->SCid=$stu_c->SCid;
+                                        $cr->save();
+                                        if($type==0){
+                                            $in=new Intern_proposal();
+                                            $in->SCid=$stu_c->SCid;
+                                            $in->IPTopic1Start= Carbon::parse($first);
+                                            $in->IPTopic1End=Carbon::parse($first)->addWeeks(1)->subDay();
+                                            $in->IPTopic2Start= Carbon::parse($first)->addWeeks(1);
+                                            $in->IPTopic2End=Carbon::parse($first)->addWeeks(2)->subDay();
+                                            $in->IPTopic3Start= Carbon::parse($first)->addWeeks(2);
+                                            $in->IPTopic3End=Carbon::parse($first)->addWeeks(3)->subDay();
+                                            $in->IPTopic4Start= Carbon::parse($first)->addWeeks(3);
+                                            $in->IPTopic4End=Carbon::parse($first)->addWeeks(4)->subDay();
+                                            $in->IPTopic5Start= Carbon::parse($first)->addWeeks(4);
+                                            $in->IPTopic5End=Carbon::parse($first)->addWeeks(5)->subDay();
+                                            $in->IPTopic6Start= Carbon::parse($first)->addWeeks(5);
+                                            $in->IPTopic6End=Carbon::parse($first)->addWeeks(6)->subDay();
+                                            $in->IPTopic7Start= Carbon::parse($first)->addWeeks(6);
+                                            $in->IPTopic7End=Carbon::parse($first)->addWeeks(7)->subDay();
+                                            $in->IPTopic8Start= Carbon::parse($first)->addWeeks(7);
+                                            $in->IPTopic8End=Carbon::parse($first)->addWeeks(8)->subDay();
+                                            $in->save();
+                                        }else{
+                                            $in=new Intern_proposal();
+                                            $in->SCid=$stu_c->SCid;
+                                            $in->IPTopic1Start= Carbon::parse($first);
+                                            $in->IPTopic1End=Carbon::parse($first)->addWeeks(2)->subDay();
+                                            $in->IPTopic2Start= Carbon::parse($first)->addWeeks(2);
+                                            $in->IPTopic2End=Carbon::parse($first)->addWeeks(4)->subDay();
+                                            $in->IPTopic3Start= Carbon::parse($first)->addWeeks(4);
+                                            $in->IPTopic3End=Carbon::parse($first)->addWeeks(6)->subDay();
+                                            $in->IPTopic4Start= Carbon::parse($first)->addWeeks(6);
+                                            $in->IPTopic4End=Carbon::parse($first)->addWeeks(8)->subDay();
+                                            $in->IPTopic5Start= Carbon::parse($first)->addWeeks(8);
+                                            $in->IPTopic5End=Carbon::parse($first)->addWeeks(10)->subDay();
+                                            $in->IPTopic6Start= Carbon::parse($first)->addWeeks(10);
+                                            $in->IPTopic6End=Carbon::parse($first)->addWeeks(12)->subDay();
+                                            $in->IPTopic7Start= Carbon::parse($first)->addWeeks(12);
+                                            $in->IPTopic7End=Carbon::parse($first)->addWeeks(14)->subDay();
+                                            $in->IPTopic8Start= Carbon::parse($first)->addWeeks(14);
+                                            $in->IPTopic8End=Carbon::parse($first)->addWeeks(16)->subDay();
+                                        }
                                     }else{
-                                        $type=$jobOp->jtypes;
+
                                         if ($type == 0) {  //暑期
                                             $journal = new Journal();
                                             $journal->SCid = $stu_c->SCid;

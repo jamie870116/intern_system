@@ -8,6 +8,7 @@ use App\Interviews_stu_questions;
 use App\Stu_basic;
 use App\Stu_course;
 use App\User;
+use Carbon\Carbon;
 
 
 class InterviewAnswerServices{
@@ -40,6 +41,13 @@ class InterviewAnswerServices{
         $interCs=InterviewComEloquent::where('SCid',$SCid)->get();
         $interSs=InterviewStuEloquent::where('SCid',$SCid)->get();
         if($interCs && $interSs){
+            $course = Stu_course::find($SCid)->courses()->first();
+            $courseMonth=Carbon::parse($course->courseStart)->month;
+            if($courseMonth==7 ||$courseMonth==8){
+                $interviewNum=1;
+            }else{
+                $interviewNum=2;
+            }
             foreach ($interCs as $interC){
                 $stu = Stu_course::find($SCid)->user_stu()->first();
                 $com = Stu_course::find($SCid)->user_com()->first();
@@ -74,7 +82,7 @@ class InterviewAnswerServices{
                 $interS->profilePic=$stu_b->profilePic;
             }
 
-                return ['InterviewComList'=>$interCs,'InterviewStuList'=>$interSs];
+                return ['InterviewComList'=>$interCs,'InterviewStuList'=>$interSs,'interviewNum'=>$interviewNum];
 
         }else{
             return '取得訪談紀錄失敗';

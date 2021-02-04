@@ -169,7 +169,7 @@ class MatchServices
                         $st_letter->lNotes =$re['mid'];
                         $st_letter->save();
                         $data = ['mail' => $user->mail, 'interview' => $interview];
-                        dispatch(new sendInterviewNoticeMail($data));
+//                        dispatch(new sendInterviewNoticeMail($data));
                         return '廠商接受面試成功';
 //                    $st_letter = new Station_Letter();
 //                    $st_letter->lStatus = $status;//3
@@ -216,7 +216,7 @@ class MatchServices
                                         公司名稱:'.$com->u_name.'\n
                                         面試日期:'.$dt->format('Y-m-d') .'\n
                                         面試時間:'.$dt->format('h:i:s').'\n
-                                        面試地點:'.$re['inadress'].'\n
+                                        面試地點:'.$re['inaddress'].'\n
                                         聯絡人姓名:'.$re['jcontact_name'].'\n
                                         聯絡人電話:'.$re['jcontact_phone'].'\n
                                         聯絡人信箱:'.$re['jcontact_email'].'\n
@@ -224,8 +224,8 @@ class MatchServices
                                         請點選下列按鈕回覆該企業是否接受面試\n';
                 $st_letter->lNotes = $interview;
                 $st_letter->save();
-                $data = ['mail' => $user->mail, 'interview' => $interview];
-                dispatch(new sendInterviewNoticeMail($data));
+//                $data = ['mail' => $user->mail, 'interview' => $interview];
+//                dispatch(new sendInterviewNoticeMail($data));
                 return '成功';
             } else {
                 return '流程錯誤';
@@ -271,7 +271,7 @@ class MatchServices
                                         公司名稱:'.$com->u_name.'\n
                                         面試日期:'.$dt->format('Y-m-d') .'\n
                                         面試時間:'.$dt->format('h:i:s').'\n
-                                        面試地點:'.$interview->inadress.'\n
+                                        面試地點:'.$interview->inaddress.'\n
                                         聯絡人姓名:'.$interview->jcontact_name.'\n
                                         聯絡人電話:'.$interview->jcontact_phone.'\n
                                         聯絡人信箱:'.$interview->jcontact_email.'\n
@@ -293,7 +293,7 @@ class MatchServices
                     return '接受面試失敗';
                 }
             } else {
-                return $match->mstatus;
+                return '流程錯誤';
             }
 
         } else {
@@ -319,11 +319,11 @@ class MatchServices
                 $log->save();
                 $user = User::where('id', $match->sid)->first();
 
-                if (isset($re['mfailedreason']))
-                    $data = ['mail' => $user->mail, 'mfailedreason' => $re['mfailedreason']];
-                else
-                    $data = ['mail' => $user->mail, 'mfailedreason' => $re['mfailedreason']];
-                dispatch(new sendInterviewNoticeMail($data));
+//                if (isset($re['mfailedreason']))
+//                    $data = ['mail' => $user->mail, 'mfailedreason' => $re['mfailedreason']];
+//                else
+//                    $data = ['mail' => $user->mail, 'mfailedreason' => $re['mfailedreason']];
+//                dispatch(new sendInterviewNoticeMail($data));
 
                 $st_letter = new Station_Letter();
                 $st_letter->lStatus = 8;
@@ -332,7 +332,8 @@ class MatchServices
                 $st_letter->lTitle = $com->u_name.'面試結果';
                 $comb=Com_basic::where('c_account',$com->account)->first();
                 $st_letter->lContent = '您未通過面試，未被'.$com->u_name.'錄取\n
-                                        '.$com->u_name.'聯絡資訊如下:\n
+                                        '.'未錄取理由為: '.$re['mfailedreason']
+                                        .$com->u_name.'聯絡資訊如下:\n
                                         姓名:'.$user->u_name.'\n
                                         電話:'.$com->u_tel.'\n
                                         E-mail:'.$com->email.'\n
@@ -426,11 +427,11 @@ class MatchServices
                     $log->save();
                     $user = User::where('id', $match->sid)->first();
 
-                    if (isset($re['mfailedreason']))
-                        $data = ['mail' => $user->mail, 'mfailedreason' => $re['mfailedreason']];
-                    else
-                        $data = ['mail' => $user->mail, 'mfailedreason' => $re['mfailedreason']];
-                    dispatch(new sendInterviewNoticeMail($data));
+//                    if (isset($re['mfailedreason']))
+//                        $data = ['mail' => $user->mail, 'mfailedreason' => $re['mfailedreason']];
+//                    else
+//                        $data = ['mail' => $user->mail, 'mfailedreason' => $re['mfailedreason']];
+//                    dispatch(new sendInterviewNoticeMail($data));
 
                     $st_letter = new Station_Letter();
                     $st_letter->lStatus = 8;

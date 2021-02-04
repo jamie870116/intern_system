@@ -121,7 +121,7 @@ class CompanyServices
 
         $jobs=Job_opening::where('c_account',$user->account)->get();
         foreach ($jobs as $j){
-            $jobs->c_name=$re['c_name'];
+            $j->c_name=$re['c_name'];
             $j->save();
         }
         $user->u_name = $re['c_name'];

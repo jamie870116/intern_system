@@ -86,7 +86,7 @@ class Assessment_TeachController extends Controller
             return response()->json($error, 400);//422
         } else {
             $responses = $this->Assessment_TeachServices->teacherCreateAssessment_ser($re);
-            if ($responses != '新增成果評量失敗') {
+            if ($responses != '尚有未填寫資料，故無法進行評量'||$responses !='廠商尚未填寫資料，故無法進行評量') {
                 return response()->json([$responses], 200, [], JSON_UNESCAPED_UNICODE);
             } else {
                 return response()->json([$responses], 400, [], JSON_UNESCAPED_UNICODE);
@@ -140,32 +140,36 @@ class Assessment_TeachController extends Controller
             }
             return response()->json($error, 400);//422
         } else {
-            $Assessment_Teach=Assessment_TeachEloquent::where('SCid',$re['SCid'])->first();
-            if ($Assessment_Teach) {
-                $Assessment_c=Assessment_Com::where('SCid',$re['SCid'])->first();
-                $Assessment_Teach->asSickLeave_days=$Assessment_c->asSickLeave_days;
-                $Assessment_Teach->asSickLeave_hours=$Assessment_c->asSickLeave_hours;
-                $Assessment_Teach->asOfficialLeave_days=$Assessment_c->asOfficialLeave_days;
-                $Assessment_Teach->asOfficialLeave_hours=$Assessment_c->asOfficialLeave_hours;
-                $Assessment_Teach->asCasualLeave_days=$Assessment_c->asCasualLeave_days;
-                $Assessment_Teach->asCasualLeave_hours=$Assessment_c->asCasualLeave_hours;
-                $Assessment_Teach->asMourningLeave_days=$Assessment_c->asMourningLeave_days;
-                $Assessment_Teach->asMourningLeave_hours=$Assessment_c->asMourningLeave_hours;
-                $Assessment_Teach->asAbsenteeism_days=$Assessment_c->asAbsenteeism_days;
-                $Assessment_Teach->asAbsenteeism_hours=$Assessment_c->asAbsenteeism_hours;
-                $Assessment_Teach->asStart=$Assessment_c->asStart;
-                $Assessment_Teach->asEnd=$Assessment_c->asEnd;
-                $Assessment_Teach->asDepartment=$Assessment_c->asDepartment;
-                $journal=Journal::where('SCid',$re['SCid'])->first();
-                $Assessment_Teach->journalInstructor=$journal->journalInstructor;
-                $stu = Stu_course::find($re['SCid'])->user_stu()->first();
-                $com = Stu_course::find($re['SCid'])->user_com()->first();
-                $Assessment_Teach->stuName=$stu->u_name;
-                $Assessment_Teach->comName=$com->u_name;
+            $Assessment_Teaches=Assessment_TeachEloquent::where('SCid',$re['SCid'])->get();
+            $Assessment_Teaches_fr=Assessment_TeachEloquent::where('SCid',$re['SCid'])->first();
+            if ($Assessment_Teaches_fr) {
+                foreach ($Assessment_Teaches as $Assessment_Teach){
+                    $Assessment_c=Assessment_Com::where('SCid',$re['SCid'])->first();
+                    $Assessment_Teach->asSickLeave_days=$Assessment_c->asSickLeave_days;
+                    $Assessment_Teach->asSickLeave_hours=$Assessment_c->asSickLeave_hours;
+                    $Assessment_Teach->asOfficialLeave_days=$Assessment_c->asOfficialLeave_days;
+                    $Assessment_Teach->asOfficialLeave_hours=$Assessment_c->asOfficialLeave_hours;
+                    $Assessment_Teach->asCasualLeave_days=$Assessment_c->asCasualLeave_days;
+                    $Assessment_Teach->asCasualLeave_hours=$Assessment_c->asCasualLeave_hours;
+                    $Assessment_Teach->asMourningLeave_days=$Assessment_c->asMourningLeave_days;
+                    $Assessment_Teach->asMourningLeave_hours=$Assessment_c->asMourningLeave_hours;
+                    $Assessment_Teach->asAbsenteeism_days=$Assessment_c->asAbsenteeism_days;
+                    $Assessment_Teach->asAbsenteeism_hours=$Assessment_c->asAbsenteeism_hours;
+                    $Assessment_Teach->asStart=$Assessment_c->asStart;
+                    $Assessment_Teach->asEnd=$Assessment_c->asEnd;
+                    $Assessment_Teach->asDepartment=$Assessment_c->asDepartment;
+                    $journal=Journal::where('SCid',$re['SCid'])->first();
+                    $Assessment_Teach->journalInstructor=$journal->journalInstructor;
+                    $stu = Stu_course::find($re['SCid'])->user_stu()->first();
+                    $com = Stu_course::find($re['SCid'])->user_com()->first();
+                    $Assessment_Teach->stuName=$stu->u_name;
+                    $Assessment_Teach->comName=$com->u_name;
+                }
 
-                return response()->json($Assessment_Teach, 200, [], JSON_UNESCAPED_UNICODE);
+
+                return response()->json($Assessment_Teaches, 200, [], JSON_UNESCAPED_UNICODE);
             } else {
-                return response()->json('無資料', 400, [], JSON_UNESCAPED_UNICODE);
+                return response()->json('無資料', 200, [], JSON_UNESCAPED_UNICODE);
             }
         }
 
